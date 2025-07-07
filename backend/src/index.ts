@@ -5,6 +5,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { routes } from "./routes";
 import cors from "cors";
 import morgan from "morgan";
+import recommendations from "./algorithim/recommendations";
 
 const prisma = new PrismaClient({
   omit: { user: { password: true } },
@@ -52,6 +53,26 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
     next(error);
   }
 });
+
+// [GET] /api/groups/recommendations
+app.get(
+  "/api/groups/recommendations",
+  async (req, res, next): Promise<void> => {
+    if (req.session.userId) {
+      type UserWithGroups = Prisma.UserGetPayload<{
+        include: { groups: true };
+      }>;
+      const user: UserWithGroups | null = await prisma.user.findUnique({
+        where: { id: req.session.userId },
+        include: { groups: true },
+      });
+      const groups = await recommendations(user);
+      res.json(groups);
+    } else {
+      res.status(401).json({ message: "Not logged in" });
+    }
+  },
+);
 
 // [GET] /groups/:id
 app.get("/api/groups/:id", async (req, res, next): Promise<void> => {
