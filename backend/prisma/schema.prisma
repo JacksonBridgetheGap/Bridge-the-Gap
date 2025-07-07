@@ -18,9 +18,10 @@ model User {
 }
 
 model Group {
-  id      Int    @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   name    String
   img     String
+  tags    String[]
   members User[]
   posts   Post[]
 }

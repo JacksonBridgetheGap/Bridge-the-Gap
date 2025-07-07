@@ -39,7 +39,6 @@ const port: number = 3000;
 app.get("/api/groups", async (req, res, next): Promise<void> => {
   const query = req.query;
   const name: string = query.name! as string;
-  console.log(name);
   try {
     const groups = await prisma.group.findMany({
       where: {
