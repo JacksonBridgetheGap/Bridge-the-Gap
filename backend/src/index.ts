@@ -68,7 +68,7 @@ app.get("/api/groups/:id", async (req, res, next): Promise<void> => {
 
 // [POST] /groups
 app.post("/api/groups", async (req, res, next): Promise<void> => {
-  const { name, img, members, posts } = req.body;
+  const { name, img, members, tags } = req.body;
   try {
     const memberData = members?.map((user: Prisma.UserCreateInput) => {
       return {
@@ -84,6 +84,7 @@ app.post("/api/groups", async (req, res, next): Promise<void> => {
       data: {
         name,
         img,
+        tags,
         members: {
           connect: memberData,
         },
