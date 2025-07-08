@@ -51,9 +51,11 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
   };
 
   const handleTagChange = (selectedTags) => {
+    const values = selectedTags.map((tag) => tag.value);
+
     setNewGroup({
       ...newGroup,
-      tags: selectedTags,
+      tags: values,
     });
   };
 

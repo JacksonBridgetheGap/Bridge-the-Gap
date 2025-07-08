@@ -18,7 +18,7 @@ const TAG_OPTIONS = [
 type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
 export default function content_based_filter(
   userClassificatoins: Map<string, number>,
-  groupMatrix: Map<string, Map<string, number>>,
+  groupMatrix: Map<number, Map<string, number>>,
   groups: RecordsType,
 ) {
   //Construct User vector from classifications
@@ -33,15 +33,16 @@ export default function content_based_filter(
     //Construct group vector
     const groupVector = Array.from({ length: 10 }, () => 0);
     for (let i = 0; i < TAG_OPTIONS.length; i++) {
-      groupVector[i] =
-        groupMatrix.get(group.id.toString())?.get(TAG_OPTIONS[i]) || 0;
+      groupVector[i] = groupMatrix.get(group.id)?.get(TAG_OPTIONS[i]) || 0;
     }
     //Compare vectors using cosine similarity
     const similarity = cosineSimilarity(userVector, groupVector);
     relationshipStrengths.set(group.id, similarity);
   });
 
-  return groups.sort((a, b) => {
+  const ret = groups.sort((a, b) => {
     return relationshipStrengths.get(b.id) - relationshipStrengths.get(a.id);
   });
+
+  return ret;
 }
