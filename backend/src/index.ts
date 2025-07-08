@@ -57,20 +57,17 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
 // [GET] /api/groups/recommendations
 app.get(
   "/api/groups/recommendations",
+  isAuthenticated,
   async (req, res, next): Promise<void> => {
-    if (req.session.userId) {
-      type UserWithGroups = Prisma.UserGetPayload<{
-        include: { groups: true };
-      }>;
-      const user: UserWithGroups | null = await prisma.user.findUnique({
-        where: { id: req.session.userId },
-        include: { groups: true },
-      });
-      const groups = await recommendations(user);
-      res.json(groups);
-    } else {
-      res.status(401).json({ message: "Not logged in" });
-    }
+    type UserWithGroups = Prisma.UserGetPayload<{
+      include: { groups: true };
+    }>;
+    const user: UserWithGroups | null = await prisma.user.findUnique({
+      where: { id: req.session.userId },
+      include: { groups: true },
+    });
+    const groups = await recommendations(user);
+    res.json(groups);
   },
 );
 
