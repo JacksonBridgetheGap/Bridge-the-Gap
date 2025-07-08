@@ -44,22 +44,27 @@ const groupData: Prisma.GroupCreateInput[] = [
   {
     name: "Group0",
     img: "/deafult_group_pic.png",
+    tags: ["Food", "Education"],
   },
   {
     name: "Group1",
     img: "/deafult_group_pic.png",
+    tags: ["Hobbies", "Gaming", "Education"],
   },
   {
     name: "Group2",
     img: "/deafult_group_pic.png",
+    tags: ["Buissness", "Travel"],
   },
   {
     name: "Group3",
     img: "/deafult_group_pic.png",
+    tags: ["Pets and Animals", "Health and Wellness", "Education"],
   },
   {
     name: "Group4",
     img: "/deafult_group_pic.png",
+    tags: ["Gaming", "Miscellaneous"],
   },
 ];
 
