@@ -21,7 +21,7 @@ model Group {
   id      Int      @id @default(autoincrement())
   name    String
   img     String
-  tags    String[]
+  tags    String[] @default([])
   members User[]
   posts   Post[]
 }

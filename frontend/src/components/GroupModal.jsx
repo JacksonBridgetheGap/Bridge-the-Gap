@@ -1,5 +1,5 @@
 import "../styles/GroupModal.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MemberSearch from "./MemberSearch";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -11,7 +11,7 @@ const defaultGroup = {
   members: [],
 };
 
-const options = [
+const GROUP_TAG_OPTIONS = [
   { value: "hobbies", label: "Hobbies" },
   { value: "education", label: "Education" },
   { value: "gaming", label: "Gaming" },
@@ -25,15 +25,7 @@ const options = [
 
 export default function GroupModal({ displayMode, onClose, onCreate }) {
   const [newGroup, setNewGroup] = useState(defaultGroup);
-  const [selectedTags, setSelectedTags] = useState([]);
   const animatedComponents = makeAnimated();
-
-  useEffect(() => {
-    setNewGroup({
-      ...newGroup,
-      tags: selectedTags.map((tag) => tag.label),
-    });
-  }, [selectedTags]);
 
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -55,6 +47,13 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
     setNewGroup({
       ...newGroup,
       members: members,
+    });
+  };
+
+  const handleTagChange = (selectedTags) => {
+    setNewGroup({
+      ...newGroup,
+      tags: selectedTags,
     });
   };
 
@@ -90,11 +89,11 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
         <input type="file" onChange={handleFileChange} />
         <h4>Add Tags (1 minimum):</h4>
         <Select
-          options={options}
+          options={GROUP_TAG_OPTIONS}
           isMulti
           components={animatedComponents}
           name={"tags"}
-          onChange={setSelectedTags}
+          onChange={handleTagChange}
         />
         <h4>Add Members to Groups:</h4>
         <MemberSearch onChange={handleMemberChange} />
