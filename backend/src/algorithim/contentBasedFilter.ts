@@ -1,5 +1,6 @@
 import { cosineSimilarity } from "../math/math";
 import { PrismaClient } from "@prisma/client";
+import { UserWithGroups } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -15,8 +16,15 @@ const TAG_OPTIONS = [
   "miscellaneous",
 ];
 
-type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
+//This is just to change the strength of how much we value people in your circle being in groups
+const FRIEND_CONSTANT = 0.1;
+
+type GroupWithMembers = {
+  members: any[];
+} & Awaited<ReturnType<typeof prisma.group.findMany>>[number];
+type RecordsType = GroupWithMembers[];
 export default function contentBasedFilter(
+  user: UserWithGroups | null,
   userClassificatoins: Map<string, number>,
   groupMatrix: Map<number, Map<string, number>>,
   groups: RecordsType,
@@ -29,6 +37,9 @@ export default function contentBasedFilter(
 
   //Loop through groups
   const relationshipStrengths = new Map();
+
+  //Get users circle as a list of ids
+  const idSet = new Set(user?.circle);
   groups.forEach((group) => {
     //Construct group vector
     const groupVector = Array.from({ length: 10 }, () => 0);
@@ -37,7 +48,16 @@ export default function contentBasedFilter(
     }
     //Compare vectors using cosine similarity
     const similarity = cosineSimilarity(userVector, groupVector);
-    relationshipStrengths.set(group.id, similarity);
+
+    //Get set difference between user circle and group members
+    const sharedCircle = group.members.filter((member) =>
+      idSet.has(Number(member.id)),
+    );
+
+    relationshipStrengths.set(
+      group.id,
+      similarity + sharedCircle.length * FRIEND_CONSTANT,
+    );
   });
 
   const ret = groups.sort((a, b) => {

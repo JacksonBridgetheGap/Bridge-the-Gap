@@ -54,16 +54,17 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
   }
 });
 
-// [GET] /api/groups/recommendations
+// [GET] /api/users/:userID/recommendations
 app.get(
-  "/api/groups/recommendations",
+  "/api/user/:userID/recommendations",
   isAuthenticated,
   async (req, res, next): Promise<void> => {
     type UserWithGroups = Prisma.UserGetPayload<{
       include: { groups: true };
     }>;
+    const { userID } = req.params;
     const user: UserWithGroups | null = await prisma.user.findUnique({
-      where: { id: req.session.userId },
+      where: { id: Number(userID) },
       include: { groups: true },
     });
     const groups = await recommendations(user);
@@ -223,14 +224,21 @@ app.put(
   isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { userID } = req.params;
-    const { groupId } = req.body;
+    const { groupId, members } = req.body;
     try {
+      const userData = await prisma.user.findUnique({
+        where: { id: Number(userID) },
+      });
+      const oldCircle = new Array(userData?.circle?.length ?? []);
+      const newCircle = [...new Set([...members, ...oldCircle])];
+
       const user = await prisma.user.update({
         where: { id: Number(userID) },
         data: {
           groups: {
             connect: { id: Number(groupId) },
           },
+          circle: newCircle,
         },
       });
       res.json(user);

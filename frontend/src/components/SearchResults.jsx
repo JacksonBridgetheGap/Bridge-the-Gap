@@ -4,15 +4,16 @@ import useSearch from "../hooks/useSearch.js";
 import useUserGroups from "../hooks/useUserGroups.js";
 import { useEffect, useState } from "react";
 import { httpRequest } from "../utils/utils.js";
-
-const RECOMMENDATIONS_URL = "/api/groups/recommendations";
+import useUser from "../hooks/useUser.js";
 
 export function SearchResults() {
   const { groups } = useSearch();
+  const { user } = useUser();
   const [recommendations, setRecommendation] = useState([]);
   const { groups: userGroups, isLoading } = useUserGroups();
 
   useEffect(() => {
+    const RECOMMENDATIONS_URL = `/api/user/${user.id}/recommendations`;
     httpRequest(RECOMMENDATIONS_URL, "GET").then((recommendations) => {
       setRecommendation(recommendations);
     });

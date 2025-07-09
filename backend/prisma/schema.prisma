@@ -15,6 +15,7 @@ model User {
   location String? @default("None")
   email    String? @unique
   groups   Group[]
+  circle   Int[]   @default([])
 }
 
 model Group {
