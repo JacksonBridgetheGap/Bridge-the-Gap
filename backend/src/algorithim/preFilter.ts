@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
 
 //Basic Filtering to cut down on groups to recommend for now only removing groups user is already a member in
-export default function pre_filter(
+export default function preFilter(
   user: UserWithGroups | null,
   groups: RecordsType,
 ) {
