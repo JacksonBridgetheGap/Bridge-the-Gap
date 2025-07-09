@@ -1,6 +1,6 @@
-import { user_parse, create_group_matrix } from "../utils/dataUtils";
-import pre_filter from "./pre_filter";
-import content_based_filter from "./content_based_filter";
+import { userParse, createGroupMatrix } from "../utils/dataUtils";
+import preFilter from "./preFilter";
+import contentBasedFilter from "./contentBasedFilter";
 import { PrismaClient } from "@prisma/client";
 import { UserWithGroups } from "../types/types";
 const prisma = new PrismaClient();
@@ -18,16 +18,16 @@ export default async function recommendations(user: UserWithGroups | null) {
   });
 
   //2.
-  const userClassifications = user_parse(user);
+  const userClassifications = userParse(user);
 
   //3.
-  const filteredGroups = pre_filter(user, groups);
+  const filteredGroups = preFilter(user, groups);
 
   //4.
-  const groupMatrix = create_group_matrix(filteredGroups);
+  const groupMatrix = createGroupMatrix(filteredGroups);
 
   //5.
-  const recommendations = content_based_filter(
+  const recommendations = contentBasedFilter(
     userClassifications,
     groupMatrix,
     filteredGroups,

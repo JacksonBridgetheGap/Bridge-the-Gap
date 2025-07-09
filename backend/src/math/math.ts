@@ -1,4 +1,4 @@
-export function dotProduct(a: number[], b: number[]) {
+export function dotProduct(a: number[], b: number[]): number {
   if (a.length !== b.length) {
     throw new Error("Vectors must be of equal length");
   }
@@ -10,14 +10,11 @@ export function dotProduct(a: number[], b: number[]) {
   return result;
 }
 
-export function magnitude(a: number[]) {
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result += a[i] * a[i];
-  }
+export function magnitude(a: number[]): number {
+  let result = a.reduce((result, value) => result + value * value, 0);
   return Math.sqrt(result);
 }
 
-export function cosineSimilarity(a: number[], b: number[]) {
+export function cosineSimilarity(a: number[], b: number[]): number {
   return dotProduct(a, b) / (magnitude(a) * magnitude(b));
 }

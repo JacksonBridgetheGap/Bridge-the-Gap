@@ -16,7 +16,7 @@ const TAG_OPTIONS = [
 ];
 
 type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
-export default function content_based_filter(
+export default function contentBasedFilter(
   userClassificatoins: Map<string, number>,
   groupMatrix: Map<number, Map<string, number>>,
   groups: RecordsType,

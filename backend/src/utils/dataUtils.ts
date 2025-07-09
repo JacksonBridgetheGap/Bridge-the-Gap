@@ -6,12 +6,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create a user classification map to describe the users relationship strength with each tag
-export function user_parse(user: UserWithGroups | null) {
+export function userParse(user: UserWithGroups | null) {
   const classification = new Map();
 
   //If user isn't apart of any group return an empty map
   // let user of function handle error detection
-  if (!user?.groups) {
+  if (user?.groups == null) {
     return classification;
   }
   //Need to merge data-model updates before we can pull tags from the users groups
@@ -32,16 +32,13 @@ export function user_parse(user: UserWithGroups | null) {
 
 //Creates a group data matrix based on tag data
 type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
-export function create_group_matrix(groups: RecordsType) {
-  const group_matrix = new Map();
-
-  groups.forEach((group) => {
-    let group_map = new Map();
-    group.tags.forEach((tag: string) => {
-      group_map.set(tag, 1);
-    });
-    group_matrix.set(group.id, group_map);
-  });
-
-  return group_matrix;
+export function createGroupMatrix(groups: RecordsType) {
+  return groups.reduce((map, group) => {
+    const groupMap = group.tags.reduce((accum, tag) => {
+      accum.set(tag, 1);
+      return accum;
+    }, new Map());
+    map.set(group.id, groupMap);
+    return map;
+  }, new Map());
 }
