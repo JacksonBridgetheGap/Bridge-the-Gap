@@ -11,7 +11,7 @@ export function dotProduct(a: number[], b: number[]): number {
 }
 
 export function magnitude(a: number[]): number {
-  let result = a.reduce((result, value) => result + value * value, 0);
+  const result = a.reduce((total, value) => total + value * value, 0);
   return Math.sqrt(result);
 }
 
