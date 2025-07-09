@@ -38,6 +38,16 @@ datasource db {
 }
 ```
 
+## Testing
+
+To make sure there were no errors in the setup of our backend we're going run a simple Jest testing suite to make sure everything has linked and the functions and types are working properly
+
+```sh
+npm test
+```
+
+You should see the Jest framework run a series of tests on relevant functions at this point. Make sure all the suites and test cases pass before moving on. If there is an error open a Github issue here <https://github.com/JacksonBridgetheGap/Bridge-the-Gap/issues>
+
 ## Start Server
 
 Now that our database is set up we can start up our server and begin to make http requests
