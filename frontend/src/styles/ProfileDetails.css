@@ -16,3 +16,9 @@
   background-color: #adadad;
   outline: none;
 }
+
+.uploaded-preview {
+  margin: 0 auto;
+  width: 3em;
+  height: 3em;
+}

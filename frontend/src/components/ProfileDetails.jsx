@@ -6,7 +6,7 @@ export default function ProfileDetails({ onUpdate }) {
   const { user } = useUser();
   const [newUser, setNewUser] = useState({
     username: user.username,
-    photo: user.photo,
+    photo: null,
     location: user.location,
     email: user.email,
   });
@@ -16,6 +16,15 @@ export default function ProfileDetails({ onUpdate }) {
       ...newUser,
       [evt.target.name]: evt.target.value,
     });
+  };
+
+  const handleFileChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setNewUser({
+        ...newUser,
+        photo: URL.createObjectURL(event.target.files[0]),
+      });
+    }
   };
 
   return (
@@ -30,14 +39,18 @@ export default function ProfileDetails({ onUpdate }) {
         onChange={handleInputChange}
       />{" "}
       <br />
+      {
+        //If I get some time I want to use react-dropzone to make a better file upload process for users
+      }
       <h5>Profile Image</h5>
-      <input
-        type="text"
-        name="photo"
-        value={newUser.photo}
-        placeholder="Enter Image Path..."
-        onChange={handleInputChange}
-      />{" "}
+      <input type="file" name="photo" onChange={handleFileChange} />
+      {newUser.photo && (
+        <img
+          src={newUser.photo}
+          alt="Profile Pic"
+          className={"uploaded-preview"}
+        />
+      )}{" "}
       <br />
       <h5>Location</h5>
       <input

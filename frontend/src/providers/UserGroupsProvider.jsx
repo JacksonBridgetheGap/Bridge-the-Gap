@@ -1,21 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { httpRequest } from "../utils/utils.js";
-import { userContext } from "./UserProvider.jsx";
 import useAuth from "../hooks/useAuth.js";
+import useUser from "../hooks/useUser.js";
 
 const userGroupContext = createContext();
-
-const USER_GROUPS_URL = "/api/user/groups";
 
 function UserGroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useContext(userContext);
+  const { user, isLoading: userLoading } = useUser();
   const auth = useAuth();
 
   useEffect(() => {
     setIsLoading(true);
-    if (!auth) return;
+    if (!auth || userLoading) return;
+    const USER_GROUPS_URL = `/api/user/${user.id}/groups`;
     httpRequest(USER_GROUPS_URL, "GET")
       .then((groups) => {
         setGroups(groups);

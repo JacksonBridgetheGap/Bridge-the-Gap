@@ -1,13 +1,14 @@
 import "../styles/Navagation.css";
-import { useState } from "react";
+import { useState, useDeferredValue } from "react";
 import useSearch from "../hooks/useSearch.js";
 
 export function Navagation({ onSearch, onClear }) {
   const [searchedTerm, setSearchedTerm] = useState("");
+  const deferredTerm = useDeferredValue(searchedTerm);
   const { setSearchTerm } = useSearch();
 
   const handleSearch = () => {
-    setSearchTerm(searchedTerm);
+    setSearchTerm(deferredTerm);
     onSearch();
   };
 

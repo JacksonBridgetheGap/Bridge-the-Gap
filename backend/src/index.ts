@@ -2,9 +2,11 @@ import express from "express";
 import session from "express-session";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import isAuthenticated from "./middleware/is-authenticated";
 import { routes } from "./routes";
 import cors from "cors";
 import morgan from "morgan";
+import recommendations from "./algorithim/recommendations";
 
 const prisma = new PrismaClient({
   omit: { user: { password: true } },
@@ -51,6 +53,23 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
     next(error);
   }
 });
+
+// [GET] /api/groups/recommendations
+app.get(
+  "/api/groups/recommendations",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    type UserWithGroups = Prisma.UserGetPayload<{
+      include: { groups: true };
+    }>;
+    const user: UserWithGroups | null = await prisma.user.findUnique({
+      where: { id: req.session.userId },
+      include: { groups: true },
+    });
+    const groups = await recommendations(user);
+    res.json(groups);
+  },
+);
 
 // [GET] /groups/:id
 app.get("/api/groups/:id", async (req, res, next): Promise<void> => {
@@ -167,49 +186,47 @@ app.get("/api/users", async (req, res, next): Promise<void> => {
 
 // [GET] /me
 // Get the currently logged in user based on the session
-app.get("/api/me", async (req, res, next): Promise<void> => {
-  if (req.session.userId) {
-    const id = req.session.userId;
-    try {
-      const user = await prisma.user.findUnique({
-        where: { id: Number(id) },
-        include: { groups: { include: { members: true } } },
-      });
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    res.status(401).json({ message: "Not logged in" });
+app.get("/api/me", isAuthenticated, async (req, res, next): Promise<void> => {
+  const id = req.session.userId;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) },
+      include: { groups: { include: { members: true } } },
+    });
+    res.json(user);
+  } catch (error) {
+    next(error);
   }
 });
 
-// [GET] /api/user/groups
-app.get("/api/user/groups", async (req, res, next): Promise<void> => {
-  if (req.session.userId) {
-    const id = req.session.userId;
+// [GET] /api/user/:userID/groups
+app.get(
+  "/api/user/:userID/groups",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { userID } = req.params;
     try {
       const user = await prisma.user.findUnique({
-        where: { id: Number(id) },
+        where: { id: Number(userID) },
         include: { groups: { include: { members: true } } },
       });
       res.json(user?.groups);
     } catch (error) {
       next(error);
     }
-  } else {
-    res.status(401).json({ message: "Not logged in" });
-  }
-});
+  },
+);
 
-// PUT /api/user/groups
-app.put("/api/user/groups", async (req, res, next): Promise<void> => {
-  if (req.session.userId) {
-    const id = req.session.userId;
+// PUT /api/user/:userID/groups
+app.put(
+  "/api/user/:userID/groups",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { userID } = req.params;
     const { groupId } = req.body;
     try {
       const user = await prisma.user.update({
-        where: { id: Number(id) },
+        where: { id: Number(userID) },
         data: {
           groups: {
             connect: { id: Number(groupId) },
@@ -220,10 +237,8 @@ app.put("/api/user/groups", async (req, res, next): Promise<void> => {
     } catch (error) {
       next(error);
     }
-  } else {
-    res.status(401).json({ message: "Not logged in" });
-  }
-});
+  },
+);
 
 //  [PUT] /users/:id
 app.put("/api/users/:id", async (req, res, next): Promise<void> => {

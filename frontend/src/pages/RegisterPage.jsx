@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [newUser, setNewUser] = useState({
     username: "",
     password: "",
+    photo: "/default_profile_pic.jpg",
   });
   const navigate = useNavigate();
   const { setUser } = useContext(userContext);

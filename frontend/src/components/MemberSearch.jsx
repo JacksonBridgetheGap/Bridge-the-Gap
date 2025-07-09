@@ -36,6 +36,7 @@ export default function MemberSearch({ onChange }) {
               member={user}
               onClick={removeMember}
               className={"added-member"}
+              key={user.id}
             />
           );
         })}
@@ -49,6 +50,7 @@ export default function MemberSearch({ onChange }) {
               member={user}
               onClick={addMember}
               className={"unadded-member"}
+              key={user.id}
             />
           );
         })}
