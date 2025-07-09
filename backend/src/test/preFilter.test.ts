@@ -1,4 +1,5 @@
 import preFilter from "../algorithim/preFilter";
+import { groupsSmall } from "./test.data/testGroups";
 
 test("preFilter: basic", () => {
   const user = {
@@ -12,24 +13,9 @@ test("preFilter: basic", () => {
       },
     ],
   };
-  const groups = [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-    {
-      id: 3,
-    },
-  ];
 
   // @ts-ignore
-  expect(preFilter(user, groups)).toEqual([
-    {
-      id: 3,
-    },
-  ]);
+  expect(preFilter(user, groupsSmall)).toEqual(groupsSmall.slice(2, 10));
 });
 
 test("preFilter: filter none", () => {
@@ -37,49 +23,17 @@ test("preFilter: filter none", () => {
     id: 1,
     groups: [],
   };
-  const groups = [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-    {
-      id: 3,
-    },
-  ];
 
   // @ts-ignore
-  expect(preFilter(user, groups)).toEqual(groups);
+  expect(preFilter(user, groupsSmall)).toEqual(groupsSmall);
 });
 
 test("preFilter: filter all", () => {
   const user = {
     id: 1,
-    groups: [
-      {
-        id: 1,
-      },
-      {
-        id: 2,
-      },
-      {
-        id: 3,
-      },
-    ],
+    groups: groupsSmall,
   };
-  const groups = [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-    {
-      id: 3,
-    },
-  ];
 
   // @ts-ignore
-  expect(preFilter(user, groups)).toEqual([]);
+  expect(preFilter(user, groupsSmall)).toEqual([]);
 });
