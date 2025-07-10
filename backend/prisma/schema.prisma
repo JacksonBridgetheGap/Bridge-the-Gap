@@ -15,7 +15,7 @@ model User {
   location String? @default("None")
   email    String? @unique
   groups   Group[]
-  circle   Int[]   @default([])
+  circle   Int[]   @default([]) //WIP: this needs to be switched over to a many-to-many relationship of User[]
 }
 
 model Group {

@@ -67,6 +67,10 @@ app.get(
       where: { id: Number(userID) },
       include: { groups: true },
     });
+    if (user === null) {
+      res.status(400).json({ message: "User not found" });
+      return;
+    }
     const groups = await recommendations(user);
     res.json(groups);
   },
