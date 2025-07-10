@@ -17,7 +17,7 @@ promptRouter.get("/api/:groupID/prompt", async (req, res) => {
     const timeSinceLastUpdate =
       (todaysDate - lastUpdate) / (1000 * 60 * 60 * 24);
     if (timeSinceLastUpdate >= 7) {
-      const prompt = await getResponseForPrompt(group);
+      const prompt = await getResponseForPrompt();
       const updatedGroup = await prisma.group.update({
         where: { id: Number(groupID) },
         data: {
