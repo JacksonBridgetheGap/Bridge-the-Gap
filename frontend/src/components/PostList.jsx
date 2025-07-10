@@ -9,6 +9,7 @@ export default function PostList({ group, posts, onOpen }) {
   useEffect(() => {
     if (group?.prompt) {
       setPrompt(group.prompt);
+      updatePrompt();
     }
   }, [group]);
 
@@ -27,7 +28,6 @@ export default function PostList({ group, posts, onOpen }) {
       <div className="post-container">
         <div className="prompt-box">
           <h3>Weekly Prompt:</h3>
-          <button onClick={updatePrompt}>Make Request</button>
           <p>{prompt}</p>
           <button className="add-post-button" onClick={onOpen}>
             +
