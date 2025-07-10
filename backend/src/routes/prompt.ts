@@ -12,14 +12,25 @@ promptRouter.get("/api/:groupID/prompt", async (req, res) => {
     const group = await prisma.group.findUnique({
       where: { id: Number(groupID) },
     });
-    const prompt = await getResponseForPrompt();
-    const updatedGroup = await prisma.group.update({
-      where: { id: Number(groupID) },
-      data: {
-        prompt: prompt,
-      },
-    });
-    res.json({ prompt, group });
+    const todaysDate = new Date().getTime();
+    const lastUpdate = group!.promptLastUpdate.getTime();
+    const timeSinceLastUpdate =
+      (todaysDate - lastUpdate) / (1000 * 60 * 60 * 24);
+    if (timeSinceLastUpdate >= 7) {
+      const prompt = await getResponseForPrompt();
+      const updatedGroup = await prisma.group.update({
+        where: { id: Number(groupID) },
+        data: {
+          prompt: prompt,
+          promptLastUpdate: new Date(),
+        },
+      });
+      res.status(201).json({ prompt, group });
+    } else {
+      res
+        .status(200)
+        .json({ message: "Prompt not updated yet. Try again in 7 days." });
+    }
   } catch (error) {
     res.status(400).json({ message: "Error getting prompt" });
   }

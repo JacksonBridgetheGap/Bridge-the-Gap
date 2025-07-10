@@ -15,6 +15,9 @@ export default function PostList({ group, posts, onOpen }) {
   const updatePrompt = () => {
     const PROMPT_URL = `/api/${group.id}/prompt`;
     httpRequest(PROMPT_URL, "GET").then((res) => {
+      if (res.message) {
+        return;
+      }
       setPrompt(res.prompt);
     });
   };

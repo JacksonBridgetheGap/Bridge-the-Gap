@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Group" ALTER COLUMN "promptLastUpdate" SET DEFAULT CURRENT_TIMESTAMP;

@@ -18,12 +18,13 @@ model User {
 }
 
 model Group {
-  id      Int    @id @default(autoincrement())
-  name    String
-  img     String
-  members User[]
-  posts   Post[]
-  prompt  String @default("Weekly Challenge: Post Something Cool!")
+  id               Int      @id @default(autoincrement())
+  name             String
+  img              String
+  members          User[]
+  posts            Post[]
+  prompt           String   @default("Weekly Challenge: Post Something Cool!")
+  promptLastUpdate DateTime @default("1970-01-01T00:00:00Z")
 }
 
 model Post {
