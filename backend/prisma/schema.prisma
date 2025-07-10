@@ -23,6 +23,7 @@ model Group {
   img     String
   members User[]
   posts   Post[]
+  prompt  String @default("Weekly Challenge: Post Something Cool!")
 }
 
 model Post {

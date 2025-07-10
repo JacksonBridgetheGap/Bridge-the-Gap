@@ -1,18 +1,31 @@
 import "../styles/PostList.css";
 import Post from "./Post";
+import { httpRequest } from "../utils/utils.js";
+import { useEffect, useState } from "react";
 
-export default function PostList({ posts, onOpen }) {
+export default function PostList({ group, posts, onOpen }) {
+  const [prompt, setPrompt] = useState("");
+
+  useEffect(() => {
+    if (group?.prompt) {
+      setPrompt(group.prompt);
+    }
+  }, [group]);
+
+  const updatePrompt = () => {
+    const PROMPT_URL = `/api/${group.id}/prompt`;
+    httpRequest(PROMPT_URL, "GET").then((res) => {
+      setPrompt(res.prompt);
+    });
+  };
+
   if (posts) {
     return (
       <div className="post-container">
         <div className="prompt-box">
           <h3>Weekly Prompt:</h3>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt,
-            vero aut? Eos earum officiis nulla accusamus, laborum hic, at
-            suscipit itaque minima excepturi odio aspernatur blanditiis
-            provident et non. Eius?
-          </p>
+          <button onClick={updatePrompt}>Make Request</button>
+          <p>{prompt}</p>
           <button className="add-post-button" onClick={onOpen}>
             +
           </button>
