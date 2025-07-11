@@ -6,7 +6,7 @@ export default function ProfileBanner() {
 
   return (
     <div className="profile-banner">
-      <h2>{`Hello ${user.username}!`}</h2>
+      <h2 className="text-5xl font-extrabold dark:text-white">{`Hello ${user.username}!`}</h2>
     </div>
   );
 }

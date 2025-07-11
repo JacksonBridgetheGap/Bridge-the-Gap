@@ -3,20 +3,6 @@
   width: 35%;
 }
 
-.profile-details input {
-  border: none;
-  border-bottom: 1px gray solid;
-  margin: 1em 0;
-  width: 60%;
-  background-color: var(--secondary-color);
-  transition: 0.3s ease;
-}
-
-.profile-details input:focus {
-  background-color: #adadad;
-  outline: none;
-}
-
 .uploaded-preview {
   margin: 0 auto;
   width: 3em;

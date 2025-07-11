@@ -77,17 +77,20 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
         <span className="close" onClick={handleClose}>
           X
         </span>
-        <h2>Create New Group:</h2>
-        <h4>Name:</h4>
+        <h2 className="text-3xl font-bold dark:text-white">
+          Create New Group:
+        </h2>
+        <h4 className="text-lg font-bold dark:text-white">Name:</h4>
         <input
           type="text"
           name="name"
           onChange={handleInputChange}
           value={newGroup.name}
           placeholder="New Group..."
+          className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           required
         />
-        <h4>Group Image:</h4>
+        <h4 className="text-lg font-bold dark:text-white">Group Image:</h4>
         <input type="file" onChange={handleFileChange} />
         <h4>Add Tags (1 minimum):</h4>
         <Select
@@ -97,12 +100,14 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
           name={"tags"}
           onChange={handleTagChange}
         />
-        <h4>Add Members to Groups:</h4>
+        <h4 className="text-lg font-bold dark:text-white">
+          Add Members to Groups:
+        </h4>
         <MemberSearch onChange={handleMemberChange} displayMode={displayMode} />
         <input
           type="submit"
           value="Create New Group"
-          className="submit-button"
+          className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         />
       </form>
     </section>

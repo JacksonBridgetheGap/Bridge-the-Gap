@@ -15,7 +15,7 @@
 }
 
 .modal-content {
-  background-color: var(--primary-color);
+  background-color: var(--third-color);
   margin: 5% auto; /* 15% from the top and centered */
   padding: 1%;
   border: 1px solid #888;
@@ -43,7 +43,7 @@
 
 .close:hover,
 .close:focus {
-  color: white;
+  color: gray;
   text-decoration: none;
   cursor: pointer;
 }

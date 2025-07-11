@@ -10,7 +10,10 @@ export default function GroupList({ onOpen }) {
 
   return (
     <section className="group-list">
-      <button className="create-group-button" onClick={onOpen}>
+      <button
+        className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 px-6 font-medium  transition-all [box-shadow:0px_4px_1px_#a3a3a3] active:translate-y-[2px] active:shadow-none"
+        onClick={onOpen}
+      >
         Create
       </button>
       {groups?.map((group) => {

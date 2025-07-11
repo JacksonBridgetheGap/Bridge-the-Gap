@@ -28,11 +28,13 @@ export default function GroupCard({ group, members, joinedGroup, home }) {
       <div className="group-card">
         {home && <Link to={`/group/${group.id}`} className="group-link"></Link>}
         <div className="group-content">
-          <h2>{group.name}</h2>
+          <h2 className="text-2xl font-bold dark:text-white">{group.name}</h2>
           <div className="group-info">
             <img src={group.img} alt="Group Image" className="group-img" />
             <div className="member-list">
-              <p className="member-list-title">Member List:</p>
+              <p className="font-bold dark:text-white underline">
+                Member List:
+              </p>
               {members?.map((member) => {
                 return <MemberCard member={member} key={member.id} />;
               })}

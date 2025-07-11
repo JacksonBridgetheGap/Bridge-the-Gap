@@ -8,6 +8,7 @@ import MembersList from "../components/MembersList";
 import Footer from "../components/Footer";
 
 import "./GroupPage.css";
+import useUser from "../hooks/useUser.js";
 
 function GroupPage() {
   const params = useParams();
@@ -24,6 +25,7 @@ function GroupPage() {
 
   const createPost = async (postData) => {
     const POST_URL = `/api/groups/${params.id}/posts`;
+
     const newPost = await httpRequest(POST_URL, "POST", postData);
     setGroup({
       ...group,
@@ -42,7 +44,9 @@ function GroupPage() {
   return (
     <main>
       <Header />
-      <h2 className="group-title">{group ? group.name : "Loading Data..."}</h2>
+      <h2 className="text-5xl font-bold dark:text-white">
+        {group ? group.name : "Loading Data..."}
+      </h2>
       <Link to="/" className="back-button">
         {"<--"}
       </Link>

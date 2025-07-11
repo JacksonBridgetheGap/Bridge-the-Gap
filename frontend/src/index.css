@@ -1,3 +1,4 @@
+@import "tailwindcss";
 /* 1. Use a more-intuitive box-sizing model */
 *,
 *::before,
@@ -78,9 +79,11 @@ h6 {
 
 :root {
   --primary-color: #82b08c;
-  --secondary-color: #c7d0ff;
+  --secondary-color: #d6d7d8;
   --third-color: #f7f8f9;
   --text-color: #121212;
+  --header-color: #444b88;
+  --accent-color: #3B82F6;
 }
 
 button:hover {

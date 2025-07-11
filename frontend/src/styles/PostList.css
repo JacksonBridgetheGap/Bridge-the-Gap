@@ -19,7 +19,7 @@
 }
 
 .add-post-button {
-  background-color: var(--primary-color);
+  background-color: var(--accent-color);
   margin: 1em auto;
   border-radius: 30px;
   border: none;

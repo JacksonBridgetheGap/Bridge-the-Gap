@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 authRouter.post("/api/auth/register", async (req, res) => {
   //Check the username for uniqness
-  const { username, password, photo } = req.body;
+  const { username, password, photo, email, location } = req.body;
   const user = await prisma.user.findUnique({ where: { username } });
   if (user === null) {
     //Hash password and write user to db
@@ -16,6 +16,8 @@ authRouter.post("/api/auth/register", async (req, res) => {
       data: {
         username,
         password: hash!,
+        email,
+        location,
         photo,
       },
       omit: {

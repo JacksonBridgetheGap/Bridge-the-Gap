@@ -4,6 +4,6 @@ footer {
   bottom: 0;
   height: auto;
   width: 100%;
-  background-color: var(--primary-color);
   z-index: 10;
+  background-color: var(--header-color);
 }
