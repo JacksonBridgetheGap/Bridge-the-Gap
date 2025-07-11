@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "circle" SET DEFAULT ARRAY[]::INTEGER[];

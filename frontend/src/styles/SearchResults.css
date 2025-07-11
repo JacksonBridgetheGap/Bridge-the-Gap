@@ -4,3 +4,15 @@
     flex-wrap: wrap;
     justify-content: space-around;
 }
+
+.recommendations {
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding: 2em;
+    background-color: var(--third-color);
+    overflow-x: auto;
+    width: 70%;
+    border-radius: 10px;
+}

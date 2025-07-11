@@ -6,6 +6,8 @@ import isAuthenticated from "./middleware/is-authenticated";
 import { routes } from "./routes";
 import cors from "cors";
 import morgan from "morgan";
+import recommendations from "./algorithim/recommendations";
+import { UserWithGroupsAndCircle } from "./types/types";
 
 const prisma = new PrismaClient({
   omit: { user: { password: true } },
@@ -40,7 +42,6 @@ const port: number = 3000;
 app.get("/api/groups", async (req, res, next): Promise<void> => {
   const query = req.query;
   const name: string = query.name! as string;
-  console.log(name);
   try {
     const groups = await prisma.group.findMany({
       where: {
@@ -53,6 +54,27 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
     next(error);
   }
 });
+
+// [GET] /api/users/:userID/recommendations
+app.get(
+  "/api/user/:userID/recommendations",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { userID } = req.params;
+    //@ts-ignore TODO: There is error with Prisma typing but I wonder if the linter just hasn't updated since new migration
+    const user: UserWithGroupsAndCircle | null = await prisma.user.findUnique({
+      where: { id: Number(userID) },
+      //@ts-ignore TODO: I don't know what ts linter is throwing a type error for doing circle: true here but it is
+      include: { groups: true, circle: true, inCircle: true },
+    });
+    if (user === null) {
+      res.status(400).json({ message: "User not found" });
+      return;
+    }
+    const groups = await recommendations(user);
+    res.json(groups);
+  },
+);
 
 // [GET] /groups/:id
 app.get("/api/groups/:id", async (req, res, next): Promise<void> => {
@@ -70,28 +92,36 @@ app.get("/api/groups/:id", async (req, res, next): Promise<void> => {
 
 // [POST] /groups
 app.post("/api/groups", async (req, res, next): Promise<void> => {
-  const { name, img, members } = req.body;
+  const { name, img, members, tags } = req.body;
   try {
-    const memberData = members?.map((user: Prisma.UserCreateInput) => {
-      return {
-        username: user?.username,
-        photo: user?.photo,
-        location: user?.location,
-        password: user?.password,
-      };
+    const memberIds = members?.map((member: any) => {
+      return member.id;
     });
 
     //Add all data to database
-    const data = await prisma.group.create({
+    const group = await prisma.group.create({
       data: {
         name,
         img,
+        tags,
         members: {
-          connect: memberData,
+          connect: memberIds.map((id: number) => ({ id })),
         },
       },
     });
-    res.json({ data });
+
+    for (const id of memberIds) {
+      const otherIds = memberIds.filter((otherId: number) => otherId !== id);
+      await prisma.user.update({
+        where: { id: id },
+        data: {
+          circle: {
+            connect: otherIds.map((id: number) => ({ id })),
+          },
+        },
+      });
+    }
+    res.json(group);
   } catch (error) {
     next(error);
   }
@@ -173,7 +203,12 @@ app.get("/api/me", isAuthenticated, async (req, res, next): Promise<void> => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
-      include: { groups: { include: { members: true } } },
+      include: {
+        //@ts-ignore TODO: including circle is still throwing type error but is working fix later
+        inCircle: true,
+        circle: true,
+        groups: { include: { members: true } },
+      },
     });
     res.json(user);
   } catch (error) {
@@ -205,16 +240,27 @@ app.put(
   isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { userID } = req.params;
-    const { groupId } = req.body;
+    const { groupId, members } = req.body;
     try {
+      const userData = await prisma.user.findUnique({
+        where: { id: Number(userID) },
+      });
+
       const user = await prisma.user.update({
         where: { id: Number(userID) },
         data: {
           groups: {
             connect: { id: Number(groupId) },
           },
+          circle: {
+            //@ts-ignore TODO: including circle is still throwing type error but is working fix later
+            connect: members.map((id: number) => ({ id })),
+          },
         },
       });
+
+      //Update User Circle
+
       res.json(user);
     } catch (error) {
       next(error);

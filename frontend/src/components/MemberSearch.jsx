@@ -3,16 +3,17 @@ import { useState, useEffect } from "react";
 import { httpRequest } from "../utils/utils";
 import AddMemberTile from "./AddMemberTile";
 
-export default function MemberSearch({ onChange }) {
+export default function MemberSearch({ onChange, displayMode }) {
   const [addedUsers, setAddedUsers] = useState([]);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
+    setAddedUsers([]);
     const USER_URL = "/api/users";
     httpRequest(USER_URL, "GET").then((userList) => {
       setUsers(userList);
     });
-  }, []);
+  }, [displayMode]);
 
   const addMember = async (member) => {
     setUsers(users.filter((user) => user.id !== member.id));

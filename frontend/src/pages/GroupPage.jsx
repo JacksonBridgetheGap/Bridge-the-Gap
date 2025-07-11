@@ -23,7 +23,6 @@ function GroupPage() {
   }, [params.id]);
 
   const createPost = async (postData) => {
-    //const POST_URL = new URL(`groups/${params.id}/posts`, BASE_URL);
     const POST_URL = `/api/groups/${params.id}/posts`;
     const newPost = await httpRequest(POST_URL, "POST", postData);
     setGroup({

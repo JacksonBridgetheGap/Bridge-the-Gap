@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Group" ALTER COLUMN "tags" SET DEFAULT ARRAY[]::TEXT[];
