@@ -22,6 +22,7 @@ export const simpleUser = {
     },
   ],
   circle: [],
+  inCircle: [],
 };
 
 export const userWithCircle = {
@@ -50,4 +51,5 @@ export const userWithCircle = {
       id: 6,
     },
   ],
+  inCircle: [],
 };
