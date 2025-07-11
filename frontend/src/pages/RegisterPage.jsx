@@ -11,6 +11,8 @@ export default function RegisterPage() {
   const [newUser, setNewUser] = useState({
     username: "",
     password: "",
+    email: "",
+    location: "",
     photo: "/default_profile_pic.jpg",
   });
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="grid place-items-center h-screen">
+    <form className="flex flex-col min-h-screen justify-center items-center">
       <h1 className="text-4xl font-extrabold dark:text-white">
         Create New Account
       </h1>
@@ -73,7 +75,51 @@ export default function RegisterPage() {
               ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
               : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           }
-          required={true}
+          required
+        />
+        <br />
+      </div>
+      <div className="mb-6">
+        <label
+          htmlFor="email"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Email
+        </label>
+        <input
+          type="text"
+          name="email"
+          placeholder="jogndoe@email.com"
+          value={newUser.email}
+          onChange={handleInputChange}
+          className={
+            errorMessage
+              ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+              : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          }
+          required
+        />
+        <br />
+      </div>
+      <div className="mb-6">
+        <label
+          htmlFor="location"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Username
+        </label>
+        <input
+          type="text"
+          name="location"
+          placeholder="Menlo Park, CA"
+          value={newUser.location}
+          onChange={handleInputChange}
+          className={
+            errorMessage
+              ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+              : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          }
+          required
         />
         <br />
       </div>
@@ -95,11 +141,12 @@ export default function RegisterPage() {
               ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
               : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           }
-          required={true}
+          required
         />
         <br />
       </div>
       <button
+        type="submit"
         onClick={handleRegister}
         className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
@@ -112,6 +159,6 @@ export default function RegisterPage() {
       >
         Already have an account?
       </Link>
-    </div>
+    </form>
   );
 }

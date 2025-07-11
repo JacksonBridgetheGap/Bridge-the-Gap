@@ -43,7 +43,7 @@
 
 .close:hover,
 .close:focus {
-  color: white;
+  color: gray;
   text-decoration: none;
   cursor: pointer;
 }

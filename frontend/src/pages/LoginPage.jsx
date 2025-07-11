@@ -55,7 +55,7 @@ function LoginPage() {
 
   return (
     <div>
-      <form className="grid place-items-center h-screen">
+      <form className="flex flex-col min-h-screen justify-center items-center">
         <h1 className="text-4xl font-extrabold dark:text-white">Login</h1>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div className="mb-6">
