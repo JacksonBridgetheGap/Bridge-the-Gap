@@ -99,7 +99,7 @@ app.post("/api/groups", async (req, res, next): Promise<void> => {
     });
 
     //Add all data to database
-    const data = await prisma.group.create({
+    const group = await prisma.group.create({
       data: {
         name,
         img,
@@ -121,7 +121,7 @@ app.post("/api/groups", async (req, res, next): Promise<void> => {
         },
       });
     }
-    res.json({ data });
+    res.json(group);
   } catch (error) {
     next(error);
   }

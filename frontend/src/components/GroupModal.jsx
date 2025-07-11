@@ -98,7 +98,7 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
           onChange={handleTagChange}
         />
         <h4>Add Members to Groups:</h4>
-        <MemberSearch onChange={handleMemberChange} />
+        <MemberSearch onChange={handleMemberChange} displayMode={displayMode} />
         <input
           type="submit"
           value="Create New Group"
