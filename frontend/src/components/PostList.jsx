@@ -4,7 +4,7 @@ import { httpRequest } from "../utils/utils.js";
 import { useEffect, useState } from "react";
 
 export default function PostList({ group, posts, onOpen }) {
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState(group?.prompt ?? "");
 
   useEffect(() => {
     if (group?.prompt) {
@@ -14,7 +14,7 @@ export default function PostList({ group, posts, onOpen }) {
   }, [group]);
 
   const updatePrompt = () => {
-    const PROMPT_URL = `/api/${group.id}/prompt`;
+    const PROMPT_URL = `/api/groups/${group.id}/prompt`;
     httpRequest(PROMPT_URL, "GET").then((res) => {
       if (res.message) {
         return;

@@ -48,9 +48,9 @@ function GroupPage() {
         {"<--"}
       </Link>
       <PostList
-        posts={group ? group.posts : []}
+        posts={group?.posts ?? []}
         onOpen={openModal}
-        group={group ? group : {}}
+        group={group ? group : null}
       />
       <MembersList members={group ? group.members : []} />
       {

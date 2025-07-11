@@ -6,7 +6,9 @@ const prisma = new PrismaClient();
 
 export const promptRouter = express.Router();
 
-promptRouter.get("/api/:groupID/prompt", async (req, res) => {
+const DAY_IN_MS = 1000 * 60 * 60 * 24;
+
+promptRouter.get("/api/groups/:groupID/prompt", async (req, res) => {
   const { groupID } = req.params;
   try {
     const group = await prisma.group.findUnique({
@@ -14,8 +16,7 @@ promptRouter.get("/api/:groupID/prompt", async (req, res) => {
     });
     const todaysDate = new Date().getTime();
     const lastUpdate = group!.promptLastUpdate.getTime();
-    const timeSinceLastUpdate =
-      (todaysDate - lastUpdate) / (1000 * 60 * 60 * 24);
+    const timeSinceLastUpdate = (todaysDate - lastUpdate) / DAY_IN_MS;
     if (timeSinceLastUpdate >= 7) {
       const prompt = await getResponseForPrompt();
       const updatedGroup = await prisma.group.update({
