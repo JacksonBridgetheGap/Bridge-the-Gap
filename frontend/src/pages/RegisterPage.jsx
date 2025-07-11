@@ -60,6 +60,7 @@ export default function RegisterPage() {
         value={newUser.username}
         onChange={handleInputChange}
         className={errorMessage ? "error" : ""}
+        required={true}
       />
       <br />
       <input
@@ -69,6 +70,7 @@ export default function RegisterPage() {
         value={newUser.password}
         onChange={handleInputChange}
         className={errorMessage ? "error" : ""}
+        required={true}
       />
       <br />
       <button onClick={handleRegister}>Register</button>

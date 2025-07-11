@@ -1,12 +1,12 @@
 //Return the users classification tags and scores as a dictionary with tags as keys
 // and values as the number of times those tags appear
-import { UserWithGroups } from "../types/types";
+import { UserWithGroupsAndCircle } from "../types/types";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 //Create a user classification map to describe the users relationship strength with each tag
-export function userParse(user: UserWithGroups | null) {
+export function userParse(user: UserWithGroupsAndCircle | null) {
   const classification = new Map();
 
   //If user isn't apart of any group return an empty map

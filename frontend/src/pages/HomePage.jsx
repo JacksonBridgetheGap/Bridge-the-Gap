@@ -9,7 +9,6 @@ import GroupList from "../components/GroupList";
 import { SearchResults } from "../components/SearchResults.jsx";
 import Footer from "../components/Footer";
 import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
-import useSearch from "../hooks/useSearch.js";
 
 const GROUP_URL = "/api/groups";
 
@@ -20,9 +19,8 @@ function useCreateGroup() {
   const create = useCallback(
     (groupData) => {
       httpRequest(GROUP_URL, "POST", groupData)
-        .then(() => {
-          //Use context to update group UI
-          setGroups([...groups, groupData]);
+        .then((group) => {
+          setGroups([...groups, group]);
         })
         .finally(() => {
           setIsLoading(false);
@@ -47,7 +45,7 @@ function HomePage() {
     setModalDisplay("modal-hidden");
   };
 
-  const startSearch = (searchTerm) => {
+  const startSearch = () => {
     setSearching(true);
   };
 
