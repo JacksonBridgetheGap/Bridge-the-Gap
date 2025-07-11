@@ -8,9 +8,11 @@ test("contentBasedFilter: small", () => {
 
   userMap.set("hobbies", 10);
   userMap.set("business", 10);
+  //@ts-ignore
   const groupMap = createGroupMatrix(groupsSmall);
 
   expect(
+    //@ts-ignore
     contentBasedFilter(simpleUser, userMap, groupMap, groupsSmall)[0],
   ).toEqual({
     id: 5,
@@ -25,6 +27,7 @@ test("contentBasedFilter: circle", () => {
   const userMap = new Map();
 
   userMap.set("education", 10);
+  //@ts-ignore
   const groupMap = createGroupMatrix(groupsSmall);
 
   expect(
@@ -45,9 +48,11 @@ test("contentBasedFilter: medium", () => {
 
   userMap.set("hobbies", 10);
   userMap.set("business", 10);
+  //@ts-ignore
   const groupMap = createGroupMatrix(groupsSmall);
 
   expect(
+    //@ts-ignore
     contentBasedFilter(simpleUser, userMap, groupMap, groupsSmall)[0],
   ).toEqual({
     id: 5,
@@ -63,9 +68,11 @@ test("contentBasedFilter: large", () => {
 
   userMap.set("hobbies", 10);
   userMap.set("business", 10);
+  //@ts-ignore
   const groupMap = createGroupMatrix(groupsSmall);
 
   expect(
+    //@ts-ignore
     contentBasedFilter(simpleUser, userMap, groupMap, groupsSmall)[0],
   ).toEqual({
     id: 5,

@@ -77,7 +77,9 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
         <span className="close" onClick={handleClose}>
           X
         </span>
-        <h2>Create New Group:</h2>
+        <h2 className="text-3xl font-bold dark:text-white">
+          Create New Group:
+        </h2>
         <h4>Name:</h4>
         <input
           type="text"

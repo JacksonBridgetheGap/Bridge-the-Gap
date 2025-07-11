@@ -3,7 +3,7 @@
   min-width: 5em;
   height: auto;
   max-height: 20%;
-  background-color: var(--secondary-color);
+  background-color: var(--accent-color);
   margin: 2em;
   overflow-y: auto;
 }
