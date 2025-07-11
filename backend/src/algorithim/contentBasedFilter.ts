@@ -39,9 +39,7 @@ export default function contentBasedFilter(
   const relationshipStrengths = new Map();
 
   //Get users circle as a list of ids
-  //@ts-ignore TODO: This user.id and inCircle.map is throwing a type error in the ts linter but it's fine will fix later
-  const circleList: number[] = user?.circle.map((user) => user.id);
-  //@ts-ignore
+  const circleList: number[] | undefined = user?.circle.map((user) => user.id);
   const inCircleList: number[] = user?.inCircle.map((user) => user.id)!;
   const idList = circleList?.concat(inCircleList);
   const idSet = new Set(idList);

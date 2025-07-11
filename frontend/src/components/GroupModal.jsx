@@ -67,8 +67,8 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     onCreate(newGroup);
-    onClose();
     setNewGroup(defaultGroup);
+    onClose();
   };
 
   return (

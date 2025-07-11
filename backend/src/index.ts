@@ -61,10 +61,8 @@ app.get(
   isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { userID } = req.params;
-    //@ts-ignore TODO: There is error with Prisma typing but I wonder if the linter just hasn't updated since new migration
     const user: UserWithGroupsAndCircle | null = await prisma.user.findUnique({
       where: { id: Number(userID) },
-      //@ts-ignore TODO: I don't know what ts linter is throwing a type error for doing circle: true here but it is
       include: { groups: true, circle: true, inCircle: true },
     });
     if (user === null) {
@@ -107,6 +105,9 @@ app.post("/api/groups", async (req, res, next): Promise<void> => {
         members: {
           connect: memberIds.map((id: number) => ({ id })),
         },
+      },
+      include: {
+        members: true,
       },
     });
 
@@ -204,7 +205,6 @@ app.get("/api/me", isAuthenticated, async (req, res, next): Promise<void> => {
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
       include: {
-        //@ts-ignore TODO: including circle is still throwing type error but is working fix later
         inCircle: true,
         circle: true,
         groups: { include: { members: true } },
@@ -253,7 +253,6 @@ app.put(
             connect: { id: Number(groupId) },
           },
           circle: {
-            //@ts-ignore TODO: including circle is still throwing type error but is working fix later
             connect: members.map((id: number) => ({ id })),
           },
         },

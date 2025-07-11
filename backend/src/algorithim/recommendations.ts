@@ -1,8 +1,8 @@
 import { userParse, createGroupMatrix } from "../utils/dataUtils";
 import preFilter from "./preFilter";
 import contentBasedFilter from "./contentBasedFilter";
-import { PrismaClient, Prisma } from "@prisma/client";
-import { UserWithGroupsAndCircle } from "../types/types";
+import { PrismaClient } from "@prisma/client";
+import { GroupWithMembers, UserWithGroupsAndCircle } from "../types/types";
 const prisma = new PrismaClient();
 
 //Return the top 4 recommended groups based off a content-based filter
@@ -15,13 +15,15 @@ export default async function recommendations(
   user: UserWithGroupsAndCircle | null,
 ) {
   //1.
-  const groups = await prisma.group.findMany({ include: { members: true } });
+  const groups: GroupWithMembers = await prisma.group.findMany({
+    include: { members: true },
+  });
 
   //2.
   const userClassifications = userParse(user);
 
   //3.
-  const filteredGroups = preFilter(user, groups);
+  const filteredGroups: GroupWithMembers = preFilter(user, groups);
 
   //4.
   const groupMatrix = createGroupMatrix(filteredGroups);
@@ -31,7 +33,6 @@ export default async function recommendations(
     user,
     userClassifications,
     groupMatrix,
-    // @ts-ignore
     filteredGroups,
   );
 
