@@ -28,6 +28,7 @@ test("contentBasedFilter: circle", () => {
   const groupMap = createGroupMatrix(groupsSmall);
 
   expect(
+    // @ts-ignore
     contentBasedFilter(userWithCircle, userMap, groupMap, groupsSmall)[0],
   ).toEqual({
     id: 2,

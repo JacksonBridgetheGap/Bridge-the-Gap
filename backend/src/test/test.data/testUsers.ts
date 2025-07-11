@@ -1,3 +1,5 @@
+import { UserWithGroupsAndCircle } from "../../types/types";
+
 export const simpleUser = {
   id: 0,
   username: "test",
@@ -43,5 +45,9 @@ export const userWithCircle = {
       tags: ["buissness", "travel"],
     },
   ],
-  circle: [6],
+  circle: [
+    {
+      id: 6,
+    },
+  ],
 };

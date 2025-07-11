@@ -8,6 +8,6 @@ interface User {
   id: number;
 }
 
-type UserWithGroups = Prisma.UserGetPayload<{
-  include: { groups: true };
+type UserWithGroupsAndCircle = Prisma.UserGetPayload<{
+  include: { groups: true; circle: true; inCircle: true };
 }>;

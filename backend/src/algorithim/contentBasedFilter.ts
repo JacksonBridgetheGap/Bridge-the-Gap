@@ -1,6 +1,6 @@
 import { cosineSimilarity } from "../math/math";
 import { PrismaClient } from "@prisma/client";
-import { UserWithGroups } from "../types/types";
+import { UserWithGroupsAndCircle } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -17,14 +17,14 @@ const TAG_OPTIONS = [
 ];
 
 //This is just to change the strength of how much we value people in your circle being in groups
-const FRIEND_CONSTANT = 0.1;
+const FRIEND_CONSTANT = 0.2;
 
 type GroupWithMembers = {
   members: any[];
 } & Awaited<ReturnType<typeof prisma.group.findMany>>[number];
 type RecordsType = GroupWithMembers[];
 export default function contentBasedFilter(
-  user: UserWithGroups | null,
+  user: UserWithGroupsAndCircle | null,
   userClassificatoins: Map<string, number>,
   groupMatrix: Map<number, Map<string, number>>,
   groups: RecordsType,
@@ -39,7 +39,12 @@ export default function contentBasedFilter(
   const relationshipStrengths = new Map();
 
   //Get users circle as a list of ids
-  const idSet = new Set(user?.circle);
+  //@ts-ignore TODO: This user.id and inCircle.map is throwing a type error in the ts linter but it's fine will fix later
+  const circleList: number[] = user?.circle.map((user) => user.id);
+  //@ts-ignore
+  const inCircleList: number[] = user?.inCircle.map((user) => user.id)!;
+  const idList = circleList?.concat(inCircleList);
+  const idSet = new Set(idList);
   groups.forEach((group) => {
     //Construct group vector
     const groupVector = Array.from({ length: 10 }, () => 0);
