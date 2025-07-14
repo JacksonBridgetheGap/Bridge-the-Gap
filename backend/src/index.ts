@@ -226,7 +226,7 @@ app.get(
     try {
       const user = await prisma.user.findUnique({
         where: { id: Number(userID) },
-        include: { groups: { include: { members: true } } },
+        include: { groups: { include: { members: true, events: true } } },
       });
       res.json(user?.groups);
     } catch (error) {

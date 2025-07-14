@@ -1,6 +1,7 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../providers/UserProvider.jsx";
+import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
 import { useContext } from "react";
 
 export default function UserCalendar() {
@@ -11,11 +12,33 @@ export default function UserCalendar() {
     margin: "0 2%",
   };
 
-  const { user } = useContext(userContext);
+  const { user, setUser } = useContext(userContext);
+  const userEvents = user.events.map((event) => {
+    return {
+      ...event,
+      backColor: "#4d9ffb",
+      text: `${event.text} - ${user.username}`,
+    };
+  });
+
+  const { groups } = useContext(userGroupContext);
+  const groupEvents = groups.flatMap((group) => {
+    return group.events.map((event) => {
+      return {
+        ...event,
+        backColor: "#f35757",
+        text: `${event.text} - ${group.name}`,
+      };
+    });
+  });
 
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/user/${user.id}/events`;
     httpRequest(EVENT_URL, "POST", eventData).then(() => {});
+    setUser({
+      ...user,
+      events: [...user.events, eventData],
+    });
   };
 
   const deleteEvent = (id) => {
@@ -31,7 +54,7 @@ export default function UserCalendar() {
   return (
     <div style={styles}>
       <Calendar
-        events={user.events}
+        events={userEvents.concat(groupEvents)}
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}

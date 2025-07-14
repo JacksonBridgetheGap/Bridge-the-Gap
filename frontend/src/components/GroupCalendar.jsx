@@ -1,5 +1,6 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
+import { useEffect, useState } from "react";
 
 export default function GroupCalendar({ group }) {
   const styles = {
@@ -8,9 +9,17 @@ export default function GroupCalendar({ group }) {
     margin: "0 auto",
   };
 
+  const [groupEvents, setGroupEvents] = useState([]);
+
+  useEffect(() => {
+    setGroupEvents(group.events);
+  }, [group]);
+
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/group/${group.id}/events`;
-    httpRequest(EVENT_URL, "POST", eventData).then(() => {});
+    httpRequest(EVENT_URL, "POST", eventData).then(() => {
+      setGroupEvents([...groupEvents, eventData]);
+    });
   };
 
   const deleteEvent = (id) => {
@@ -26,7 +35,7 @@ export default function GroupCalendar({ group }) {
   return (
     <div style={styles}>
       <Calendar
-        events={group.events}
+        events={groupEvents}
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}

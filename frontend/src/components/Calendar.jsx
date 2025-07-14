@@ -7,7 +7,7 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
 
   const config = {
     viewType: "Week",
-    durationBarVisible: true,
+    durationBarVisible: false,
     timeRangeSelectedHandling: "Enabled",
     heightSpec: "BusinessHours",
     onTimeRangeSelected: async (args) => {
@@ -22,7 +22,6 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
         id: DayPilot.guid(),
         text: modal.result,
       };
-      calendar.events.add(newEvent);
       onAdd(newEvent);
     },
     onEventClick: async (args) => {
