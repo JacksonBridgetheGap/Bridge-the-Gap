@@ -6,9 +6,8 @@ import PostList from "../components/PostList";
 import PostModal from "../components/PostModal";
 import MembersList from "../components/MembersList";
 import Footer from "../components/Footer";
-
 import "./GroupPage.css";
-import useUser from "../hooks/useUser.js";
+import GroupCalendar from "../components/GroupCalendar.jsx";
 
 function GroupPage() {
   const params = useParams();
@@ -55,10 +54,8 @@ function GroupPage() {
         onOpen={openModal}
         group={group ? group : null}
       />
+      <GroupCalendar />
       <MembersList members={group ? group.members : []} />
-      {
-        //Calendar
-      }
       <Footer />
       <PostModal
         onPost={createPost}

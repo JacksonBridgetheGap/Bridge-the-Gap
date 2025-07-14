@@ -3,7 +3,7 @@ import { useState, useCallback, useContext } from "react";
 import { httpRequest } from "../utils/utils";
 import Header from "../components/Header";
 import { Navagation } from "../components/Navagation";
-import HomeDetails from "../components/HomeDetails";
+import UserCalendar from "../components/UserCalendar.jsx";
 import GroupModal from "../components/GroupModal";
 import GroupList from "../components/GroupList";
 import { SearchResults } from "../components/SearchResults.jsx";
@@ -63,7 +63,7 @@ function HomePage() {
         <SearchResults />
       ) : (
         <div className="home-content">
-          <HomeDetails />
+          <UserCalendar />
           <GroupList onOpen={openModal} />
           <GroupModal
             displayMode={modalDisplay}
