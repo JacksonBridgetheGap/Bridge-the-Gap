@@ -7,8 +7,9 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
 
   const config = {
     viewType: "Week",
-    durationBarVisible: false,
+    durationBarVisible: true,
     timeRangeSelectedHandling: "Enabled",
+    heightSpec: "BusinessHours",
     onTimeRangeSelected: async (args) => {
       const modal = await DayPilot.Modal.prompt("Add a new event", "Title");
       calendar.clearSelection();
