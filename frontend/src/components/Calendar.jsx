@@ -1,9 +1,8 @@
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../styles/Calendar.css";
 
-export default function Calendar() {
-  const [events, setEvents] = useState([]);
+export default function Calendar({ events, onAdd, onDelete, onEdit }) {
   const [calendar, setCalendar] = useState(null);
 
   const config = {
@@ -16,12 +15,15 @@ export default function Calendar() {
       if (!modal.result) {
         return;
       }
-      calendar.events.add({
-        start: args.start,
-        end: args.end,
+      const newEvent = {
+        start: args.start.toDate().toISOString(),
+        end: args.end.toDate().toISOString(),
         id: DayPilot.guid(),
         text: modal.result,
-      });
+      };
+      console.log("raw: ", args.start.toString());
+      console.log("formatted: ", args.start.toDate().toISOString());
+      onAdd(newEvent);
     },
     onEventClick: async (args) => {
       await EditEvent(args.e);
@@ -31,7 +33,8 @@ export default function Calendar() {
         {
           text: "Delete",
           onClick: async (args) => {
-            calendar.events.remove(args.source);
+            onDelete(args.source.cache.id);
+            calendar.events.remove(args.source.cache.id);
           },
         },
         {
@@ -71,27 +74,13 @@ export default function Calendar() {
     }
     event.data.text = modal.result;
     calendar.events.update(event);
+    onEdit({
+      id: event.id(),
+      start: event.start().toDate().toISOString(),
+      end: event.end().toDate().toISOString(),
+      text: modal.result,
+    });
   };
-
-  useEffect(() => {
-    const events = [
-      {
-        id: 1,
-        text: "Event 1",
-        start: "2025-07-14T12:00:00",
-        end: "2025-07-14T15:00:00",
-        participants: 2,
-      },
-      {
-        id: 1,
-        text: "Event 2",
-        start: "2025-07-15T12:00:00",
-        end: "2025-07-15T15:00:00",
-        participants: 2,
-      },
-    ];
-    setEvents(events);
-  }, []);
 
   return (
     <div>

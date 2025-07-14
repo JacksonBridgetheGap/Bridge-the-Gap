@@ -14,7 +14,9 @@ eventsRouter.get(
     try {
       const user = await prisma.user.findUnique({
         where: { id: Number(userId) },
-        include: { events: true },
+        include: {
+          events: { select: { id: true, text: true, start: true, end: true } },
+        },
       });
       res.status(200).json({ events: user?.events });
     } catch (error) {
