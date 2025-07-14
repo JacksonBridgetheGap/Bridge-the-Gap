@@ -1,7 +1,7 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../providers/UserProvider.jsx";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 export default function UserCalendar() {
   const styles = {
@@ -12,17 +12,10 @@ export default function UserCalendar() {
   };
 
   const { user } = useContext(userContext);
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    setEvents(user.events);
-  }, [user]);
 
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/user/${user.id}/events`;
-    httpRequest(EVENT_URL, "POST", eventData).then((res) => {
-      setEvents([...events, res.event]);
-    });
+    httpRequest(EVENT_URL, "POST", eventData).then(() => {});
   };
 
   const deleteEvent = (id) => {
@@ -38,8 +31,7 @@ export default function UserCalendar() {
   return (
     <div style={styles}>
       <Calendar
-        styles={styles}
-        events={events}
+        events={user.events}
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}

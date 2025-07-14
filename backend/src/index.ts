@@ -80,7 +80,7 @@ app.get("/api/groups/:id", async (req, res, next): Promise<void> => {
   try {
     const group = await prisma.group.findUnique({
       where: { id: Number(id) },
-      include: { members: true, posts: true },
+      include: { members: true, posts: true, events: true },
     });
     res.json(group);
   } catch (error) {

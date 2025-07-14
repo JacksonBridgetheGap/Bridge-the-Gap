@@ -2,11 +2,10 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import isAuthenticated from "../middleware/is-authenticated";
 
-export const eventsRouter = express.Router();
+export const userEventsRouter = express.Router();
 const prisma = new PrismaClient();
 
-//USER EVENT ROUTES
-eventsRouter.get(
+userEventsRouter.get(
   "/api/user/:userId/events",
   isAuthenticated,
   async (req, res) => {
@@ -25,7 +24,7 @@ eventsRouter.get(
   },
 );
 
-eventsRouter.post(
+userEventsRouter.post(
   "/api/user/:userId/events",
   isAuthenticated,
   async (req, res) => {
@@ -57,7 +56,7 @@ eventsRouter.post(
   },
 );
 
-eventsRouter.put(
+userEventsRouter.put(
   "/api/user/:userId/events/:eventId",
   isAuthenticated,
   async (req, res) => {
@@ -79,7 +78,7 @@ eventsRouter.put(
   },
 );
 
-eventsRouter.delete(
+userEventsRouter.delete(
   "/api/user/:userId/events/:eventId",
   isAuthenticated,
   async (req, res) => {

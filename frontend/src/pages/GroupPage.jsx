@@ -54,7 +54,7 @@ function GroupPage() {
         onOpen={openModal}
         group={group ? group : null}
       />
-      <GroupCalendar />
+      <GroupCalendar group={group} />
       <MembersList members={group ? group.members : []} />
       <Footer />
       <PostModal

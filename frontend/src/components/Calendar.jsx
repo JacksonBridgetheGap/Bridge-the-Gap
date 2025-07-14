@@ -21,8 +21,7 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
         id: DayPilot.guid(),
         text: modal.result,
       };
-      console.log("raw: ", args.start.toString());
-      console.log("formatted: ", args.start.toDate().toISOString());
+      calendar.events.add(newEvent);
       onAdd(newEvent);
     },
     onEventClick: async (args) => {
