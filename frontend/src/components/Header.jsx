@@ -5,6 +5,7 @@ import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../providers/UserProvider.jsx";
 import { authContext } from "../providers/AuthProvider.jsx";
 import { useContext } from "react";
+import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
 const LOGOUT_URL = "/api/auth/logout";
 
@@ -29,12 +30,7 @@ export default function Header() {
         </h1>
       </div>
       <div className="relative top-4 left-10">
-        <button
-          className="text-white mr-auto cursor-pointer h-1/2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-4 py-2 text-center"
-          onClick={handleLogout}
-        >
-          Log Out
-        </button>
+        <BridgeTheGapButton onClick={handleLogout} value={"Log Out"} />
       </div>
       <div className="profile-icon">
         <Link to="/profile" className="profile-link"></Link>

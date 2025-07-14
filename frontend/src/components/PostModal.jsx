@@ -1,5 +1,7 @@
 import "../styles/PostModal.css";
 import { useState } from "react";
+import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
+import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
 const emptyPost = {
   title: "",
@@ -46,14 +48,12 @@ export default function PostModal({ displayMode, onPost, onClose }) {
         </span>
         <h2>New Post</h2>
         <h4>Name Post:</h4>
-        <input
+        <BridgeTheGapTextInput
           type="text"
           name="title"
           onChange={handleInputChange}
           value={newPost.title}
           placeholder="New post..."
-          className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          required
         />
         <h4>Add Image:</h4>
         <input type="file" className="img-input" onChange={handleFileChange} />
@@ -66,11 +66,7 @@ export default function PostModal({ displayMode, onPost, onClose }) {
           placeholder="How did i get here..."
         />
         <br />
-        <input
-          type="submit"
-          value="Post It!"
-          className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        />
+        <BridgeTheGapButton value="Post It!" onClick={handleSubmit} />
       </form>
     </section>
   );

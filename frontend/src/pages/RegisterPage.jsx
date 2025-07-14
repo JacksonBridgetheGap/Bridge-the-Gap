@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useContext, useState } from "react";
 import { userContext } from "../providers/UserProvider.jsx";
 import { authContext } from "../providers/AuthProvider.jsx";
+import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 
 const REGISTER_URL = "/api/auth/register";
 
@@ -89,7 +90,7 @@ export default function RegisterPage() {
         <input
           type="text"
           name="email"
-          placeholder="jogndoe@email.com"
+          placeholder="johndoe@email.com"
           value={newUser.email}
           onChange={handleInputChange}
           className={
@@ -145,13 +146,7 @@ export default function RegisterPage() {
         />
         <br />
       </div>
-      <button
-        type="submit"
-        onClick={handleRegister}
-        className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Register
-      </button>
+      <BridgeTheGapButton onClick={handleRegister} value={"Register"} />
       <br />
       <Link
         to="/login"

@@ -1,6 +1,8 @@
 import "../styles/ProfileDetails.css";
 import useUser from "../hooks/useUser.js";
 import { useState } from "react";
+import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
+import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
 export default function ProfileDetails({ onUpdate }) {
   const { user } = useUser();
@@ -31,14 +33,12 @@ export default function ProfileDetails({ onUpdate }) {
     <div className="profile-details">
       <h3>User Information</h3>
       <h5>Name</h5>
-      <input
-        type="text"
+      <BridgeTheGapTextInput
         name="username"
         value={newUser.username}
         placeholder="Enter Name..."
         onChange={handleInputChange}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      />{" "}
+      />
       <br />
       {
         //If I get some time I want to use react-dropzone to make a better file upload process for users
@@ -59,31 +59,25 @@ export default function ProfileDetails({ onUpdate }) {
       )}{" "}
       <br />
       <h5>Location</h5>
-      <input
-        type="text"
+      <BridgeTheGapTextInput
         name="location"
         value={newUser.location}
         placeholder="Enter Location..."
         onChange={handleInputChange}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      />{" "}
+      />
       <br />
       <h5>Email</h5>
-      <input
-        type="text"
+      <BridgeTheGapTextInput
         name="email"
         value={newUser.email}
         placeholder="Enter Email..."
         onChange={handleInputChange}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      />{" "}
+      />
       <br />
-      <button
+      <BridgeTheGapButton
         onClick={() => onUpdate(newUser)}
-        className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Save Changes
-      </button>
+        value={"Save Changes"}
+      />
     </div>
   );
 }

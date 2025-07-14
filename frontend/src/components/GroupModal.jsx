@@ -3,6 +3,7 @@ import { useState } from "react";
 import MemberSearch from "./MemberSearch";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
 
 const defaultGroup = {
   name: "",
@@ -81,14 +82,11 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
           Create New Group:
         </h2>
         <h4 className="text-lg font-bold dark:text-white">Name:</h4>
-        <input
-          type="text"
+        <BridgeTheGapTextInput
           name="name"
           onChange={handleInputChange}
           value={newGroup.name}
           placeholder="New Group..."
-          className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          required
         />
         <h4 className="text-lg font-bold dark:text-white">Group Image:</h4>
         <input type="file" onChange={handleFileChange} />
