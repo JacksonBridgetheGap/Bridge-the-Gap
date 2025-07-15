@@ -1,5 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import optimalTimeSlot from "../algorithim/optimalTimeSlot";
+import { TimeSlot } from "../utils/TimeSlot";
 import isAuthenticated from "../middleware/is-authenticated";
 
 export const groupEventsRouter = express.Router();
@@ -24,6 +26,34 @@ groupEventsRouter.get(
   },
 );
 
+groupEventsRouter.get(
+  "/api/group/:groupId/optimalEvent",
+  isAuthenticated,
+  async (req, res) => {
+    const { groupId } = req.params;
+    try {
+      const group = await prisma.group.findUnique({
+        where: { id: Number(groupId) },
+        include: {
+          members: {
+            include: { events: true },
+          },
+        },
+      });
+      const timeSlotList = group!.members.flatMap((member) =>
+        member.events.map((event) => new TimeSlot(event.start, event.end)),
+      );
+      const bestTime: TimeSlot = optimalTimeSlot(
+        timeSlotList,
+        group!.averageEventLength,
+      );
+      res.status(200).json({ bestTime });
+    } catch (error) {
+      res.status(500).json({ message: "Error during events optimization" });
+    }
+  },
+);
+
 groupEventsRouter.post(
   "/api/group/:groupId/events",
   isAuthenticated,
@@ -31,11 +61,13 @@ groupEventsRouter.post(
     const { groupId } = req.params;
     const { text, start, end, members } = req.body;
     try {
+      const startDateTime = new Date(start);
+      const endDateTime = new Date(end);
       const event = await prisma.event.create({
         data: {
           text: text,
-          start: new Date(start),
-          end: new Date(end),
+          start: startDateTime,
+          end: endDateTime,
           group: {
             connect: {
               id: Number(groupId),
@@ -49,6 +81,19 @@ groupEventsRouter.post(
           participants: true,
         },
       });
+      const eventLength = endDateTime.getHours() - startDateTime.getHours();
+      const group = await prisma.group.findUnique({
+        where: { id: Number(groupId) },
+        include: { events: true },
+      });
+      await prisma.group.update({
+        where: { id: Number(groupId) },
+        data: {
+          averageEventLength:
+            (group?.averageEventLength! + eventLength) / group?.events?.length!,
+        },
+      });
+
       res.status(201).json({ event });
     } catch (error) {
       res.status(400).json({ message: "Error creating event", error: error });

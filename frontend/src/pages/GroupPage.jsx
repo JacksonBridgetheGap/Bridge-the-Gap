@@ -12,7 +12,7 @@ import GroupCalendar from "../components/GroupCalendar.jsx";
 function GroupPage() {
   const params = useParams();
 
-  const [group, setGroup] = useState({});
+  const [group, setGroup] = useState(null);
   const [modalDisplay, setModalDisplay] = useState("modal-hidden");
 
   useEffect(() => {

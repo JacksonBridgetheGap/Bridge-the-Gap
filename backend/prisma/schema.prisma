@@ -21,15 +21,16 @@ model User {
 }
 
 model Group {
-  id               Int      @id @default(autoincrement())
-  name             String
-  img              String
-  members          User[]
-  posts            Post[]
-  tags             String[] @default([])
-  prompt           String   @default("Weekly Challenge: Post Something Cool!")
-  promptLastUpdate DateTime @updatedAt
-  events           Event[]
+  id                 Int      @id @default(autoincrement())
+  name               String
+  img                String
+  members            User[]
+  posts              Post[]
+  tags               String[] @default([])
+  prompt             String   @default("Weekly Challenge: Post Something Cool!")
+  promptLastUpdate   DateTime @updatedAt
+  events             Event[]
+  averageEventLength Int      @default(1)
 }
 
 model Post {
