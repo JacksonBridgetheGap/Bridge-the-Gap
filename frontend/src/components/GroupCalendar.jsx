@@ -1,5 +1,6 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
+import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
 const styles = {
   flexGrow: "1",
@@ -9,6 +10,7 @@ const styles = {
 
 export default function GroupCalendar({ group, setGroup }) {
   const addEvent = (eventData) => {
+    eventData.members = group.members;
     const EVENT_URL = `/api/group/${group.id}/events`;
     httpRequest(EVENT_URL, "POST", eventData).then(() => {
       setGroup({
@@ -36,6 +38,7 @@ export default function GroupCalendar({ group, setGroup }) {
         onDelete={deleteEvent}
         onEdit={editEvent}
       />
+      <BridgeTheGapButton value={"Best Next Event Time"} />
     </div>
   );
 }

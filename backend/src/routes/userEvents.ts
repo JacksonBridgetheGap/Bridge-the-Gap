@@ -31,23 +31,20 @@ userEventsRouter.post(
     const { userId } = req.params;
     const { text, start, end } = req.body;
     try {
-      const event = await prisma.userEvent.create({
+      const user = await prisma.user.findUnique({
+        where: { id: Number(userId) },
+      });
+      const event = await prisma.event.create({
         data: {
           text: text,
           start: new Date(start),
           end: new Date(end),
-          userId: Number(userId),
-        },
-      });
-
-      const user = await prisma.user.update({
-        where: { id: Number(userId) },
-        data: {
-          events: {
-            connect: { id: event.id },
+          participants: {
+            connect: [{ id: user?.id }],
           },
         },
       });
+
       res.status(201).json({ event });
     } catch (error) {
       res.status(500).json({ message: "Error creating event", error: error });
@@ -62,7 +59,7 @@ userEventsRouter.put(
     const { userId, eventId } = req.params;
     const { text, start, end } = req.body;
     try {
-      const event = await prisma.userEvent.update({
+      const event = await prisma.event.update({
         where: { id: Number(eventId) },
         data: {
           text: text,

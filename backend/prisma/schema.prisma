@@ -8,28 +8,28 @@ datasource db {
 }
 
 model User {
-  id       Int         @id @default(autoincrement())
-  username String      @unique
+  id       Int     @id @default(autoincrement())
+  username String  @unique
   password String
   photo    String?
-  location String?     @default("None")
-  email    String?     @unique
+  location String? @default("None")
+  email    String? @unique
   groups   Group[]
-  circle   User[]      @relation("UserCircle")
-  inCircle User[]      @relation("UserCircle")
-  events   UserEvent[]
+  circle   User[]  @relation("UserCircle")
+  inCircle User[]  @relation("UserCircle")
+  events   Event[]
 }
 
 model Group {
-  id               Int          @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   name             String
   img              String
   members          User[]
   posts            Post[]
-  tags             String[]     @default([])
-  prompt           String       @default("Weekly Challenge: Post Something Cool!")
-  promptLastUpdate DateTime     @updatedAt
-  events           GroupEvent[]
+  tags             String[] @default([])
+  prompt           String   @default("Weekly Challenge: Post Something Cool!")
+  promptLastUpdate DateTime @updatedAt
+  events           Event[]
 }
 
 model Post {
@@ -41,20 +41,12 @@ model Post {
   groupID     Int
 }
 
-model UserEvent {
-  id     Int      @id @default(autoincrement())
-  text   String
-  start  DateTime
-  end    DateTime
-  user   User?    @relation(fields: [userId], references: [id])
-  userId Int?
-}
-
-model GroupEvent {
-  id      Int      @id @default(autoincrement())
-  text    String
-  start   DateTime
-  end     DateTime
-  group   Group    @relation(fields: [groupId], references: [id])
-  groupId Int
+model Event {
+  id           Int      @id @default(autoincrement())
+  text         String
+  start        DateTime
+  end          DateTime
+  group        Group?   @relation(fields: [groupID], references: [id], onDelete: Cascade)
+  groupID      Int?
+  participants User[]
 }

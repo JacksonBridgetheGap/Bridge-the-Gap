@@ -29,14 +29,24 @@ groupEventsRouter.post(
   isAuthenticated,
   async (req, res) => {
     const { groupId } = req.params;
-    const { text, start, end } = req.body;
+    const { text, start, end, members } = req.body;
     try {
-      const event = await prisma.groupEvent.create({
+      const event = await prisma.event.create({
         data: {
           text: text,
           start: new Date(start),
           end: new Date(end),
-          groupId: Number(groupId),
+          group: {
+            connect: {
+              id: Number(groupId),
+            },
+          },
+          participants: {
+            connect: members.map((member: any) => ({ id: member.id })),
+          },
+        },
+        include: {
+          participants: true,
         },
       });
       res.status(201).json({ event });
@@ -51,14 +61,17 @@ groupEventsRouter.put(
   isAuthenticated,
   async (req, res) => {
     const { groupId, eventId } = req.params;
-    const { text, start, end } = req.body;
+    const { text, start, end, members } = req.body;
     try {
-      const event = await prisma.groupEvent.update({
+      const event = await prisma.event.update({
         where: { id: Number(eventId) },
         data: {
           text: text,
           start: new Date(start),
           end: new Date(end),
+          participants: {
+            connect: [members.map((member: any) => ({ id: member.id }))],
+          },
         },
       });
       res.status(200).json({ event });
@@ -74,15 +87,10 @@ groupEventsRouter.delete(
   async (req, res) => {
     const { groupId, eventId } = req.params;
     try {
-      const group = await prisma.group.update({
-        where: { id: Number(groupId) },
-        data: {
-          events: {
-            delete: [{ id: Number(eventId) }],
-          },
-        },
+      const event = await prisma.event.delete({
+        where: { id: Number(eventId) },
       });
-      res.status(200).json({ group });
+      res.status(200).json({ event });
     } catch (error) {
       res.status(400).json({ message: "Error deleting event", error: error });
     }

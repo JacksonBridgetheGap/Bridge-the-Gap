@@ -208,7 +208,7 @@ app.get("/api/me", isAuthenticated, async (req, res, next): Promise<void> => {
         inCircle: true,
         circle: true,
         groups: { include: { members: true } },
-        events: true,
+        events: { include: { group: true } },
       },
     });
     res.json(user);
