@@ -31,7 +31,6 @@ userEventsRouter.post(
     const { userId } = req.params;
     const { text, start, end } = req.body;
     try {
-      console.log(req.body);
       const event = await prisma.userEvent.create({
         data: {
           text: text,
@@ -51,7 +50,7 @@ userEventsRouter.post(
       });
       res.status(201).json({ event });
     } catch (error) {
-      res.status(400).json({ message: "Error creating event", error: error });
+      res.status(500).json({ message: "Error creating event", error: error });
     }
   },
 );

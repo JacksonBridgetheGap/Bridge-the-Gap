@@ -25,7 +25,7 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
       onAdd(newEvent);
     },
     onEventClick: async (args) => {
-      await EditEvent(args.e);
+      await editEvent(args.e);
     },
     contextMenu: new DayPilot.Menu({
       items: [
@@ -42,7 +42,7 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
         {
           text: "Edit",
           onClick: async (args) => {
-            await EditEvent(args.source);
+            await editEvent(args.source);
           },
         },
       ],
@@ -63,7 +63,7 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
     },
   };
 
-  const EditEvent = async (event) => {
+  const editEvent = async (event) => {
     const modal = await DayPilot.Modal.prompt(
       "Update event name: ",
       event.text(),

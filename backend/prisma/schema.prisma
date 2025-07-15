@@ -28,7 +28,7 @@ model Group {
   posts            Post[]
   tags             String[]     @default([])
   prompt           String       @default("Weekly Challenge: Post Something Cool!")
-  promptLastUpdate DateTime     @default("1970-01-01T00:00:00Z")
+  promptLastUpdate DateTime     @updatedAt
   events           GroupEvent[]
 }
 

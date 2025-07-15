@@ -1,24 +1,20 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
-import { useEffect, useState } from "react";
 
-export default function GroupCalendar({ group }) {
-  const styles = {
-    flexGrow: "1",
-    width: "90%",
-    margin: "0 auto",
-  };
+const styles = {
+  flexGrow: "1",
+  width: "90%",
+  margin: "0 auto",
+};
 
-  const [groupEvents, setGroupEvents] = useState([]);
-
-  useEffect(() => {
-    setGroupEvents(group.events);
-  }, [group]);
-
+export default function GroupCalendar({ group, setGroup }) {
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/group/${group.id}/events`;
     httpRequest(EVENT_URL, "POST", eventData).then(() => {
-      setGroupEvents([...groupEvents, eventData]);
+      setGroup({
+        ...group,
+        events: [...group.events, eventData],
+      });
     });
   };
 
@@ -35,7 +31,7 @@ export default function GroupCalendar({ group }) {
   return (
     <div style={styles}>
       <Calendar
-        events={groupEvents}
+        events={group.events}
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}

@@ -4,14 +4,14 @@ import { userContext } from "../providers/UserProvider.jsx";
 import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
 import { useContext } from "react";
 
-export default function UserCalendar() {
-  const styles = {
-    flexGrow: "1",
-    height: "50%",
-    width: "50%",
-    margin: "0 2%",
-  };
+const styles = {
+  flexGrow: "1",
+  height: "50%",
+  width: "50%",
+  margin: "0 2%",
+};
 
+export default function UserCalendar() {
   const { user, setUser } = useContext(userContext);
   const userEvents = user.events.map((event) => {
     return {
@@ -34,10 +34,11 @@ export default function UserCalendar() {
 
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/user/${user.id}/events`;
-    httpRequest(EVENT_URL, "POST", eventData).then(() => {});
-    setUser({
-      ...user,
-      events: [...user.events, eventData],
+    httpRequest(EVENT_URL, "POST", eventData).then((created) => {
+      setUser({
+        ...user,
+        events: [...user.events, created.event],
+      });
     });
   };
 
