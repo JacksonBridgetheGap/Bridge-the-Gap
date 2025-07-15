@@ -7,7 +7,7 @@ export class TimeSlot {
     this.end = end;
   }
 
-  eventOverlaps(event: TimeSlot): boolean {
-    return event.start < this.end && event.end > this.start;
+  eventsOverlap(other: TimeSlot): boolean {
+    return this.start < other.end && this.end > other.start;
   }
 }

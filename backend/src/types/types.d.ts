@@ -15,3 +15,7 @@ type UserWithGroupsAndCircle = Prisma.UserGetPayload<{
 type GroupWithMembers = {
   members: any[];
 } & Awaited<ReturnType<typeof prisma.group.findMany>>[number];
+
+type UserWithEvents = Prisma.UserGetPayload<{
+  include: { events: true };
+}>;

@@ -2,6 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import optimalTimeSlot from "../algorithim/optimalTimeSlot";
 import { TimeSlot } from "../utils/TimeSlot";
+import { createTimeSlotMap } from "../utils/dataUtils";
 import isAuthenticated from "../middleware/is-authenticated";
 
 export const groupEventsRouter = express.Router();
@@ -40,12 +41,15 @@ groupEventsRouter.get(
           },
         },
       });
-      const timeSlotList = group!.members.flatMap((member) =>
-        member.events.map((event) => new TimeSlot(event.start, event.end)),
-      );
+      const date = new Date();
+      const endOfWeek = new Date();
+      const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
       const bestTime: TimeSlot = optimalTimeSlot(
-        timeSlotList,
+        timeSlotSet,
+        timeSlotMap,
         group!.averageEventLength,
+        date,
+        new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
       );
       res.status(200).json({ bestTime });
     } catch (error) {
