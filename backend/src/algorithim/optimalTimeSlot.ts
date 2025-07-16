@@ -1,5 +1,12 @@
 import { TimeSlot } from "../utils/TimeSlot";
 
+/*WIP: Need to make sure algorithm never suggests a time that the group is already meeting
+ *
+ * need to pass the current groups list of events and check whether the current proposed event time is overlapping with a group event
+ * if so we need to skip that possible time slot no matter what
+ *
+ */
+
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
   timeSlotMap: Map<string, number>,
@@ -22,7 +29,7 @@ export default function optimalTimeSlot(
       currentStartTime.getUTCHours() < 8 ||
       currentStartTime.getUTCHours() > 20
     ) {
-      continue;
+      continue startTimeLoop;
     }
     let numConflicts: number = 0;
     durationLoop: for (
@@ -30,10 +37,12 @@ export default function optimalTimeSlot(
       currentDuration <= desiredLength;
       currentDuration += 30
     ) {
+      console.log("in duration loop");
       let possibleTimeSlot = new TimeSlot(
         new Date(currentStartTime.getTime()),
         new Date(currentStartTime.getTime() + currentDuration * 60 * 1000),
       );
+      console.log(possibleTimeSlot);
       if (possibleTimeSlot.end.getUTCHours() > 22) {
         continue startTimeLoop;
       }
@@ -45,6 +54,7 @@ export default function optimalTimeSlot(
           numConflicts += timeSlotMap.get(
             new TimeSlot(event.start, event.end).toString(),
           )!;
+          console.log(numConflicts);
         }
         if (numConflicts > minConflicts) {
           return;
@@ -62,5 +72,6 @@ export default function optimalTimeSlot(
       }
     }
   }
+  console.log(minConflicts);
   return bestTimeSlot;
 }

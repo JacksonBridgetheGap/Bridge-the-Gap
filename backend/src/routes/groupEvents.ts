@@ -95,7 +95,8 @@ groupEventsRouter.post(
         where: { id: Number(groupId) },
         data: {
           averageEventLength:
-            (group?.averageEventLength! + eventLength) / group?.events?.length!,
+            (group?.averageEventLength! + eventLength) /
+            (group?.events?.length! + 1),
         },
       });
 
