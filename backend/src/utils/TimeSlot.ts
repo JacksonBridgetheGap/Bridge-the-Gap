@@ -1,13 +1,18 @@
 export class TimeSlot {
   start: Date;
   end: Date;
+  groupID: number | null;
 
-  constructor(start: Date, end: Date) {
+  constructor(start: Date, end: Date, groupID: number | null) {
     this.start = start;
     this.end = end;
+    this.groupID = groupID;
   }
 
   toString(): string {
+    if (this.groupID !== null) {
+      return `${this.start.toLocaleString()} - ${this.end.toLocaleString()} - ${this.groupID}`;
+    }
     return `${this.start.toLocaleString()} - ${this.end.toLocaleString()}`;
   }
 

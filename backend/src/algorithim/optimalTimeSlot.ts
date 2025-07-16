@@ -1,22 +1,17 @@
 import { TimeSlot } from "../utils/TimeSlot";
 
-/*WIP: Need to make sure algorithm never suggests a time that the group is already meeting
- *
- * need to pass the current groups list of events and check whether the current proposed event time is overlapping with a group event
- * if so we need to skip that possible time slot no matter what
- *
- */
-
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
   timeSlotMap: Map<string, number>,
   desiredLength: number,
   startDateTime: Date,
   endDateTime: Date,
+  groupID: number,
 ): TimeSlot {
   let bestTimeSlot: TimeSlot = new TimeSlot(
     startDateTime,
     new Date(startDateTime.getTime() + 30 * 60 * 1000),
+    groupID,
   );
   let minConflicts = Infinity;
 
@@ -26,8 +21,8 @@ export default function optimalTimeSlot(
     currentStartTime.setMinutes(currentStartTime.getMinutes() + 30)
   ) {
     if (
-      currentStartTime.getUTCHours() < 8 ||
-      currentStartTime.getUTCHours() > 20
+      currentStartTime.getUTCHours() <= 8 ||
+      currentStartTime.getUTCHours() >= 20
     ) {
       continue startTimeLoop;
     }
@@ -40,23 +35,27 @@ export default function optimalTimeSlot(
       let possibleTimeSlot = new TimeSlot(
         new Date(currentStartTime.getTime()),
         new Date(currentStartTime.getTime() + currentDuration * 60 * 1000),
+        groupID,
       );
       if (possibleTimeSlot.end.getUTCHours() > 22) {
         continue startTimeLoop;
       }
-      userEvents.forEach((event) => {
+      for (const event of userEvents) {
         if (event.end <= currentStartTime) {
           userEvents.delete(event);
-        }
-        if (possibleTimeSlot.eventsOverlap(event)) {
+          continue;
+        } else if (possibleTimeSlot.eventsOverlap(event)) {
+          if (event.groupID === groupID) {
+            continue startTimeLoop;
+          }
           numConflicts += timeSlotMap.get(
-            new TimeSlot(event.start, event.end).toString(),
+            new TimeSlot(event.start, event.end, event.groupID).toString(),
           )!;
         }
         if (numConflicts > minConflicts) {
-          return;
+          continue startTimeLoop;
         }
-      });
+      }
 
       if (numConflicts <= minConflicts) {
         if (

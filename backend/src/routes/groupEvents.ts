@@ -42,6 +42,10 @@ groupEventsRouter.get(
         },
       });
       const date = new Date();
+      date.setMinutes(0);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      console.log(date);
       const endOfWeek = new Date();
       const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
       const bestTime: TimeSlot = optimalTimeSlot(
@@ -50,6 +54,7 @@ groupEventsRouter.get(
         group!.averageEventLength,
         date,
         new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
+        Number(groupId),
       );
       res.status(200).json({ bestTime });
     } catch (error) {
@@ -95,7 +100,8 @@ groupEventsRouter.post(
         where: { id: Number(groupId) },
         data: {
           averageEventLength:
-            (group?.averageEventLength! + eventLength) /
+            (group?.averageEventLength! * group?.events?.length! +
+              eventLength) /
             (group?.events?.length! + 1),
         },
       });
