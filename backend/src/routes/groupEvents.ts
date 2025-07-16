@@ -45,11 +45,8 @@ groupEventsRouter.get(
       date.setMinutes(0);
       date.setSeconds(0);
       date.setMilliseconds(0);
-      console.log(date);
       const endOfWeek = new Date();
       const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
-      console.log(timeSlotMap);
-      console.log(timeSlotSet);
       const [bestTime, numConflicts]: [TimeSlot, number] = optimalTimeSlot(
         timeSlotSet,
         timeSlotMap,
