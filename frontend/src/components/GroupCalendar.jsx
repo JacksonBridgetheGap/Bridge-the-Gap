@@ -2,6 +2,7 @@ import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 import { useState, useMemo } from "react";
+import { DayPilot } from "@daypilot/daypilot-lite-react";
 
 const styles = {
   flexGrow: "1",
@@ -51,12 +52,29 @@ export default function GroupCalendar({ group, setGroup }) {
           end: response.bestTime.end,
           text: "Suggested Event",
           backColor: "rgba(141,255,125,0.53)",
+          suggested: true,
         };
         setOptimalTime(suggestEvent);
       })
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleSuggested = async (args) => {
+    const modal = await DayPilot.Modal.prompt("Add suggested event", "Title");
+    if (!modal.result) {
+      return;
+    }
+    const newEvent = {
+      start: args.e.start().toDate().toISOString(),
+      end: args.e.end().toDate().toISOString(),
+      id: DayPilot.guid(),
+      text: modal.result,
+      suggested: true,
+    };
+    await addEvent(newEvent);
+    setOptimalTime(null);
   };
 
   return (
@@ -66,6 +84,7 @@ export default function GroupCalendar({ group, setGroup }) {
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}
+        handleSuggested={handleSuggested}
       />
       <BridgeTheGapButton
         value={"Best Next Event Time"}
