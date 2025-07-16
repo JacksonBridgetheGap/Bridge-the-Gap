@@ -48,7 +48,7 @@ groupEventsRouter.get(
       console.log(date);
       const endOfWeek = new Date();
       const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
-      const bestTime: TimeSlot = optimalTimeSlot(
+      const [bestTime, numConflicts]: [TimeSlot, number] = optimalTimeSlot(
         timeSlotSet,
         timeSlotMap,
         group!.averageEventLength,
@@ -56,7 +56,7 @@ groupEventsRouter.get(
         new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
         Number(groupId),
       );
-      res.status(200).json({ bestTime });
+      res.status(200).json({ bestTime, numConflicts });
     } catch (error) {
       res.status(500).json({ message: "Error during events optimization" });
     }

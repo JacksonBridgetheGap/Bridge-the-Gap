@@ -7,7 +7,7 @@ export default function optimalTimeSlot(
   startDateTime: Date,
   endDateTime: Date,
   groupID: number,
-): TimeSlot {
+): [TimeSlot, number] {
   let bestTimeSlot: TimeSlot = new TimeSlot(
     startDateTime,
     new Date(startDateTime.getTime() + 30 * 60 * 1000),
@@ -68,5 +68,5 @@ export default function optimalTimeSlot(
       }
     }
   }
-  return bestTimeSlot;
+  return [bestTimeSlot, minConflicts];
 }

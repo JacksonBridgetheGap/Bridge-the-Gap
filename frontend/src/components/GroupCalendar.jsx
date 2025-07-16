@@ -47,11 +47,20 @@ export default function GroupCalendar({ group, setGroup }) {
     setLoading(true);
     httpRequest(OPTIMAL_TIME_URL, "GET")
       .then((response) => {
+        const conflictLevel =
+          response.numConflicts === 0
+            ? 0
+            : group.members.length / response.numConflicts;
         const suggestEvent = {
           start: response.bestTime.start,
           end: response.bestTime.end,
-          text: "Suggested Event",
-          backColor: "rgba(141,255,125,0.53)",
+          text: `Suggested Event - ${response.numConflicts} Conflicts`,
+          backColor:
+            conflictLevel > 0.7
+              ? "rgba(255,6,0,0.56)"
+              : conflictLevel > 0.5
+                ? "rgba(255,197,36,0.53)"
+                : "rgba(141,255,125,0.53)",
           suggested: true,
         };
         setOptimalTime(suggestEvent);
