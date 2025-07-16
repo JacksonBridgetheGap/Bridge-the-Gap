@@ -243,8 +243,9 @@ app.put(
     const { userID } = req.params;
     const { groupId, members } = req.body;
     try {
-      const userData = await prisma.user.findUnique({
-        where: { id: Number(userID) },
+      const group = await prisma.group.findUnique({
+        where: { id: Number(groupId) },
+        include: { members: true, events: true },
       });
 
       const user = await prisma.user.update({
@@ -254,13 +255,13 @@ app.put(
             connect: { id: Number(groupId) },
           },
           circle: {
-            connect: members.map((id: number) => ({ id })),
+            connect: group?.members.map((member) => ({ id: member.id })),
+          },
+          events: {
+            connect: group?.events.map((event) => ({ id: event.id })),
           },
         },
       });
-
-      //Update User Circle
-
       res.json(user);
     } catch (error) {
       next(error);
