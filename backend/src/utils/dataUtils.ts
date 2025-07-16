@@ -56,9 +56,10 @@ export function createTimeSlotMap(
   users.forEach((user) => {
     user.events.forEach((event) => {
       timeSlotSet.add(new TimeSlot(event.start, event.end));
-      const eventTimeSlot: string = event.start
-        .toString()
-        .concat(event.end.toString());
+      const eventTimeSlot: string = new TimeSlot(
+        event.start,
+        event.end,
+      ).toString();
       if (timeSlotMap.has(eventTimeSlot)) {
         const currentValue = timeSlotMap.get(eventTimeSlot)!;
         timeSlotMap.set(eventTimeSlot, currentValue + 1);

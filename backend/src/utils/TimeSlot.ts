@@ -7,6 +7,10 @@ export class TimeSlot {
     this.end = end;
   }
 
+  toString(): string {
+    return `${this.start.toLocaleString()} - ${this.end.toLocaleString()}`;
+  }
+
   eventsOverlap(other: TimeSlot): boolean {
     return this.start < other.end && this.end > other.start;
   }
