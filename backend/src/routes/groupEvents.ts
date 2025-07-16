@@ -85,7 +85,8 @@ groupEventsRouter.post(
           participants: true,
         },
       });
-      const eventLength = endDateTime.getHours() - startDateTime.getHours();
+      const eventLength =
+        (endDateTime.getTime() - startDateTime.getTime()) / 1000 / 60;
       const group = await prisma.group.findUnique({
         where: { id: Number(groupId) },
         include: { events: true },

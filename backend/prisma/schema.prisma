@@ -30,7 +30,7 @@ model Group {
   prompt             String   @default("Weekly Challenge: Post Something Cool!")
   promptLastUpdate   DateTime @updatedAt
   events             Event[]
-  averageEventLength Int      @default(1)
+  averageEventLength Int      @default(60)
 }
 
 model Post {
