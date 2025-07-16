@@ -14,7 +14,6 @@ export default function optimalTimeSlot(
     groupID,
   );
   let minConflicts = Infinity;
-
   startTimeLoop: for (
     let currentStartTime = new Date(startDateTime);
     currentStartTime < endDateTime;
@@ -26,12 +25,12 @@ export default function optimalTimeSlot(
     ) {
       continue startTimeLoop;
     }
-    let numConflicts: number = 0;
     durationLoop: for (
       let currentDuration = 30;
       currentDuration <= desiredLength;
       currentDuration += 30
     ) {
+      let numConflicts: number = 0;
       let possibleTimeSlot = new TimeSlot(
         new Date(currentStartTime.getTime()),
         new Date(currentStartTime.getTime() + currentDuration * 60 * 1000),
@@ -41,10 +40,7 @@ export default function optimalTimeSlot(
         continue startTimeLoop;
       }
       for (const event of userEvents) {
-        if (event.end <= currentStartTime) {
-          userEvents.delete(event);
-          continue;
-        } else if (possibleTimeSlot.eventsOverlap(event)) {
+        if (possibleTimeSlot.eventsOverlap(event)) {
           if (event.groupID === groupID) {
             continue startTimeLoop;
           }
