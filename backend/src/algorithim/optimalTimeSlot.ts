@@ -62,6 +62,5 @@ export default function optimalTimeSlot(
       }
     }
   }
-  console.log(minConflicts);
   return bestTimeSlot;
 }

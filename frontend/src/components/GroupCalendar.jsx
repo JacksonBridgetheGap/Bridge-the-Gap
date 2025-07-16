@@ -11,6 +11,7 @@ const styles = {
 
 export default function GroupCalendar({ group, setGroup }) {
   const [optimalTime, setOptimalTime] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const cachedEvents = useMemo(() => {
     if (group == null) {
@@ -42,15 +43,20 @@ export default function GroupCalendar({ group, setGroup }) {
 
   const getOptimalTime = () => {
     const OPTIMAL_TIME_URL = `/api/group/${group.id}/optimalEvent`;
-    httpRequest(OPTIMAL_TIME_URL, "GET").then((response) => {
-      const suggestEvent = {
-        start: response.bestTime.start,
-        end: response.bestTime.end,
-        text: "Suggested Event",
-        backColor: "rgba(141,255,125,0.53)",
-      };
-      setOptimalTime(suggestEvent);
-    });
+    setLoading(true);
+    httpRequest(OPTIMAL_TIME_URL, "GET")
+      .then((response) => {
+        const suggestEvent = {
+          start: response.bestTime.start,
+          end: response.bestTime.end,
+          text: "Suggested Event",
+          backColor: "rgba(141,255,125,0.53)",
+        };
+        setOptimalTime(suggestEvent);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -64,6 +70,7 @@ export default function GroupCalendar({ group, setGroup }) {
       <BridgeTheGapButton
         value={"Best Next Event Time"}
         onClick={getOptimalTime}
+        loading={loading}
       />
     </div>
   );
