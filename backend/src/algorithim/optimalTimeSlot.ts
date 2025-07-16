@@ -37,12 +37,10 @@ export default function optimalTimeSlot(
       currentDuration <= desiredLength;
       currentDuration += 30
     ) {
-      console.log("in duration loop");
       let possibleTimeSlot = new TimeSlot(
         new Date(currentStartTime.getTime()),
         new Date(currentStartTime.getTime() + currentDuration * 60 * 1000),
       );
-      console.log(possibleTimeSlot);
       if (possibleTimeSlot.end.getUTCHours() > 22) {
         continue startTimeLoop;
       }
@@ -54,7 +52,6 @@ export default function optimalTimeSlot(
           numConflicts += timeSlotMap.get(
             new TimeSlot(event.start, event.end).toString(),
           )!;
-          console.log(numConflicts);
         }
         if (numConflicts > minConflicts) {
           return;
@@ -72,6 +69,5 @@ export default function optimalTimeSlot(
       }
     }
   }
-  console.log(minConflicts);
   return bestTimeSlot;
 }
