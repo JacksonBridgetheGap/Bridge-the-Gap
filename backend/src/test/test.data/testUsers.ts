@@ -1,4 +1,4 @@
-import { UserWithGroupsAndCircle } from "../../types/types";
+import { testEventsOneOpening, testEventsTwoOpenings } from "./testEvents";
 
 export const simpleUser = {
   id: 0,
@@ -52,4 +52,24 @@ export const userWithCircle = {
     },
   ],
   inCircle: [],
+};
+
+export const userWithOneOpeningEvents = {
+  id: 0,
+  username: "test",
+  password: "<PASSWORD>",
+  email: null,
+  location: null,
+  photo: null,
+  events: testEventsOneOpening,
+};
+
+export const userWithTwoOpeningEvents = {
+  id: 0,
+  username: "test",
+  password: "<PASSWORD>",
+  email: null,
+  location: null,
+  photo: null,
+  events: testEventsTwoOpenings,
 };

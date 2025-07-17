@@ -11,9 +11,9 @@ export class TimeSlot {
 
   toString(): string {
     if (this.groupID !== null) {
-      return `${this.start.toLocaleString()} - ${this.end.toLocaleString()} - ${this.groupID}`;
+      return `${this.start.toUTCString()} - ${this.end.toUTCString()} - ${this.groupID}`;
     }
-    return `${this.start.toLocaleString()} - ${this.end.toLocaleString()}`;
+    return `${this.start.toUTCString()} - ${this.end.toUTCString()}`;
   }
 
   duration(): number {

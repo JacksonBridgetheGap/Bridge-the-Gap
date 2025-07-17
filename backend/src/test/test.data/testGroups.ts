@@ -1,3 +1,11 @@
+export const groupSingle = {
+  id: 1,
+  name: "Group1",
+  img: "/default_group_pic.png",
+  tags: ["hobbies", "education", "gaming"],
+  members: [{ id: 1 }, { id: 2 }, { id: 3 }],
+};
+
 export const groupsSmall = [
   {
     id: 1,
