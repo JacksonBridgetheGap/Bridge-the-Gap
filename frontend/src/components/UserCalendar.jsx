@@ -2,6 +2,7 @@ import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../context/UserContext.jsx";
 import { useContext } from "react";
+import { DateTime } from "luxon";
 
 const styles = {
   flexGrow: "1",
@@ -26,13 +27,15 @@ export default function UserCalendar() {
       text: `${event.text} - ${user.username}`,
     };
   });
-  
-  const addEvent = (eventData) => {
+
+  const addEvent = (eventUTC, eventLocal) => {
+    eventUTC.groupID = null;
+    eventLocal.groupID = null;
     const EVENT_URL = `/api/user/${user.id}/events`;
-    httpRequest(EVENT_URL, "POST", eventData).then((created) => {
+    httpRequest(EVENT_URL, "POST", eventUTC).then(() => {
       setUser({
         ...user,
-        events: [...user.events, created.event],
+        events: [...user.events, eventLocal],
       });
     });
   };

@@ -8,6 +8,7 @@ import MembersList from "../components/MembersList";
 import Footer from "../components/Footer";
 import "./GroupPage.css";
 import GroupCalendar from "../components/GroupCalendar.jsx";
+import { DateTime } from "luxon";
 
 function GroupPage() {
   const params = useParams();
@@ -18,7 +19,18 @@ function GroupPage() {
   useEffect(() => {
     const GROUP_URL = `/api/groups/${params.id}`;
     httpRequest(GROUP_URL, "GET").then((group) => {
-      setGroup(group);
+      setGroup({
+        ...group,
+        events: group.events.map((event) => {
+          event.start = DateTime.fromISO(event.start, { zone: "utc" })
+            .toLocal()
+            .toISO({ suppressMilliseconds: true, includeOffset: false });
+          event.end = DateTime.fromISO(event.end, { zone: "utc" })
+            .toLocal()
+            .toISO({ suppressMilliseconds: true, includeOffset: false });
+          return event;
+        }),
+      });
     });
   }, [params.id]);
 

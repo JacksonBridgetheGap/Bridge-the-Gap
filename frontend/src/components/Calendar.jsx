@@ -22,13 +22,27 @@ export default function Calendar({
       if (!modal.result) {
         return;
       }
-      const newEvent = {
-        start: args.start.toDate().toISOString(),
-        end: args.end.toDate().toISOString(),
+      const newEventUTC = {
+        start: new Date(
+          args.start.toDate().getTime() +
+            args.start.toDate().getTimezoneOffset() * 60000,
+        ).toISOString(),
+        end: new Date(
+          args.end.toDate().getTime() +
+            args.end.toDate().getTimezoneOffset() * 60000,
+        ).toISOString(),
         id: DayPilot.guid(),
         text: modal.result,
       };
-      onAdd(newEvent);
+
+      const newEventLocal = {
+        start: args.start.toDate(),
+        end: args.end.toDate(),
+        id: DayPilot.guid(),
+        text: modal.result,
+      };
+
+      onAdd(newEventUTC, newEventLocal);
     },
     onEventClick: async (args) => {
       if (args.e.data.suggested) {
@@ -93,7 +107,16 @@ export default function Calendar({
 
   return (
     <div>
-      <DayPilotCalendar {...config} events={events} controlRef={setCalendar} />
+      <p>
+        Your Timezone:{" "}
+        <em>{Intl.DateTimeFormat().resolvedOptions().timeZone}</em>
+      </p>
+      <DayPilotCalendar
+        {...config}
+        events={events}
+        controlRef={setCalendar}
+        timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+      />
     </div>
   );
 }

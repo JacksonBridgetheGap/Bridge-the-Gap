@@ -6,6 +6,15 @@ const BUFFER_MINUTES = 10;
 const BUFFER_PENALTY = 0.25;
 const SAME_DAY_PENALTY = 0.5;
 
+/*TIME ZONE PLAN:
+ *
+ * Store the local timezones of each user (JS date objects let you do this if you use toLocaleString() or something similar)
+ * Pass in the largest negative and positive offset for the group, (or the average group offset)
+ * Base the start time and end time restrictions off this average or the extreme cases (may be difficult for extreme cases because they can be so different)
+ * Or could do a hybrid approach where I have users enter their own availability convert that to UTC then find overlaps in all users (IDK if i like this though since the point is app is laid back and does the hard part for you)
+ *
+ */
+
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
   timeSlotMap: Map<string, number>,
@@ -13,6 +22,7 @@ export default function optimalTimeSlot(
   startDateTime: Date,
   endDateTime: Date,
   groupID: number,
+  groupTimezoneOffset: number,
 ): { slot: TimeSlot; conflicts: number } {
   let bestTimeSlot: TimeSlot = new TimeSlot(
     startDateTime,
@@ -28,8 +38,8 @@ export default function optimalTimeSlot(
     )
   ) {
     if (
-      currentStartTime.getUTCHours() <= 8 ||
-      currentStartTime.getUTCHours() >= 20
+      currentStartTime.getUTCHours() - groupTimezoneOffset <= 8 ||
+      currentStartTime.getUTCHours() - groupTimezoneOffset >= 20
     ) {
       continue startTimeLoop;
     }

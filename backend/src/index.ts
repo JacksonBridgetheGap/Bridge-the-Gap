@@ -96,12 +96,17 @@ app.post("/api/groups", async (req, res, next): Promise<void> => {
       return member.id;
     });
 
-    //Add all data to database
+    const averageOffsetUTC =
+      members?.reduce((acc: number, cur: any) => {
+        return acc + cur.offsetUTC;
+      }, 0) / memberIds?.length;
+
     const group = await prisma.group.create({
       data: {
         name,
         img,
         tags,
+        averageOffsetUTC: averageOffsetUTC,
         members: {
           connect: memberIds.map((id: number) => ({ id })),
         },
@@ -247,21 +252,34 @@ app.put(
         where: { id: Number(groupId) },
         include: { members: true, events: true },
       });
-      const user = await prisma.user.update({
-        where: { id: Number(userID) },
-        data: {
-          groups: {
-            connect: { id: Number(groupId) },
+      if (group) {
+        const user = await prisma.user.update({
+          where: { id: Number(userID) },
+          data: {
+            groups: {
+              connect: { id: Number(groupId) },
+            },
+            circle: {
+              connect: group?.members.map((member) => ({ id: member.id })),
+            },
+            events: {
+              connect: group?.events.map((event) => ({ id: event.id })),
+            },
           },
-          circle: {
-            connect: group?.members.map((member) => ({ id: member.id })),
+        });
+        await prisma.group.update({
+          where: { id: Number(groupId) },
+          data: {
+            averageOffsetUTC:
+              (group?.averageOffsetUTC! * group?.members?.length! +
+                user.offsetUTC) /
+              (group?.members?.length! + 1),
           },
-          events: {
-            connect: group?.events.map((event) => ({ id: event.id })),
-          },
-        },
-      });
-      res.json(user);
+        });
+        res.json(user);
+      } else {
+        throw new Error("Group not found");
+      }
     } catch (error) {
       next(error);
     }
