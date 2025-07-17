@@ -1,4 +1,8 @@
-import { testEventsOneOpening, testEventsTwoOpenings } from "./testEvents";
+import {
+  testEventsOneOpening,
+  testEventsTwoOpenings,
+  testEventsTwoOpeningsTimezone,
+} from "./testEvents";
 
 export const simpleUser = {
   id: 0,
@@ -62,6 +66,7 @@ export const userWithOneOpeningEvents = {
   location: null,
   photo: null,
   events: testEventsOneOpening,
+  offsetUTC: 0,
 };
 
 export const userWithTwoOpeningEvents = {
@@ -72,4 +77,16 @@ export const userWithTwoOpeningEvents = {
   location: null,
   photo: null,
   events: testEventsTwoOpenings,
+  offsetUTC: 0,
+};
+
+export const userWithTwoOpeningsTimezone = {
+  id: 0,
+  username: "test",
+  password: "<PASSWORD>",
+  email: null,
+  location: null,
+  photo: null,
+  events: testEventsTwoOpeningsTimezone,
+  offsetUTC: 0,
 };

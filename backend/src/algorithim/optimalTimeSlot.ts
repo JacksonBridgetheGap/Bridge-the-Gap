@@ -5,15 +5,7 @@ const SLOT_DURATION_MINUTES = 30;
 const BUFFER_MINUTES = 10;
 const BUFFER_PENALTY = 0.25;
 const SAME_DAY_PENALTY = 0.5;
-
-/*TIME ZONE PLAN:
- *
- * Store the local timezones of each user (JS date objects let you do this if you use toLocaleString() or something similar)
- * Pass in the largest negative and positive offset for the group, (or the average group offset)
- * Base the start time and end time restrictions off this average or the extreme cases (may be difficult for extreme cases because they can be so different)
- * Or could do a hybrid approach where I have users enter their own availability convert that to UTC then find overlaps in all users (IDK if i like this though since the point is app is laid back and does the hard part for you)
- *
- */
+const DURATION_BONUS = 0.25;
 
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
@@ -30,6 +22,7 @@ export default function optimalTimeSlot(
     groupID,
   );
   let minConflicts = Infinity;
+  let minScore = Infinity;
   startTimeLoop: for (
     let currentStartTime = new Date(startDateTime);
     currentStartTime < endDateTime;
@@ -44,11 +37,12 @@ export default function optimalTimeSlot(
       continue startTimeLoop;
     }
     durationLoop: for (
-      let currentDuration = SLOT_DURATION_MINUTES;
+      let currentDuration = SLOT_DURATION_MINUTES, durationIterations = 0;
       currentDuration <= desiredLength;
-      currentDuration += SLOT_DURATION_MINUTES
+      currentDuration += SLOT_DURATION_MINUTES, ++durationIterations
     ) {
       let numConflicts: number = 0;
+      let score: number = 0;
       let possibleTimeSlot = new TimeSlot(
         new Date(currentStartTime.getTime()),
         new Date(
@@ -56,7 +50,7 @@ export default function optimalTimeSlot(
         ),
         groupID,
       );
-      if (possibleTimeSlot.end.getUTCHours() > 22) {
+      if (possibleTimeSlot.end.getUTCHours() - groupTimezoneOffset > 22) {
         continue startTimeLoop;
       }
       for (const event of userEvents) {
@@ -69,32 +63,35 @@ export default function optimalTimeSlot(
           if (event.groupID === groupID) {
             continue startTimeLoop;
           }
-          numConflicts += timeSlotMap.get(
+          let number = timeSlotMap.get(
             new TimeSlot(event.start, event.end, event.groupID).toString(),
           )!;
+          numConflicts += number;
+          score += number;
         } else if (possibleTimeSlot.eventsOverlap(bufferedEvent)) {
-          numConflicts += BUFFER_PENALTY;
+          score += BUFFER_PENALTY;
         }
 
         if (
           event.groupID === groupID &&
           event.day() === possibleTimeSlot.day()
         ) {
-          numConflicts += SAME_DAY_PENALTY;
+          score += SAME_DAY_PENALTY;
         }
         if (numConflicts > minConflicts) {
           continue startTimeLoop;
         }
       }
 
-      if (numConflicts <= minConflicts) {
-        if (
-          numConflicts < minConflicts ||
-          possibleTimeSlot.duration() > bestTimeSlot.duration()
-        ) {
-          minConflicts = numConflicts;
-          bestTimeSlot = possibleTimeSlot;
-        }
+      score -= durationIterations * DURATION_BONUS;
+
+      console.log(possibleTimeSlot);
+      console.log(score);
+
+      if (score < minScore) {
+        minConflicts = numConflicts;
+        minScore = score;
+        bestTimeSlot = possibleTimeSlot;
       }
     }
   }
