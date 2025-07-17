@@ -47,7 +47,7 @@ groupEventsRouter.get(
       date.setMilliseconds(0);
       const endOfWeek = new Date();
       const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
-      const [bestTime, numConflicts]: [TimeSlot, number] = optimalTimeSlot(
+      const { slot, conflicts } = optimalTimeSlot(
         timeSlotSet,
         timeSlotMap,
         group!.averageEventLength,
@@ -55,7 +55,7 @@ groupEventsRouter.get(
         new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
         Number(groupId),
       );
-      res.status(200).json({ bestTime, numConflicts });
+      res.status(200).json({ slot, conflicts });
     } catch (error) {
       res
         .status(500)

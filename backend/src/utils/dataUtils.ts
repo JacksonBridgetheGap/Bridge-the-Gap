@@ -43,11 +43,21 @@ export function createGroupMatrix(groups: RecordsType) {
   }, new Map());
 }
 
-//WIP: I have to convert to strings so that I can acutally map the TimeSlot objects (there might be a better way to represent the TimeSlots)
-// might be a way to have some form of deterministic function that I can put a time slot into and get a better key representation
 export function createTimeSlotMap(
   users: UserWithEvents[],
 ): [Map<string, number>, Set<TimeSlot>] {
+  /*
+  This function takes in a list of user events and outputs a set of all non-duplicate events
+  as well as a map of the events to the number of times they appeared, this map uses the TimeSlots .toString()
+  method to give each timeslot a unique key.
+
+  Args:
+    users: This is a list of prisma users that each have their own list of events as a member varible
+
+  Returns:
+    Map<string, number>: A map structure with key value pairs of TimeSlot.toString() ---> # of appearances of event in all users
+    Set<TimeSlot>: A set of all user events with no repeating events
+  */
   const timeSlotMap = new Map<string, number>();
   const timeSlotSet = new Set<TimeSlot>();
 

@@ -1,5 +1,8 @@
 import { TimeSlot } from "../utils/TimeSlot";
 
+const TIME_IN_MINUTES = 60 * 1000;
+const SLOT_DURATION_MINUTES = 30;
+
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
   timeSlotMap: Map<string, number>,
@@ -7,17 +10,19 @@ export default function optimalTimeSlot(
   startDateTime: Date,
   endDateTime: Date,
   groupID: number,
-): [TimeSlot, number] {
+): { slot: TimeSlot; conflicts: number } {
   let bestTimeSlot: TimeSlot = new TimeSlot(
     startDateTime,
-    new Date(startDateTime.getTime() + 30 * 60 * 1000),
+    new Date(startDateTime.getTime() + SLOT_DURATION_MINUTES * TIME_IN_MINUTES),
     groupID,
   );
   let minConflicts = Infinity;
   startTimeLoop: for (
     let currentStartTime = new Date(startDateTime);
     currentStartTime < endDateTime;
-    currentStartTime.setMinutes(currentStartTime.getMinutes() + 30)
+    currentStartTime.setMinutes(
+      currentStartTime.getMinutes() + SLOT_DURATION_MINUTES,
+    )
   ) {
     if (
       currentStartTime.getUTCHours() <= 8 ||
@@ -26,14 +31,16 @@ export default function optimalTimeSlot(
       continue startTimeLoop;
     }
     durationLoop: for (
-      let currentDuration = 30;
+      let currentDuration = SLOT_DURATION_MINUTES;
       currentDuration <= desiredLength;
-      currentDuration += 30
+      currentDuration += SLOT_DURATION_MINUTES
     ) {
       let numConflicts: number = 0;
       let possibleTimeSlot = new TimeSlot(
         new Date(currentStartTime.getTime()),
-        new Date(currentStartTime.getTime() + currentDuration * 60 * 1000),
+        new Date(
+          currentStartTime.getTime() + currentDuration * TIME_IN_MINUTES,
+        ),
         groupID,
       );
       if (possibleTimeSlot.end.getUTCHours() > 22) {
@@ -64,5 +71,5 @@ export default function optimalTimeSlot(
       }
     }
   }
-  return [bestTimeSlot, minConflicts];
+  return { slot: bestTimeSlot, conflicts: minConflicts };
 }
