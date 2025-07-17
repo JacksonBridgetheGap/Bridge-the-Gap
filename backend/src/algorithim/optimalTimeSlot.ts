@@ -4,6 +4,7 @@ const TIME_IN_MINUTES = 60 * 1000;
 const SLOT_DURATION_MINUTES = 30;
 const BUFFER_MINUTES = 10;
 const BUFFER_PENALTY = 0.25;
+const SAME_DAY_PENALTY = 0.5;
 
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
@@ -63,6 +64,13 @@ export default function optimalTimeSlot(
           )!;
         } else if (possibleTimeSlot.eventsOverlap(bufferedEvent)) {
           numConflicts += BUFFER_PENALTY;
+        }
+
+        if (
+          event.groupID === groupID &&
+          event.day() === possibleTimeSlot.day()
+        ) {
+          numConflicts += SAME_DAY_PENALTY;
         }
         if (numConflicts > minConflicts) {
           continue startTimeLoop;
