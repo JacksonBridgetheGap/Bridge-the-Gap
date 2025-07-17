@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { userGroupsContext } from "../context/userGroupsContext.jsx";
+import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 
 export default function useUserGroups() {
   const { groups, isLoading } = useContext(userGroupsContext);
