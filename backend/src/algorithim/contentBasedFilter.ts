@@ -1,8 +1,6 @@
 import { cosineSimilarity } from "../math/math";
-import { PrismaClient } from "@prisma/client";
 import { UserWithGroupsAndCircle } from "../types/types";
-
-const prisma = new PrismaClient();
+import { prisma } from "./prisma";
 
 const TAG_OPTIONS = [
   "hobbies",

@@ -3,9 +3,8 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import { Link } from "react-router";
-import { userContext } from "../providers/UserProvider";
-import { authContext } from "../providers/AuthProvider";
-
+import { userContext } from "../context/UserContext.jsx";
+import { authContext } from "../context/AuthContext.jsx";
 const LOGIN_URL = "/api/auth/login";
 
 function LoginPage() {

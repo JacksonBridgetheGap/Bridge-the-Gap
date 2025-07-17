@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { userGroupsContext as UserGroupsContext } from "../context/UserGroupsContext.jsx";
 import { httpRequest } from "../utils/utils.js";
 import useAuth from "../hooks/useAuth.js";
 import useUser from "../hooks/useUser.js";
-
-const userGroupContext = createContext();
 
 function UserGroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
@@ -22,13 +21,13 @@ function UserGroupProvider({ children }) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [setGroups, user, auth]);
+  }, [setGroups, user, auth, userLoading]);
 
   return (
-    <userGroupContext.Provider value={{ groups, setGroups, isLoading }}>
+    <UserGroupsContext.Provider value={{ groups, setGroups, isLoading }}>
       {children}
-    </userGroupContext.Provider>
+    </UserGroupsContext.Provider>
   );
 }
 
-export { userGroupContext, UserGroupProvider };
+export { UserGroupProvider };

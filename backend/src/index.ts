@@ -59,7 +59,7 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
 app.get(
   "/api/user/:userID/recommendations",
   isAuthenticated,
-  async (req, res, next): Promise<void> => {
+  async (req, res): Promise<void> => {
     const { userID } = req.params;
     const user: UserWithGroupsAndCircle | null = await prisma.user.findUnique({
       where: { id: Number(userID) },
@@ -349,7 +349,7 @@ app.post("/api/groups/:id/posts", async (req, res, next): Promise<void> => {
         groupID: groupId,
       },
     });
-    const group = await prisma.group.update({
+    await prisma.group.update({
       where: { id: groupId },
       data: {
         posts: {
@@ -370,10 +370,15 @@ app.delete(
     const groupId = req.params.groupId;
     const postId = req.params.postId;
     try {
-      const result = await prisma.post.delete({
-        where: { id: Number(postId) },
+      const post = await prisma.post.findFirst({
+        where: { id: Number(postId), groupID: Number(groupId) },
       });
-      res.json(result);
+      if (post) {
+        await prisma.post.delete({ where: { id: Number(postId) } });
+        res.json(post);
+      } else {
+        throw new Error("Post not found for group");
+      }
     } catch (error) {
       next(error);
     }

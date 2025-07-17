@@ -8,7 +8,7 @@ import GroupModal from "../components/GroupModal";
 import GroupList from "../components/GroupList";
 import { SearchResults } from "../components/SearchResults.jsx";
 import Footer from "../components/Footer";
-import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
+import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 
 const GROUP_URL = "/api/groups";
 
@@ -19,7 +19,7 @@ function HomePage() {
   function useCreateGroup() {
     const [isLoading, setIsLoading] = useState(false);
 
-    const { groups, setGroups } = useContext(userGroupContext);
+    const { groups, setGroups } = useContext(userGroupsContext);
     const create = useCallback(
       async (groupData) => {
         setIsLoading(true);

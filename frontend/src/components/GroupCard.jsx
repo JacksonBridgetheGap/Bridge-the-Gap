@@ -2,12 +2,12 @@ import "../styles/GroupCard.css";
 import { Link } from "react-router";
 import MemberCard from "./MemberCard";
 import { httpRequest } from "../utils/utils.js";
-import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
+import { userGroupsContext } from "../context/userGroupsContext.jsx";
 import { useContext } from "react";
 import useUser from "../hooks/useUser.js";
 
 export default function GroupCard({ group, members, joinedGroup, home }) {
-  const { groups, setGroups } = useContext(userGroupContext);
+  const { groups, setGroups } = useContext(userGroupsContext);
   const { user } = useUser();
 
   const handleJoin = () => {

@@ -1,6 +1,7 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
-import { userContext } from "../providers/UserProvider.jsx";
+import { userContext } from "../context/UserContext.jsx";
+import { userGroupsContext } from "../context/userGroupsContext.jsx";
 import { useContext } from "react";
 
 const styles = {

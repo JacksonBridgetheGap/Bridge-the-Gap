@@ -10,7 +10,8 @@
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force",
     "db:seed": "ts-node prisma/seed.ts",
-    "db:init": "npm run db:reset && npm run db:migrate && npm run db:seed"
+    "db:init": "npm run db:reset && npm run db:migrate && npm run db:seed",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +21,7 @@
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-typescript": "^7.27.1",
-    "@eslint/js": "^9.29.0",
+    "@eslint/js": "^9.31.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
@@ -28,7 +29,7 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.7",
     "babel-jest": "^30.0.4",
-    "eslint": "^9.29.0",
+    "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.2.0",
@@ -38,7 +39,7 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.0"
+    "typescript-eslint": "^8.37.0"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
