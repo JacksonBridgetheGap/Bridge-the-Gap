@@ -1,8 +1,7 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { userContext as UserContext } from "../context/UserContext.jsx";
 import { httpRequest } from "../utils/utils.js";
 import useAuth from "../hooks/useAuth.js";
-
-const userContext = createContext();
 
 const USER_URL = `/api/me`;
 
@@ -24,10 +23,10 @@ function UserProvider({ children }) {
   }, [auth, setUser]);
 
   return (
-    <userContext.Provider value={{ user, setUser, isLoading }}>
+    <UserContext.Provider value={{ user, setUser, isLoading }}>
       {children}
-    </userContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-export { userContext, UserProvider };
+export { UserProvider };

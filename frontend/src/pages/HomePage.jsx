@@ -8,14 +8,14 @@ import GroupModal from "../components/GroupModal";
 import GroupList from "../components/GroupList";
 import { SearchResults } from "../components/SearchResults.jsx";
 import Footer from "../components/Footer";
-import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
+import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 
 const GROUP_URL = "/api/groups";
 
 function useCreateGroup() {
   const [isLoading, setIsLoading] = useState(true);
 
-  const { groups, setGroups } = useContext(userGroupContext);
+  const { groups, setGroups } = useContext(userGroupsContext);
   const create = useCallback(
     (groupData) => {
       httpRequest(GROUP_URL, "POST", groupData)

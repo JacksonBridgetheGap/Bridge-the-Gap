@@ -1,7 +1,7 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
-import { userContext } from "../providers/UserProvider.jsx";
-import { userGroupContext } from "../providers/UserGroupsProvider.jsx";
+import { userContext } from "../context/UserContext.jsx";
+import { userGroupsContext } from "../context/userGroupsContext.jsx";
 import { useContext } from "react";
 
 const styles = {
@@ -21,7 +21,7 @@ export default function UserCalendar() {
     };
   });
 
-  const { groups } = useContext(userGroupContext);
+  const { groups } = useContext(userGroupsContext);
   const groupEvents = groups.flatMap((group) => {
     return group.events.map((event) => {
       return {

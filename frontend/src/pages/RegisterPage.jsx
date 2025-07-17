@@ -1,8 +1,8 @@
 import "./RegisterPage.css";
 import { Link, useNavigate } from "react-router";
 import { useContext, useState } from "react";
-import { userContext } from "../providers/UserProvider.jsx";
-import { authContext } from "../providers/AuthProvider.jsx";
+import { userContext } from "../context/UserContext.jsx";
+import { authContext } from "../context/AuthContext.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 
 const REGISTER_URL = "/api/auth/register";

@@ -1,8 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { searchResultsContext as SearchResultsContext } from "../context/SearchResultsContext.jsx";
 import { httpRequest } from "../utils/utils.js";
-import useSearch from "../hooks/useSearch.js";
-
-const searchResultsContext = createContext();
 
 function SearchResultsProvider({ children }) {
   const [groups, setGroups] = useState([]);
@@ -14,17 +12,17 @@ function SearchResultsProvider({ children }) {
     httpRequest(SEARCH_URL, "GET").then((groups) => {
       setGroups(groups);
     });
-  }, [searchTerm]);
+  }, [searchTerm, SEARCH_URL]);
 
   useEffect(() => {});
 
   return (
-    <searchResultsContext.Provider
+    <SearchResultsContext.Provider
       value={{ groups, searchTerm, setSearchTerm }}
     >
       {children}
-    </searchResultsContext.Provider>
+    </SearchResultsContext.Provider>
   );
 }
 
-export { searchResultsContext, SearchResultsProvider };
+export { SearchResultsProvider };
