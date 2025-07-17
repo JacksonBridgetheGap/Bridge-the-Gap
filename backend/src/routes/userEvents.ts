@@ -59,15 +59,29 @@ userEventsRouter.put(
     const { userId, eventId } = req.params;
     const { text, start, end } = req.body;
     try {
-      const event = await prisma.event.update({
-        where: { id: Number(eventId) },
-        data: {
-          text: text,
-          start: new Date(start),
-          end: new Date(end),
+      const event = await prisma.event.findFirst({
+        where: {
+          id: Number(eventId),
+          participants: { some: { id: Number(userId) } },
         },
+        select: { id: true },
       });
-      res.status(200).json({ event });
+      if (event) {
+        await prisma.event.update({
+          where: { id: Number(eventId) },
+          data: {
+            text: text,
+            start: new Date(start),
+            end: new Date(end),
+          },
+          include: {
+            participants: true,
+          },
+        });
+        res.status(200).json({ event });
+      } else {
+        throw new Error("Event not found for user");
+      }
     } catch (error) {
       res.status(400).json({ message: "Error updating event", error: error });
     }

@@ -57,7 +57,9 @@ groupEventsRouter.get(
       );
       res.status(200).json({ bestTime, numConflicts });
     } catch (error) {
-      res.status(500).json({ message: "Error during events optimization" });
+      res
+        .status(500)
+        .json({ message: "Error during events optimization", error: error });
     }
   },
 );
@@ -125,6 +127,7 @@ groupEventsRouter.put(
           text: text,
           start: new Date(start),
           end: new Date(end),
+          groupID: Number(groupId),
           participants: {
             connect: [members.map((member: any) => ({ id: member.id }))],
           },
@@ -143,10 +146,15 @@ groupEventsRouter.delete(
   async (req, res) => {
     const { groupId, eventId } = req.params;
     try {
-      const event = await prisma.event.delete({
-        where: { id: Number(eventId) },
+      const event = prisma.event.findFirst({
+        where: { id: Number(eventId), groupID: Number(groupId) },
       });
-      res.status(200).json({ event });
+      if (event) {
+        await prisma.event.delete({ where: { id: Number(eventId) } });
+        res.status(200).json(event);
+      } else {
+        throw new Error("Event not found for group");
+      }
     } catch (error) {
       res.status(400).json({ message: "Error deleting event", error: error });
     }

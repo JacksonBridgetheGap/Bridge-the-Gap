@@ -241,7 +241,7 @@ app.put(
   isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { userID } = req.params;
-    const { groupId, members } = req.body;
+    const { groupId } = req.body;
     try {
       const group = await prisma.group.findUnique({
         where: { id: Number(groupId) },
