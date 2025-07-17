@@ -85,9 +85,6 @@ export default function optimalTimeSlot(
 
       score -= durationIterations * DURATION_BONUS;
 
-      console.log(possibleTimeSlot);
-      console.log(score);
-
       if (score < minScore) {
         minConflicts = numConflicts;
         minScore = score;
