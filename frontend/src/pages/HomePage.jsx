@@ -12,30 +12,33 @@ import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 
 const GROUP_URL = "/api/groups";
 
-function useCreateGroup() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { groups, setGroups } = useContext(userGroupsContext);
-  const create = useCallback(
-    (groupData) => {
-      httpRequest(GROUP_URL, "POST", groupData)
-        .then((group) => {
-          setGroups([...groups, group]);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    },
-    [groups, setGroups],
-  );
-
-  return [create, isLoading];
-}
-
 function HomePage() {
   const [modalDisplay, setModalDisplay] = useState("modal-hidden");
   const [searching, setSearching] = useState(false);
-  const [createGroup] = useCreateGroup();
+
+  function useCreateGroup() {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { groups, setGroups } = useContext(userGroupsContext);
+    const create = useCallback(
+      async (groupData) => {
+        setIsLoading(true);
+        httpRequest(GROUP_URL, "POST", groupData)
+          .then((group) => {
+            setGroups([...groups, group]);
+            closeModal();
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      },
+      [groups, setGroups],
+    );
+
+    return [create, isLoading];
+  }
+
+  const [createGroup, isLoading] = useCreateGroup();
 
   const openModal = () => {
     setModalDisplay("modal-display");
@@ -69,6 +72,7 @@ function HomePage() {
             displayMode={modalDisplay}
             onClose={closeModal}
             onCreate={createGroup}
+            loading={isLoading}
           />
         </div>
       )}

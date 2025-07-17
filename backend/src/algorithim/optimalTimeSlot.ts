@@ -1,27 +1,75 @@
 import { TimeSlot } from "../utils/TimeSlot";
 
+const TIME_IN_MINUTES = 60 * 1000;
+const SLOT_DURATION_MINUTES = 30;
+
 export default function optimalTimeSlot(
-  timeSlots: Set<TimeSlot>,
+  userEvents: Set<TimeSlot>,
   timeSlotMap: Map<string, number>,
   desiredLength: number,
   startDateTime: Date,
   endDateTime: Date,
-): TimeSlot {
-  //Algorithm
+  groupID: number,
+): { slot: TimeSlot; conflicts: number } {
+  let bestTimeSlot: TimeSlot = new TimeSlot(
+    startDateTime,
+    new Date(startDateTime.getTime() + SLOT_DURATION_MINUTES * TIME_IN_MINUTES),
+    groupID,
+  );
+  let minConflicts = Infinity;
+  startTimeLoop: for (
+    let currentStartTime = new Date(startDateTime);
+    currentStartTime < endDateTime;
+    currentStartTime.setMinutes(
+      currentStartTime.getMinutes() + SLOT_DURATION_MINUTES,
+    )
+  ) {
+    if (
+      currentStartTime.getUTCHours() <= 8 ||
+      currentStartTime.getUTCHours() >= 20
+    ) {
+      continue startTimeLoop;
+    }
+    durationLoop: for (
+      let currentDuration = SLOT_DURATION_MINUTES;
+      currentDuration <= desiredLength;
+      currentDuration += SLOT_DURATION_MINUTES
+    ) {
+      let numConflicts: number = 0;
+      let possibleTimeSlot = new TimeSlot(
+        new Date(currentStartTime.getTime()),
+        new Date(
+          currentStartTime.getTime() + currentDuration * TIME_IN_MINUTES,
+        ),
+        groupID,
+      );
+      if (possibleTimeSlot.end.getUTCHours() > 22) {
+        continue startTimeLoop;
+      }
+      for (const event of userEvents) {
+        if (possibleTimeSlot.eventsOverlap(event)) {
+          if (event.groupID === groupID) {
+            continue startTimeLoop;
+          }
+          numConflicts += timeSlotMap.get(
+            new TimeSlot(event.start, event.end, event.groupID).toString(),
+          )!;
+        }
+        if (numConflicts > minConflicts) {
+          continue startTimeLoop;
+        }
+      }
 
-  //Optimize to reduce the number of conflicts while trying to get as close to the desired length as possible
-  //Should be between the given start and end times
-
-  //Could be solved using Dynamic Programming or Greedy Algorithm
-
-  //If proposed event is outside of good hours ( start < 8am || start > 10pm) move on to next start time
-
-  //Loop through possible start times, start with event being at shortest possible length of 30 min,
-  // If num conflicts is less than the min number seen so far extend event time by 30 min and perform check again
-  // If num conflicts ever higher than min seen so far move on to next start time
-
-  //Need a fast way to check how many conflicts exist within a given time slot, trying to use map but this doesn't seem best
-  // We could pass all user events and then check if the current time slot overlaps with the provided event and then use the map the check how many of these events exist to reduce
-  // looping over duplicate events
-  return new TimeSlot(new Date(), new Date());
+      if (numConflicts <= minConflicts) {
+        if (
+          numConflicts < minConflicts ||
+          possibleTimeSlot.duration() > bestTimeSlot.duration()
+        ) {
+          minConflicts = numConflicts;
+          bestTimeSlot = possibleTimeSlot;
+        }
+      }
+    }
+  }
+  return { slot: bestTimeSlot, conflicts: minConflicts };
 }

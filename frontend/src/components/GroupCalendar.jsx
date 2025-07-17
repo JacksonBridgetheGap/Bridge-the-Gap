@@ -2,6 +2,7 @@ import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 import { useState, useMemo } from "react";
+import { DayPilot } from "@daypilot/daypilot-lite-react";
 
 const styles = {
   flexGrow: "1",
@@ -11,6 +12,7 @@ const styles = {
 
 export default function GroupCalendar({ group, setGroup }) {
   const [optimalTime, setOptimalTime] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const cachedEvents = useMemo(() => {
     if (group == null) {
@@ -42,15 +44,44 @@ export default function GroupCalendar({ group, setGroup }) {
 
   const getOptimalTime = () => {
     const OPTIMAL_TIME_URL = `/api/group/${group.id}/optimalEvent`;
-    httpRequest(OPTIMAL_TIME_URL, "GET").then((response) => {
-      const suggestEvent = {
-        start: response.bestTime.start,
-        end: response.bestTime.end,
-        text: "Suggested Event",
-        backColor: "rgba(141,255,125,0.53)",
-      };
-      setOptimalTime(suggestEvent);
-    });
+    setLoading(true);
+    httpRequest(OPTIMAL_TIME_URL, "GET")
+      .then((response) => {
+        const conflictLevel =
+          response.numConflicts / Math.max(1, group.members.length);
+        const suggestEvent = {
+          start: response.bestTime.start,
+          end: response.bestTime.end,
+          text: `Suggested Event - ${response.numConflicts} Conflicts`,
+          backColor:
+            conflictLevel > 0.7
+              ? "rgba(255,6,0,0.56)"
+              : conflictLevel > 0.5
+                ? "rgba(255,197,36,0.53)"
+                : "rgba(141,255,125,0.53)",
+          suggested: true,
+        };
+        setOptimalTime(suggestEvent);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleSuggested = async (args) => {
+    const modal = await DayPilot.Modal.prompt("Add suggested event", "Title");
+    if (!modal.result) {
+      return;
+    }
+    const newEvent = {
+      start: args.e.start().toDate().toISOString(),
+      end: args.e.end().toDate().toISOString(),
+      id: DayPilot.guid(),
+      text: modal.result,
+      suggested: true,
+    };
+    await addEvent(newEvent);
+    setOptimalTime(null);
   };
 
   return (
@@ -60,10 +91,12 @@ export default function GroupCalendar({ group, setGroup }) {
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}
+        handleSuggested={handleSuggested}
       />
       <BridgeTheGapButton
         value={"Best Next Event Time"}
         onClick={getOptimalTime}
+        loading={loading}
       />
     </div>
   );

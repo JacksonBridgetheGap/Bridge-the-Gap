@@ -4,6 +4,7 @@ import MemberSearch from "./MemberSearch";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
+import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
 const defaultGroup = {
   name: "",
@@ -24,7 +25,12 @@ const GROUP_TAG_OPTIONS = [
   { value: "miscellaneous", label: "Miscellaneous" },
 ];
 
-export default function GroupModal({ displayMode, onClose, onCreate }) {
+export default function GroupModal({
+  displayMode,
+  onClose,
+  onCreate,
+  loading,
+}) {
   const [newGroup, setNewGroup] = useState(defaultGroup);
   const animatedComponents = makeAnimated();
 
@@ -69,7 +75,6 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
     evt.preventDefault();
     onCreate(newGroup);
     setNewGroup(defaultGroup);
-    onClose();
   };
 
   return (
@@ -102,10 +107,10 @@ export default function GroupModal({ displayMode, onClose, onCreate }) {
           Add Members to Groups:
         </h4>
         <MemberSearch onChange={handleMemberChange} displayMode={displayMode} />
-        <input
-          type="submit"
-          value="Create New Group"
-          className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        <BridgeTheGapButton
+          value={"Create New Group"}
+          onClick={handleSubmit}
+          loading={loading}
         />
       </form>
     </section>

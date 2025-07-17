@@ -42,18 +42,24 @@ groupEventsRouter.get(
         },
       });
       const date = new Date();
+      date.setMinutes(0);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
       const endOfWeek = new Date();
       const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
-      const bestTime: TimeSlot = optimalTimeSlot(
+      const { slot, conflicts } = optimalTimeSlot(
         timeSlotSet,
         timeSlotMap,
         group!.averageEventLength,
         date,
         new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
+        Number(groupId),
       );
-      res.status(200).json({ bestTime });
+      res.status(200).json({ slot, conflicts });
     } catch (error) {
-      res.status(500).json({ message: "Error during events optimization" });
+      res
+        .status(500)
+        .json({ message: "Error during events optimization", error: error });
     }
   },
 );
@@ -85,7 +91,8 @@ groupEventsRouter.post(
           participants: true,
         },
       });
-      const eventLength = endDateTime.getHours() - startDateTime.getHours();
+      const eventLength =
+        (endDateTime.getTime() - startDateTime.getTime()) / 1000 / 60;
       const group = await prisma.group.findUnique({
         where: { id: Number(groupId) },
         include: { events: true },
@@ -94,7 +101,9 @@ groupEventsRouter.post(
         where: { id: Number(groupId) },
         data: {
           averageEventLength:
-            (group?.averageEventLength! + eventLength) / group?.events?.length!,
+            (group?.averageEventLength! * group?.events?.length! +
+              eventLength) /
+            (group?.events?.length! + 1),
         },
       });
 
@@ -118,6 +127,7 @@ groupEventsRouter.put(
           text: text,
           start: new Date(start),
           end: new Date(end),
+          groupID: Number(groupId),
           participants: {
             connect: [members.map((member: any) => ({ id: member.id }))],
           },
@@ -136,10 +146,15 @@ groupEventsRouter.delete(
   async (req, res) => {
     const { groupId, eventId } = req.params;
     try {
-      const event = await prisma.event.delete({
-        where: { id: Number(eventId) },
+      const event = prisma.event.findFirst({
+        where: { id: Number(eventId), groupID: Number(groupId) },
       });
-      res.status(200).json({ event });
+      if (event) {
+        await prisma.event.delete({ where: { id: Number(eventId) } });
+        res.status(200).json(event);
+      } else {
+        throw new Error("Event not found for group");
+      }
     } catch (error) {
       res.status(400).json({ message: "Error deleting event", error: error });
     }

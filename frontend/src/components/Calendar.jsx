@@ -2,7 +2,13 @@ import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import { useState } from "react";
 import "../styles/Calendar.css";
 
-export default function Calendar({ events, onAdd, onDelete, onEdit }) {
+export default function Calendar({
+  events,
+  onAdd,
+  onDelete,
+  onEdit,
+  handleSuggested,
+}) {
   const [calendar, setCalendar] = useState(null);
 
   const config = {
@@ -25,6 +31,10 @@ export default function Calendar({ events, onAdd, onDelete, onEdit }) {
       onAdd(newEvent);
     },
     onEventClick: async (args) => {
+      if (args.e.data.suggested) {
+        await handleSuggested(args);
+        return;
+      }
       await editEvent(args.e);
     },
     contextMenu: new DayPilot.Menu({
