@@ -4,6 +4,8 @@ import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 import { useState, useMemo } from "react";
 import { DayPilot } from "@daypilot/daypilot-lite-react";
 import { DateTime } from "luxon";
+import moment from "moment-timezone";
+import { popularTimezones } from "../data/timezones.js";
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const styles = {
@@ -94,6 +96,15 @@ export default function GroupCalendar({ group, setGroup }) {
     setOptimalTime(null);
   };
 
+  const getApproximateTimezone = () => {
+    const matchingZones = popularTimezones.filter((zone) => {
+      const offset = moment.tz(new Date(), zone).utcOffset();
+      return offset === -group.averageOffsetUTC;
+    });
+
+    return matchingZones[0];
+  };
+
   return (
     <div style={styles}>
       <Calendar
@@ -114,6 +125,10 @@ export default function GroupCalendar({ group, setGroup }) {
             ? `Your group timezone is (UTC-${group.averageOffsetUTC / 60}:00)`
             : `Your group timezone is (UTC+${group.averageOffsetUTC / 60}:00)`
           : "Loading group timezone..."}
+      </p>
+      <p>
+        <em>Approximate Timezone: </em>{" "}
+        {group ? getApproximateTimezone() : "Loading Approximate Timezone..."}
       </p>
       <p className="font-light text-gray-700">
         Group timezone information is based off the average timezone of the
