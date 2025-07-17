@@ -59,7 +59,7 @@ app.get("/api/groups", async (req, res, next): Promise<void> => {
 app.get(
   "/api/user/:userID/recommendations",
   isAuthenticated,
-  async (req, res, next): Promise<void> => {
+  async (req, res): Promise<void> => {
     const { userID } = req.params;
     const user: UserWithGroupsAndCircle | null = await prisma.user.findUnique({
       where: { id: Number(userID) },
