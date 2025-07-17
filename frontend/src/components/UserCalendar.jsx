@@ -26,7 +26,7 @@ export default function UserCalendar() {
       text: `${event.text} - ${user.username}`,
     };
   });
-
+  
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/user/${user.id}/events`;
     httpRequest(EVENT_URL, "POST", eventData).then((created) => {

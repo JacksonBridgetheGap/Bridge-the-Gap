@@ -247,7 +247,6 @@ app.put(
         where: { id: Number(groupId) },
         include: { members: true, events: true },
       });
-
       const user = await prisma.user.update({
         where: { id: Number(userID) },
         data: {
