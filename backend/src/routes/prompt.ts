@@ -26,13 +26,13 @@ promptRouter.get("/api/groups/:groupID/prompt", async (req, res) => {
           promptLastUpdate: new Date(),
         },
       });
-      res.status(201).json({ prompt, group });
+      res.status(201).json({ prompt, updatedGroup });
     } else {
       res
         .status(200)
         .json({ message: "Prompt not updated yet. Try again in 7 days." });
     }
   } catch (error) {
-    res.status(400).json({ message: "Error getting prompt" });
+    res.status(400).json({ message: "Error getting prompt", error: error });
   }
 });

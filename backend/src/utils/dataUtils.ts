@@ -1,9 +1,7 @@
 //Return the users classification tags and scores as a dictionary with tags as keys
 // and values as the number of times those tags appear
 import { UserWithGroupsAndCircle } from "../types/types";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../algorithim/prisma";
 
 //Create a user classification map to describe the users relationship strength with each tag
 export function userParse(user: UserWithGroupsAndCircle | null) {
