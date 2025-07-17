@@ -2,6 +2,8 @@ import { TimeSlot } from "../utils/TimeSlot";
 
 const TIME_IN_MINUTES = 60 * 1000;
 const SLOT_DURATION_MINUTES = 30;
+const BUFFER_MINUTES = 10;
+const BUFFER_PENALTY = 0.25;
 
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
@@ -47,6 +49,11 @@ export default function optimalTimeSlot(
         continue startTimeLoop;
       }
       for (const event of userEvents) {
+        const bufferedEvent = new TimeSlot(
+          new Date(event.start.getTime() - BUFFER_MINUTES * TIME_IN_MINUTES),
+          new Date(event.end.getTime() + BUFFER_MINUTES * TIME_IN_MINUTES),
+          event.groupID,
+        );
         if (possibleTimeSlot.eventsOverlap(event)) {
           if (event.groupID === groupID) {
             continue startTimeLoop;
@@ -54,6 +61,8 @@ export default function optimalTimeSlot(
           numConflicts += timeSlotMap.get(
             new TimeSlot(event.start, event.end, event.groupID).toString(),
           )!;
+        } else if (possibleTimeSlot.eventsOverlap(bufferedEvent)) {
+          numConflicts += BUFFER_PENALTY;
         }
         if (numConflicts > minConflicts) {
           continue startTimeLoop;
