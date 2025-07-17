@@ -17,7 +17,7 @@ export function SearchResults() {
     httpRequest(RECOMMENDATIONS_URL, "GET").then((recommendations) => {
       setRecommendation(recommendations);
     });
-  }, []);
+  }, [user.id]);
 
   if (isLoading) {
     return <p>Loading...</p>;

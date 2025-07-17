@@ -2,10 +2,8 @@
 // and values as the number of times those tags appear
 import { UserWithGroupsAndCircle } from "../types/types";
 import { UserWithEvents } from "../types/types";
-import { PrismaClient } from "@prisma/client";
 import { TimeSlot } from "./TimeSlot";
-
-const prisma = new PrismaClient();
+import { prisma } from "../algorithim/prisma";
 
 //Create a user classification map to describe the users relationship strength with each tag
 export function userParse(user: UserWithGroupsAndCircle | null) {

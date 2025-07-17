@@ -6,18 +6,21 @@ import ProfileBanner from "../components/ProfileBanner";
 import MemberIcon from "../components/MemberIcon";
 import ProfileDetails from "../components/ProfileDetails";
 import useUser from "../hooks/useUser.js";
-import { userContext } from "../providers/UserProvider.jsx";
+import { userContext } from "../context/UserContext.jsx";
 import { useCallback, useContext } from "react";
 import { httpRequest } from "../utils/utils.js";
 
 function useUpdateProfile() {
   const { user, setUser } = useContext(userContext);
-  const update = useCallback((userData) => {
-    const USER_URL = `/api/users/${user.id}`;
-    httpRequest(USER_URL, "PUT", userData).then((updatedUser) => {
-      setUser(updatedUser);
-    });
-  });
+  const update = useCallback(
+    (userData) => {
+      const USER_URL = `/api/users/${user.id}`;
+      httpRequest(USER_URL, "PUT", userData).then((updatedUser) => {
+        setUser(updatedUser);
+      });
+    },
+    [setUser, user.id],
+  );
   return [update];
 }
 

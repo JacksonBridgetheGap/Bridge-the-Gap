@@ -1,6 +1,6 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
-import { userContext } from "../providers/UserProvider.jsx";
+import { userContext } from "../context/UserContext.jsx";
 import { useContext } from "react";
 
 const styles = {
@@ -26,7 +26,7 @@ export default function UserCalendar() {
       text: `${event.text} - ${user.username}`,
     };
   });
-
+  
   const addEvent = (eventData) => {
     const EVENT_URL = `/api/user/${user.id}/events`;
     httpRequest(EVENT_URL, "POST", eventData).then((created) => {

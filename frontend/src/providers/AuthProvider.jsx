@@ -1,12 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { authContext as AuthContext } from "../context/AuthContext.jsx";
 import { httpRequest } from "../utils/utils.js";
-
-const authContext = createContext();
 
 const AUTH_URL = "/api/auth/session";
 
-function AuthProvider({ children }) {
-  const [auth, setAuth] = useState(false);
+export function AuthProvider({ children }) {
+  const [auth, setAuth] = useState(null);
 
   useEffect(() => {
     httpRequest(AUTH_URL, "GET").then((auth) => {
@@ -15,10 +14,8 @@ function AuthProvider({ children }) {
   }, [setAuth]);
 
   return (
-    <authContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth }}>
       {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   );
 }
-
-export { authContext, AuthProvider };

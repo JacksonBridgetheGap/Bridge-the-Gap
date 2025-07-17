@@ -2,8 +2,8 @@ import "../styles/Header.css";
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
 import { httpRequest } from "../utils/utils.js";
-import { userContext } from "../providers/UserProvider.jsx";
-import { authContext } from "../providers/AuthProvider.jsx";
+import { userContext } from "../context/UserContext.jsx";
+import { authContext } from "../context/AuthContext.jsx";
 import { useContext } from "react";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 

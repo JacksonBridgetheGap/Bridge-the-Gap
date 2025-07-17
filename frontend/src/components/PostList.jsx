@@ -9,19 +9,15 @@ export default function PostList({ group, posts, onOpen }) {
   useEffect(() => {
     if (group?.prompt) {
       setPrompt(group.prompt);
-      updatePrompt();
+      const PROMPT_URL = `/api/groups/${group.id}/prompt`;
+      httpRequest(PROMPT_URL, "GET").then((res) => {
+        if (res.message) {
+          return;
+        }
+        setPrompt(res.prompt);
+      });
     }
   }, [group]);
-
-  const updatePrompt = () => {
-    const PROMPT_URL = `/api/groups/${group.id}/prompt`;
-    httpRequest(PROMPT_URL, "GET").then((res) => {
-      if (res.message) {
-        return;
-      }
-      setPrompt(res.prompt);
-    });
-  };
 
   if (posts) {
     return (
