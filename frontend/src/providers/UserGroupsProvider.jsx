@@ -3,6 +3,7 @@ import { userGroupsContext as UserGroupsContext } from "../context/UserGroupsCon
 import { httpRequest } from "../utils/utils.js";
 import useAuth from "../hooks/useAuth.js";
 import useUser from "../hooks/useUser.js";
+import { DateTime } from "luxon";
 
 function UserGroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
@@ -16,7 +17,22 @@ function UserGroupProvider({ children }) {
     const USER_GROUPS_URL = `/api/user/${user.id}/groups`;
     httpRequest(USER_GROUPS_URL, "GET")
       .then((groups) => {
-        setGroups(groups);
+        setGroups(
+          groups.map((group) => {
+            return {
+              ...group,
+              events: group.events.map((event) => {
+                event.start = DateTime.fromISO(event.start, { zone: "utc" })
+                  .toLocal()
+                  .toISO({ suppressMilliseconds: true, includeOffset: false });
+                event.end = DateTime.fromISO(event.end, { zone: "utc" })
+                  .toLocal()
+                  .toISO({ suppressMilliseconds: true, includeOffset: false });
+                return event;
+              }),
+            };
+          }),
+        );
       })
       .finally(() => {
         setIsLoading(false);

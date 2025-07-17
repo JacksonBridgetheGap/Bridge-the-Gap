@@ -20,6 +20,10 @@ export class TimeSlot {
     return this.end.getTime() - this.start.getTime();
   }
 
+  day(): number {
+    return this.start.getDay();
+  }
+
   eventsOverlap(other: TimeSlot): boolean {
     return this.start < other.end && this.end > other.start;
   }

@@ -12,6 +12,7 @@ authRouter.post("/api/auth/register", async (req, res) => {
   if (user === null) {
     //Hash password and write user to db
     const hash = await hashPassword(password);
+    const offsetUTC = new Date().getTimezoneOffset();
     const newUser = await prisma.user.create({
       data: {
         username,
@@ -19,6 +20,7 @@ authRouter.post("/api/auth/register", async (req, res) => {
         email,
         location,
         photo,
+        offsetUTC,
       },
       omit: {
         password: true,

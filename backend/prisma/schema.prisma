@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  username String  @unique
-  password String
-  photo    String?
-  location String? @default("None")
-  email    String? @unique
-  groups   Group[]
-  circle   User[]  @relation("UserCircle")
-  inCircle User[]  @relation("UserCircle")
-  events   Event[]
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
+  password  String
+  photo     String?
+  location  String? @default("None")
+  email     String? @unique
+  groups    Group[]
+  circle    User[]  @relation("UserCircle")
+  inCircle  User[]  @relation("UserCircle")
+  events    Event[]
+  offsetUTC Int     @default(0)
 }
 
 model Group {
@@ -31,6 +32,7 @@ model Group {
   promptLastUpdate   DateTime @updatedAt
   events             Event[]
   averageEventLength Int      @default(60)
+  averageOffsetUTC   Float    @default(0)
 }
 
 model Post {
