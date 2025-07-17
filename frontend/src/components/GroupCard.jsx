@@ -2,7 +2,7 @@ import "../styles/GroupCard.css";
 import { Link } from "react-router";
 import MemberCard from "./MemberCard";
 import { httpRequest } from "../utils/utils.js";
-import { userGroupsContext } from "../context/userGroupsContext.jsx";
+import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 import { useContext } from "react";
 import useUser from "../hooks/useUser.js";
 
