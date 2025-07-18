@@ -1,6 +1,6 @@
 import { cosineSimilarity } from "../math/math";
 import { UserWithGroupsAndCircle } from "../types/types";
-import { prisma } from "./prisma";
+import { prisma } from "../../prisma/prisma";
 
 const TAG_OPTIONS = [
   "hobbies",

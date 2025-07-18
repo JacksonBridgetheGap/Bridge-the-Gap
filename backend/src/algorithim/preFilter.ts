@@ -1,6 +1,6 @@
 //Quick filter of user groups to exclude filters we know shouldn't be included like already joined groups
 import { UserWithGroupsAndCircle } from "../types/types";
-import { prisma } from "./prisma";
+import { prisma } from "../../prisma/prisma";
 
 type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
 

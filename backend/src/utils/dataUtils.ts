@@ -3,7 +3,7 @@
 import { UserWithGroupsAndCircle } from "../types/types";
 import { UserWithEvents } from "../types/types";
 import { TimeSlot } from "./TimeSlot";
-import { prisma } from "../algorithim/prisma";
+import { prisma } from "../../prisma/prisma";
 
 //Create a user classification map to describe the users relationship strength with each tag
 export function userParse(user: UserWithGroupsAndCircle | null) {
