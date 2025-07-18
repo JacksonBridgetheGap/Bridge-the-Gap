@@ -39,7 +39,6 @@ export default function PostModal({ displayMode, onPost, onClose }) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(newPost);
     onPost(newPost);
     onClose();
     setNewPost(emptyPost);

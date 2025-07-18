@@ -40,7 +40,6 @@ function ProfilePage() {
 
   const [update, isLoading] = useUpdateProfile();
 
-  console.log(user);
   return (
     <main>
       <Header />
