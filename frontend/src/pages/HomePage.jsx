@@ -59,7 +59,7 @@ function HomePage() {
   return (
     <main>
       <Header />
-      <div className="search-form">
+      <div className="flex flex-row justify-center max-w mx-auto p-2 m-auto">
         <Navagation onSearch={startSearch} onClear={endSearch} />
       </div>
       {searching ? (
