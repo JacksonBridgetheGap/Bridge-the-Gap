@@ -11,7 +11,6 @@ authRouter.post("/api/auth/register", async (req, res) => {
   const user = await prisma.user.findFirst({
     where: { OR: [{ username: username }, { email: email }] },
   });
-  console.log(user);
   if (user === null) {
     //Hash password and write user to db
     const hash = await hashPassword(password);

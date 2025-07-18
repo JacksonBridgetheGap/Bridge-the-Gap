@@ -8,11 +8,6 @@ import moment from "moment-timezone";
 import { popularTimezones } from "../data/timezones.js";
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const styles = {
-  flexGrow: "1",
-  width: "90%",
-  margin: "0 auto",
-};
 
 export default function GroupCalendar({ group, setGroup }) {
   const [optimalTime, setOptimalTime] = useState(null);
@@ -107,7 +102,7 @@ export default function GroupCalendar({ group, setGroup }) {
   };
 
   return (
-    <div style={styles}>
+    <div className="flex-grow w-[90%] mx-auto my-8 rounded-2xl border-b-3 border-b-blue-500 border border-gray-200 bg-white/70 backdrop-blur-md p-6 shadow-md dark:border-gray-700 dark:bg-gray-800/60 dark:shadow-lg">
       <Calendar
         events={cachedEvents}
         onAdd={addEvent}

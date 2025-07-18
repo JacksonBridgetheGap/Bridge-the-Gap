@@ -3,13 +3,6 @@ import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../context/UserContext.jsx";
 import { useContext, useEffect, useState } from "react";
 
-const styles = {
-  flexGrow: "1",
-  height: "50%",
-  width: "50%",
-  margin: "0 2%",
-};
-
 export default function UserCalendar() {
   const { user, setUser } = useContext(userContext);
   const [userEvents, setUserEvents] = useState([]);
@@ -61,7 +54,7 @@ export default function UserCalendar() {
   };
 
   return (
-    <div style={styles}>
+    <div className="flex-grow w-[60%] mx-[2%] m-4 p-6 rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-md shadow-md dark:border-gray-700 dark:bg-gray-800/60 dark:shadow-lg">
       <Calendar
         events={user ? userEvents : []}
         onAdd={addEvent}

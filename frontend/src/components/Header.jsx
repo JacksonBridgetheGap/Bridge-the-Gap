@@ -6,6 +6,7 @@ import { userContext } from "../context/UserContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
 import { useContext } from "react";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
+import BridgeTheGapTitle from "./BridgeTheGapTitle.jsx";
 
 const LOGOUT_URL = "/api/auth/logout";
 
@@ -23,22 +24,20 @@ export default function Header() {
   };
 
   return (
-    <header>
+    <header className="flex justify-between items-center py-4 px-8">
       <div className="logo">
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-blue-400 md:text-5xl lg:text-6xl dark:text-white">
-          Bridge the Gap
-        </h1>
+        <BridgeTheGapTitle />
       </div>
-      <div className="relative top-4 left-10">
+      <div className="flex items-center gap-4">
         <BridgeTheGapButton onClick={handleLogout} value={"Log Out"} />
-      </div>
-      <div className="profile-icon">
-        <Link to="/profile" className="profile-link"></Link>
-        <img
-          src="/default_profile_pic.jpg"
-          alt="Profile Phot"
-          className="profile-photo"
-        />
+        <div className="profile-icon">
+          <Link to="/profile" className="profile-link"></Link>
+          <img
+            src="/default_profile_pic.jpg"
+            alt="Profile Phot"
+            className="profile-photo"
+          />
+        </div>
       </div>
     </header>
   );

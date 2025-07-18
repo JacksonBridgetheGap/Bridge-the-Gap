@@ -107,7 +107,7 @@ export default function Calendar({
 
   return (
     <div>
-      <p>
+      <p className="text-2xl font-bold dark:text-white">
         Your Timezone:{" "}
         <em>{Intl.DateTimeFormat().resolvedOptions().timeZone}</em>
       </p>
