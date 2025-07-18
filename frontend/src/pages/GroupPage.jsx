@@ -56,17 +56,19 @@ function GroupPage() {
   return (
     <main>
       <Header />
-      <h2 className="text-5xl font-bold dark:text-white">
-        {group ? group.name : "Loading Data..."}
-      </h2>
       <BackButton />
-      <PostList
-        posts={group?.posts ?? []}
-        onOpen={openModal}
-        group={group ? group : null}
-      />
-      <GroupCalendar group={group} setGroup={setGroup} />
-      <MembersList members={group ? group.members : []} />
+      <div className="flex flex-col items-center justify-center space-y-4 p-4 gap-4 w-full">
+        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4 p-2 border-b-4">
+          {group ? group.name : "Loading Data..."}
+        </h2>
+        <PostList
+          posts={group?.posts ?? []}
+          onOpen={openModal}
+          group={group ? group : null}
+        />
+        <GroupCalendar group={group} setGroup={setGroup} />
+        <MembersList members={group ? group.members : []} />
+      </div>
       <Footer />
       <PostModal
         onPost={createPost}

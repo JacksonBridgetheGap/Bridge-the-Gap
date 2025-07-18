@@ -372,13 +372,14 @@ app.get("/api/groups/:id/posts", async (req, res, next): Promise<void> => {
 app.post("/api/groups/:id/posts", async (req, res, next): Promise<void> => {
   const { id } = req.params;
   const groupId = Number(id);
-  const { title, img, description } = req.body;
+  const { title, img, description, author } = req.body;
   try {
     const post = await prisma.post.create({
       data: {
         title,
         img,
         description,
+        author,
         groupID: groupId,
       },
     });
