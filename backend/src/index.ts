@@ -289,17 +289,7 @@ app.put(
 //  [PUT] /users/:id
 app.put("/api/users/:id", async (req, res, next): Promise<void> => {
   const { id } = req.params;
-  const { username, password, photo, location, email, groups } = req.body;
-
-  const groupData = groups?.map((group: Prisma.GroupCreateInput) => {
-    return {
-      name: group?.name,
-      img: group?.img,
-      members: {
-        create: group?.members,
-      },
-    };
-  });
+  const { username, password, photo, location, email, offsetUTC } = req.body;
 
   try {
     const result = await prisma.user.update({
@@ -310,9 +300,12 @@ app.put("/api/users/:id", async (req, res, next): Promise<void> => {
         photo,
         location,
         email,
-        groups: {
-          connect: groupData,
-        },
+      },
+      include: {
+        inCircle: true,
+        circle: true,
+        groups: { include: { members: true } },
+        events: { include: { group: true } },
       },
     });
     res.json(result);

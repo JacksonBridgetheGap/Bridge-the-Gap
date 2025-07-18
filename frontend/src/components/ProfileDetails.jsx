@@ -8,7 +8,7 @@ export default function ProfileDetails({ onUpdate }) {
   const { user } = useUser();
   const [newUser, setNewUser] = useState({
     username: user.username,
-    photo: null,
+    photo: user.photo,
     location: user.location,
     email: user.email,
   });

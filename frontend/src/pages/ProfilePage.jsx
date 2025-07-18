@@ -8,18 +8,25 @@ import ProfileDetails from "../components/ProfileDetails";
 import useUser from "../hooks/useUser.js";
 import { userContext } from "../context/UserContext.jsx";
 import { useCallback, useContext } from "react";
-import { httpRequest } from "../utils/utils.js";
+import { convertEventsToLocal, httpRequest } from "../utils/utils.js";
+import { DateTime } from "luxon";
 
 function useUpdateProfile() {
   const { user, setUser } = useContext(userContext);
   const update = useCallback(
     (userData) => {
+      if (user.offsetUTC !== new Date().getTimezoneOffset()) {
+        userData.offsetUTC = new Date().getTimezoneOffset();
+      }
       const USER_URL = `/api/users/${user.id}`;
       httpRequest(USER_URL, "PUT", userData).then((updatedUser) => {
-        setUser(updatedUser);
+        setUser({
+          ...updatedUser,
+          events: convertEventsToLocal(updatedUser.events),
+        });
       });
     },
-    [setUser, user.id],
+    [setUser, user.id, user.offsetUTC],
   );
   return [update];
 }
