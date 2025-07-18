@@ -36,5 +36,5 @@ export default async function recommendations(
     filteredGroups,
   );
 
-  return recommendations.splice(0, 4);
+  return recommendations.splice(0, 3);
 }

@@ -2,8 +2,8 @@
 // and values as the number of times those tags appear
 import { UserWithGroupsAndCircle } from "../types/types";
 import { UserWithEvents } from "../types/types";
+import { Groups } from "../types/types";
 import { TimeSlot } from "./TimeSlot";
-import { prisma } from "../algorithim/prisma";
 
 //Create a user classification map to describe the users relationship strength with each tag
 export function userParse(user: UserWithGroupsAndCircle | null) {
@@ -31,8 +31,7 @@ export function userParse(user: UserWithGroupsAndCircle | null) {
 }
 
 //Creates a group data matrix based on tag data
-type RecordsType = Awaited<ReturnType<typeof prisma.group.findMany>>;
-export function createGroupMatrix(groups: RecordsType) {
+export function createGroupMatrix(groups: Groups[]) {
   return groups.reduce((map, group) => {
     const groupMap = group.tags.reduce((accum, tag) => {
       accum.set(tag, 1);

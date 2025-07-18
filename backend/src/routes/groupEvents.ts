@@ -1,11 +1,10 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../prisma/prisma";
 import optimalTimeSlot from "../algorithim/optimalTimeSlot";
 import { createTimeSlotMap } from "../utils/dataUtils";
 import isAuthenticated from "../middleware/is-authenticated";
 
 export const groupEventsRouter = express.Router();
-const prisma = new PrismaClient();
 
 groupEventsRouter.get(
   "/api/group/:groupId/events",
