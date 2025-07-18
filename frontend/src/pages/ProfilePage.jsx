@@ -9,6 +9,7 @@ import useUser from "../hooks/useUser.js";
 import { userContext } from "../context/UserContext.jsx";
 import { useCallback, useContext, useState } from "react";
 import { convertEventsToLocal, httpRequest } from "../utils/utils.js";
+import BackButton from "../components/BackButtons.jsx";
 
 function ProfilePage() {
   const { user } = useUser();
@@ -43,10 +44,8 @@ function ProfilePage() {
   return (
     <main>
       <Header />
+      <BackButton />
       <ProfileBanner />
-      <Link to="/" className="back-button">
-        {"<--"}
-      </Link>
       <div className="profile-information">
         <MemberIcon member={user} className="member-icon" />
         <ProfileDetails onUpdate={update} loading={isLoading} />

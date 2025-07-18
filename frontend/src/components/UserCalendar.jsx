@@ -5,8 +5,7 @@ import { useContext, useEffect, useState } from "react";
 
 const styles = {
   flexGrow: "1",
-  height: "50%",
-  width: "50%",
+  width: "60%",
   margin: "0 2%",
 };
 

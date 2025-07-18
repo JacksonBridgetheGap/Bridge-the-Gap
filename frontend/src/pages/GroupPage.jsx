@@ -9,6 +9,7 @@ import Footer from "../components/Footer";
 import "./GroupPage.css";
 import GroupCalendar from "../components/GroupCalendar.jsx";
 import { DateTime } from "luxon";
+import BackButton from "../components/BackButtons.jsx";
 
 function GroupPage() {
   const params = useParams();
@@ -58,9 +59,7 @@ function GroupPage() {
       <h2 className="text-5xl font-bold dark:text-white">
         {group ? group.name : "Loading Data..."}
       </h2>
-      <Link to="/" className="back-button">
-        {"<--"}
-      </Link>
+      <BackButton />
       <PostList
         posts={group?.posts ?? []}
         onOpen={openModal}

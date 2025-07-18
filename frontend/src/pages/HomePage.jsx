@@ -65,7 +65,7 @@ function HomePage() {
       {searching ? (
         <SearchResults />
       ) : (
-        <div className="home-content">
+        <div className="flex flex-row items-center justify-center space-y-4 w-full">
           <UserCalendar />
           <GroupList onOpen={openModal} />
           <GroupModal
