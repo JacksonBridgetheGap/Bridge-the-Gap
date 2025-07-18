@@ -16,6 +16,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const { setUser } = useContext(userContext);
   const { setAuth } = useContext(authContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (evt) => {
     setLoginData({
@@ -27,6 +28,7 @@ function LoginPage() {
 
   const handleLogin = async (evt) => {
     evt.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(LOGIN_URL, {
         method: "POST",
@@ -37,11 +39,13 @@ function LoginPage() {
       });
       if (response.ok) {
         const { user } = await response.json();
+        setIsLoading(false);
         setUser(user);
         setAuth(true);
         navigate("/");
       } else {
         const json = await response.json();
+        setIsLoading(false);
         setErrorMessage(json.message);
         setLoginData({
           username: "",
@@ -100,7 +104,11 @@ function LoginPage() {
           />
           <br />
         </div>
-        <BridgeTheGapButton onClick={handleLogin} value={"Login"} />
+        <BridgeTheGapButton
+          onClick={handleLogin}
+          value={"Login"}
+          loading={isLoading}
+        />
         <br />
         <Link
           to="/"

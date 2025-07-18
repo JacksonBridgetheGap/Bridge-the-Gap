@@ -19,6 +19,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { setUser } = useContext(userContext);
   const { setAuth } = useContext(authContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (evt) => {
     setNewUser({
@@ -30,6 +31,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (evt) => {
     evt.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(REGISTER_URL, {
         method: "POST",
@@ -40,11 +42,13 @@ export default function RegisterPage() {
       });
       if (response.ok) {
         const { newUser } = await response.json();
+        setIsLoading(false);
         setAuth(true);
         setUser(newUser);
         navigate("/");
       } else {
         const json = await response.json();
+        setIsLoading(false);
         setErrorMessage(json.message);
       }
     } catch (error) {
@@ -146,7 +150,11 @@ export default function RegisterPage() {
         />
         <br />
       </div>
-      <BridgeTheGapButton onClick={handleRegister} value={"Register"} />
+      <BridgeTheGapButton
+        onClick={handleRegister}
+        value={"Register"}
+        loading={isLoading}
+      />
       <br />
       <Link
         to="/login"
