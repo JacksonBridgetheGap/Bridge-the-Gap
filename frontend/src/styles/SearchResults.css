@@ -8,6 +8,7 @@
 .recommendations {
     margin: auto;
     display: flex;
+    gap: 1.5rem;
     justify-content: space-around;
     text-align: center;
     padding: 2em;

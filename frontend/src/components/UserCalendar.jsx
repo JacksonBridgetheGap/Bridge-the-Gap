@@ -7,6 +7,7 @@ const styles = {
   flexGrow: "1",
   width: "60%",
   margin: "0 2%",
+  padding: "1.5rem",
 };
 
 export default function UserCalendar() {
@@ -60,7 +61,7 @@ export default function UserCalendar() {
   };
 
   return (
-    <div style={styles}>
+    <div className="flex-grow w-[60%] mx-[2%] m-4 p-6 rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-md shadow-md dark:border-gray-700 dark:bg-gray-800/60 dark:shadow-lg">
       <Calendar
         events={user ? userEvents : []}
         onAdd={addEvent}
