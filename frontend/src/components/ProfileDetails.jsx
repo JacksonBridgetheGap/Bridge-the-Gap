@@ -4,11 +4,11 @@ import { useState } from "react";
 import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
-export default function ProfileDetails({ onUpdate }) {
+export default function ProfileDetails({ onUpdate, loading }) {
   const { user } = useUser();
   const [newUser, setNewUser] = useState({
     username: user.username,
-    photo: null,
+    photo: user.photo,
     location: user.location,
     email: user.email,
   });
@@ -77,6 +77,7 @@ export default function ProfileDetails({ onUpdate }) {
       <BridgeTheGapButton
         onClick={() => onUpdate(newUser)}
         value={"Save Changes"}
+        loading={loading}
       />
     </div>
   );

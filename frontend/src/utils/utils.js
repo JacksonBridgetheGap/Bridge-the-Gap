@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export async function httpRequest(URL, method, data) {
   return fetch(URL, {
     method: method,
@@ -22,4 +24,16 @@ export async function httpRequest(URL, method, data) {
       console.error("Error fetching data:", error);
       // Display an error message or retry the request
     });
+}
+
+export function convertEventsToLocal(events) {
+  return events.map((event) => {
+    event.start = DateTime.fromISO(event.start, { zone: "utc" })
+      .toLocal()
+      .toISO({ suppressMilliseconds: true, includeOffset: false });
+    event.end = DateTime.fromISO(event.end, { zone: "utc" })
+      .toLocal()
+      .toISO({ suppressMilliseconds: true, includeOffset: false });
+    return event;
+  });
 }

@@ -1,8 +1,7 @@
 import Calendar from "./Calendar";
 import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../context/UserContext.jsx";
-import { useContext } from "react";
-import { DateTime } from "luxon";
+import { useContext, useEffect, useState } from "react";
 
 const styles = {
   flexGrow: "1",
@@ -13,20 +12,26 @@ const styles = {
 
 export default function UserCalendar() {
   const { user, setUser } = useContext(userContext);
-  const userEvents = user.events.map((event) => {
-    if (event.groupID !== null) {
+  const [userEvents, setUserEvents] = useState([]);
+
+  useEffect(() => {
+    const userEvents = user?.events.map((event) => {
+      if (event.groupID !== null) {
+        return {
+          ...event,
+          backColor: "#fb4d4d",
+          text: `${event.text} - ${event.group.name}`,
+        };
+      }
       return {
         ...event,
-        backColor: "#fb4d4d",
-        text: `${event.text} - ${event.group.name}`,
+        backColor: "#7f7fff",
+        text: `${event.text} - ${user.username}`,
       };
-    }
-    return {
-      ...event,
-      backColor: "#7f7fff",
-      text: `${event.text} - ${user.username}`,
-    };
-  });
+    });
+
+    setUserEvents(userEvents);
+  }, [user?.events, user.username]);
 
   const addEvent = (eventUTC, eventLocal) => {
     eventUTC.groupID = null;
@@ -58,7 +63,7 @@ export default function UserCalendar() {
   return (
     <div style={styles}>
       <Calendar
-        events={userEvents}
+        events={user ? userEvents : []}
         onAdd={addEvent}
         onDelete={deleteEvent}
         onEdit={editEvent}

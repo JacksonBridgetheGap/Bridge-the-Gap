@@ -97,9 +97,10 @@ export default function GroupCalendar({ group, setGroup }) {
   };
 
   const getApproximateTimezone = () => {
+    const roundedOffset = Math.round(group.averageOffsetUTC / 60) * 60;
     const matchingZones = popularTimezones.filter((zone) => {
       const offset = moment.tz(new Date(), zone).utcOffset();
-      return offset === -group.averageOffsetUTC;
+      return offset === -roundedOffset;
     });
 
     return matchingZones[0];
@@ -122,8 +123,8 @@ export default function GroupCalendar({ group, setGroup }) {
       <p>
         {group
           ? group.averageOffsetUTC > 0
-            ? `Your group timezone is (UTC-${group.averageOffsetUTC / 60}:00)`
-            : `Your group timezone is (UTC+${group.averageOffsetUTC / 60}:00)`
+            ? `Your group timezone is (UTC-${Math.round(group.averageOffsetUTC / 60)}:00)`
+            : `Your group timezone is (UTC+${Math.round(group.averageOffsetUTC / 60)}:00)`
           : "Loading group timezone..."}
       </p>
       <p>

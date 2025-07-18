@@ -289,33 +289,49 @@ app.put(
 //  [PUT] /users/:id
 app.put("/api/users/:id", async (req, res, next): Promise<void> => {
   const { id } = req.params;
-  const { username, password, photo, location, email, groups } = req.body;
-
-  const groupData = groups?.map((group: Prisma.GroupCreateInput) => {
-    return {
-      name: group?.name,
-      img: group?.img,
-      members: {
-        create: group?.members,
-      },
-    };
-  });
+  const { username, password, photo, location, email, offsetUTC } = req.body;
 
   try {
-    const result = await prisma.user.update({
-      where: { id: Number(id) },
-      data: {
-        username,
-        password,
-        photo,
-        location,
-        email,
-        groups: {
-          connect: groupData,
+    const user = await prisma.user.findFirst({ where: { id: Number(id) } });
+
+    if (user) {
+      const result = await prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+          username,
+          password,
+          photo,
+          location,
+          email,
+          offsetUTC,
         },
-      },
-    });
-    res.json(result);
+        include: {
+          inCircle: true,
+          circle: true,
+          groups: { include: { members: true } },
+          events: { include: { group: true } },
+        },
+      });
+
+      for (const group of result.groups) {
+        if (offsetUTC) {
+          await prisma.group.update({
+            where: { id: group.id },
+            data: {
+              averageOffsetUTC:
+                (group.averageOffsetUTC! * group.members?.length! -
+                  user.offsetUTC +
+                  offsetUTC) /
+                group.members?.length!,
+            },
+          });
+        }
+      }
+
+      res.json(result);
+    } else {
+      throw new Error("User not found");
+    }
   } catch (error) {
     next(error);
   }
