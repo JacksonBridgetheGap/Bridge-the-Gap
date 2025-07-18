@@ -1,5 +1,4 @@
 import "./ProfilePage.css";
-import { Link } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProfileBanner from "../components/ProfileBanner";
@@ -41,13 +40,18 @@ function ProfilePage() {
 
   const [update, isLoading] = useUpdateProfile();
 
+  console.log(user);
   return (
     <main>
       <Header />
       <BackButton />
       <ProfileBanner />
       <div className="profile-information">
-        <MemberIcon member={user} className="member-icon" />
+        <img
+          className={"w-48 h-48 rounded-full object-cover shadow-lg"}
+          src={user ? user.photo : "/default_profile_pic.jpg"}
+          alt="Profile Image"
+        />
         <ProfileDetails onUpdate={update} loading={isLoading} />
       </div>
       <Footer />

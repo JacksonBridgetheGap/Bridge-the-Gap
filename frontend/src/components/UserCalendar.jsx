@@ -3,13 +3,6 @@ import { httpRequest } from "../utils/utils.js";
 import { userContext } from "../context/UserContext.jsx";
 import { useContext, useEffect, useState } from "react";
 
-const styles = {
-  flexGrow: "1",
-  width: "60%",
-  margin: "0 2%",
-  padding: "1.5rem",
-};
-
 export default function UserCalendar() {
   const { user, setUser } = useContext(userContext);
   const [userEvents, setUserEvents] = useState([]);
