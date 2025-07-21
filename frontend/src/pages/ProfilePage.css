@@ -12,5 +12,11 @@
 
 .profile-information {
   display: flex;
-  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 1000px;
+  padding: 2rem;
 }

@@ -1,20 +1,24 @@
-import { useParams, Link } from "react-router";
+import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { httpRequest } from "../utils/utils";
 import Header from "../components/Header";
 import PostList from "../components/PostList";
 import PostModal from "../components/PostModal";
+import PostView from "../components/PostView.jsx";
 import MembersList from "../components/MembersList";
 import Footer from "../components/Footer";
 import "./GroupPage.css";
 import GroupCalendar from "../components/GroupCalendar.jsx";
 import { DateTime } from "luxon";
+import BackButton from "../components/BackButtons.jsx";
 
 function GroupPage() {
   const params = useParams();
 
   const [group, setGroup] = useState(null);
   const [modalDisplay, setModalDisplay] = useState("modal-hidden");
+  const [inPostView, setInPostView] = useState(false);
+  const [post, setPost] = useState(null);
 
   useEffect(() => {
     const GROUP_URL = `/api/groups/${params.id}`;
@@ -52,27 +56,61 @@ function GroupPage() {
     setModalDisplay("modal-hidden");
   };
 
+  const viewPost = (post) => {
+    setPost(post);
+    setInPostView(true);
+  };
+
+  const closePostView = () => {
+    setInPostView(false);
+    setPost(null);
+  };
+
+  const nextPost = () => {
+    const postIndex = group.posts.findIndex((p) => p.id === post.id);
+    if (postIndex === group.posts.length - 1) {
+      setPost(group.posts[0]);
+    }
+    setPost(group.posts[postIndex + 1]);
+  };
+
+  const prevPost = () => {
+    const postIndex = group.posts.findIndex((p) => p.id === post.id);
+    if (postIndex === 0) {
+      setPost(group.posts[group.posts.length - 1]);
+    }
+    setPost(group.posts[postIndex - 1]);
+  };
+
   return (
     <main>
       <Header />
-      <h2 className="text-5xl font-bold dark:text-white">
-        {group ? group.name : "Loading Data..."}
-      </h2>
-      <Link to="/" className="back-button">
-        {"<--"}
-      </Link>
-      <PostList
-        posts={group?.posts ?? []}
-        onOpen={openModal}
-        group={group ? group : null}
-      />
-      <GroupCalendar group={group} setGroup={setGroup} />
-      <MembersList members={group ? group.members : []} />
+      <BackButton />
+      <div className="flex flex-col items-center justify-center space-y-4 p-4 gap-4 w-full">
+        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4 p-2 border-b-4">
+          {group ? group.name : "Loading Data..."}
+        </h2>
+        <PostList
+          posts={group?.posts ?? []}
+          onOpen={openModal}
+          group={group ? group : null}
+          openPost={viewPost}
+        />
+        <GroupCalendar group={group} setGroup={setGroup} />
+        <MembersList members={group ? group.members : []} />
+      </div>
       <Footer />
       <PostModal
         onPost={createPost}
         displayMode={modalDisplay}
         onClose={closeModal}
+      />
+      <PostView
+        isOpen={inPostView}
+        post={post}
+        onClose={closePostView}
+        nextPost={nextPost}
+        prevPost={prevPost}
       />
     </main>
   );

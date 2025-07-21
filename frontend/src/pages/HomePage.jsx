@@ -59,15 +59,15 @@ function HomePage() {
   return (
     <main>
       <Header />
-      <div className="search-form">
+      <div className="flex flex-row justify-center max-w mx-auto p-2 m-auto">
         <Navagation onSearch={startSearch} onClear={endSearch} />
       </div>
       {searching ? (
         <SearchResults />
       ) : (
-        <div className="home-content">
-          <UserCalendar />
+        <div className="flex flex-row items-center justify-center space-y-4 p-4 gap-4 w-full">
           <GroupList onOpen={openModal} />
+          <UserCalendar />
           <GroupModal
             displayMode={modalDisplay}
             onClose={closeModal}

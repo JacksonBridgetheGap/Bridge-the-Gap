@@ -8,10 +8,12 @@
 .recommendations {
     margin: auto;
     display: flex;
+    gap: 1.5rem;
     justify-content: space-around;
     text-align: center;
     padding: 2em;
-    background-color: var(--third-color);
+    background-color: var(--secondary-color);
+    border: 3px gray solid;
     overflow-x: auto;
     width: 70%;
     border-radius: 10px;
