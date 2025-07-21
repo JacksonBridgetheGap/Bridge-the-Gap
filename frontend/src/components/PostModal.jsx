@@ -1,15 +1,19 @@
 import "../styles/PostModal.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
-
-const emptyPost = {
-  title: "",
-  img: "/default_post_pic.png",
-  description: "",
-};
+import { userContext } from "../context/UserContext.jsx";
 
 export default function PostModal({ displayMode, onPost, onClose }) {
+  const { user } = useContext(userContext);
+
+  const emptyPost = {
+    title: "",
+    img: "/default_post_pic.png",
+    description: "",
+    author: user.username,
+  };
+
   const [newPost, setNewPost] = useState(emptyPost);
 
   const handleFileChange = (event) => {

@@ -24,21 +24,28 @@ export function SearchResults() {
   }
   return (
     <div>
-      <h3>Recommend Groups For You...</h3>
-      <div className={"recommendations"}>
-        {recommendations.map((group) => (
-          <GrouopCard
-            group={group}
-            members={group.members}
-            key={group.id}
-            joinedGroup={userGroups.some(
-              (userGroup) => userGroup.id === group.id,
-            )}
-            home={false}
-          />
-        ))}
+      <div className="mb-6 rounded-2xl border-l-4 border-blue-500 bg-blue-50 p-5 shadow-md dark:border-blue-400 dark:bg-blue-900/30">
+        <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-200 mb-3">
+          Recommend Groups For You...
+        </h3>
+        <div className={"grid gap-3 sm:grid-cols-2 md:grid-cols-3"}>
+          {recommendations.map((group) => (
+            <GrouopCard
+              group={group}
+              members={group.members}
+              key={group.id}
+              joinedGroup={userGroups.some(
+                (userGroup) => userGroup.id === group.id,
+              )}
+              home={false}
+            />
+          ))}
+        </div>
       </div>
-      <div className={"search-results"}>
+      <p className="p-4 text-sm text-gray-600 dark:text-gray-300">
+        {groups ? `${groups.length} results found...` : "Loading results..."}
+      </p>
+      <div className={"grid gap-4 sm:grid-cols-2 md:grid-cols-3"}>
         {groups?.map((group) => (
           <GrouopCard
             group={group}
