@@ -2,6 +2,7 @@ import express from "express";
 import { prisma } from "../prisma";
 import optimalTimeSlot from "../algorithim/optimalTimeSlot";
 import { createTimeSlotMap } from "../utils/dataUtils";
+import { timeoutPromise } from "../utils/promise";
 import isAuthenticated from "../middleware/is-authenticated";
 
 export const groupEventsRouter = express.Router();
@@ -45,16 +46,26 @@ groupEventsRouter.get(
       date.setMilliseconds(0);
       const endOfWeek = new Date();
       const [timeSlotMap, timeSlotSet] = createTimeSlotMap(group!.members);
-      const { slot, conflicts } = optimalTimeSlot(
-        timeSlotSet,
-        timeSlotMap,
-        group!.averageEventLength,
-        date,
-        new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
-        Number(groupId),
-        group?.averageOffsetUTC! / 60,
-      );
-      res.status(200).json({ slot, conflicts });
+      timeoutPromise(
+        5000,
+        optimalTimeSlot(
+          timeSlotSet,
+          timeSlotMap,
+          group!.averageEventLength,
+          date,
+          new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
+          Number(groupId),
+          group?.averageOffsetUTC! / 60,
+        ),
+      )
+        .then((data) => {
+          const slot = data.slot;
+          const conflicts = data.conflicts;
+          res.status(200).json({ slot, conflicts });
+        })
+        .catch(() => {
+          res.status(500).json({ error: "Optimal time algorithm timed out" });
+        });
     } catch (error) {
       res
         .status(500)

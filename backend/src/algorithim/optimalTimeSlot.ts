@@ -8,7 +8,7 @@ const SAME_DAY_PENALTY = 0.5;
 const DURATION_BONUS = 0.25;
 const MIDDAY_DISTANCE_PENALTY = 0.1;
 
-export default function optimalTimeSlot(
+export default async function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
   timeSlotMap: Map<string, number>,
   desiredLength: number,
@@ -16,7 +16,7 @@ export default function optimalTimeSlot(
   endDateTime: Date,
   groupID: number,
   groupTimezoneOffset: number,
-): { slot: TimeSlot; conflicts: number } {
+): Promise<{ slot: TimeSlot; conflicts: number }> {
   let bestTimeSlot: TimeSlot = new TimeSlot(
     startDateTime,
     new Date(startDateTime.getTime() + SLOT_DURATION_MINUTES * TIME_IN_MINUTES),
