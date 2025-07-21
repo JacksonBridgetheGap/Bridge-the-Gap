@@ -6,6 +6,7 @@ const BUFFER_MINUTES = 10;
 const BUFFER_PENALTY = 0.25;
 const SAME_DAY_PENALTY = 0.5;
 const DURATION_BONUS = 0.25;
+const MIDDAY_DISTANCE_PENALTY = 0.1;
 
 export default function optimalTimeSlot(
   userEvents: Set<TimeSlot>,
@@ -53,12 +54,16 @@ export default function optimalTimeSlot(
       if (possibleTimeSlot.end.getUTCHours() - groupTimezoneOffset > 22) {
         continue startTimeLoop;
       }
-      for (const event of userEvents) {
+      eventLoop: for (const event of userEvents) {
         const bufferedEvent = new TimeSlot(
           new Date(event.start.getTime() - BUFFER_MINUTES * TIME_IN_MINUTES),
           new Date(event.end.getTime() + BUFFER_MINUTES * TIME_IN_MINUTES),
           event.groupID,
         );
+        if (bufferedEvent.end < possibleTimeSlot.start) {
+          userEvents.delete(event);
+          continue eventLoop;
+        }
         if (possibleTimeSlot.eventsOverlap(event)) {
           if (event.groupID === groupID) {
             continue startTimeLoop;
@@ -83,7 +88,12 @@ export default function optimalTimeSlot(
         }
       }
 
-      score -= durationIterations * DURATION_BONUS;
+      const distanceFromMidday = Math.abs(
+        possibleTimeSlot.start.getUTCHours() - groupTimezoneOffset - 12,
+      );
+      score -=
+        durationIterations * DURATION_BONUS -
+        distanceFromMidday * MIDDAY_DISTANCE_PENALTY;
 
       if (score < minScore) {
         minConflicts = numConflicts;
