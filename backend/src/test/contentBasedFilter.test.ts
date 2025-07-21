@@ -19,6 +19,7 @@ test("contentBasedFilter: small", () => {
     name: "Group5",
     img: "/default_group_pic.png",
     tags: ["business", "hobbies", "gaming"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 5 }],
   });
 });
@@ -38,6 +39,7 @@ test("contentBasedFilter: circle", () => {
     name: "Group2",
     img: "/deafult_group_pic.png",
     tags: ["education"],
+    postFrequency: 0,
     members: [{ id: 2 }, { id: 4 }, { id: 6 }],
   });
 });
@@ -59,6 +61,7 @@ test("contentBasedFilter: medium", () => {
     name: "Group5",
     img: "/default_group_pic.png",
     tags: ["business", "hobbies", "gaming"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 5 }],
   });
 });
@@ -79,6 +82,7 @@ test("contentBasedFilter: large", () => {
     name: "Group5",
     img: "/default_group_pic.png",
     tags: ["business", "hobbies", "gaming"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 5 }],
   });
 });

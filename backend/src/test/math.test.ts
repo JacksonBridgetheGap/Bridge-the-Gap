@@ -13,7 +13,7 @@ test("cosineSimilarity: same", () => {
 });
 
 test("cosineSimilarity: zero vector", () => {
-  expect(cosineSimilarity([1, 2, 3], [0, 0, 0])).toBe(NaN);
+  expect(cosineSimilarity([1, 2, 3], [0, 0, 0])).toBe(0);
 });
 
 test("cosineSimilarity: zero", () => {
