@@ -28,11 +28,12 @@ model Group {
   members            User[]
   posts              Post[]
   tags               String[] @default([])
-  prompt             String   @default("Weekly Challenge: Post Something Cool!")
+  prompt             String   @default("")
   promptLastUpdate   DateTime @updatedAt
   events             Event[]
   averageEventLength Int      @default(60)
   averageOffsetUTC   Float    @default(0)
+  postFrequency      Float    @default(0)
 }
 
 model Post {

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Group" ADD COLUMN     "postFrequency" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ALTER COLUMN "prompt" SET DEFAULT '';

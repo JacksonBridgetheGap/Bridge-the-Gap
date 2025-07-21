@@ -66,7 +66,7 @@ usersRouter.put(
     try {
       const group = await prisma.group.findUnique({
         where: { id: Number(groupId) },
-        include: { members: true, events: true },
+        include: { members: true, events: true, posts: true },
       });
       if (group) {
         const user = await prisma.user.update({
@@ -83,6 +83,8 @@ usersRouter.put(
             },
           },
         });
+        console.log(group?.members.length);
+        console.log(group?.posts.length);
         await prisma.group.update({
           where: { id: Number(groupId) },
           data: {
@@ -90,6 +92,7 @@ usersRouter.put(
               (group?.averageOffsetUTC! * group?.members?.length! +
                 user.offsetUTC) /
               (group?.members?.length! + 1),
+            postFrequency: group?.posts.length! / (group?.members?.length! + 1),
           },
         });
         res.json(user);
