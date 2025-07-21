@@ -83,8 +83,6 @@ usersRouter.put(
             },
           },
         });
-        console.log(group?.members.length);
-        console.log(group?.posts.length);
         await prisma.group.update({
           where: { id: Number(groupId) },
           data: {
