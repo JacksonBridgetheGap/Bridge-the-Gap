@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "../../prisma/prisma";
+import { prisma } from "../prisma";
 import optimalTimeSlot from "../algorithim/optimalTimeSlot";
 import { createTimeSlotMap } from "../utils/dataUtils";
 import isAuthenticated from "../middleware/is-authenticated";

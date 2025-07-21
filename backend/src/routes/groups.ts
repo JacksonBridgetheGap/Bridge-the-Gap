@@ -1,6 +1,6 @@
 import express from "express";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../../prisma/prisma";
+import { prisma } from "../prisma";
 import { UserWithGroupsAndCircle } from "../types/types";
 import recommendations from "../algorithim/recommendations";
 import isAuthenticated from "../middleware/is-authenticated";

@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "../../prisma/prisma";
+import { prisma } from "../prisma";
 
 export const postsRouter = express.Router();
 
