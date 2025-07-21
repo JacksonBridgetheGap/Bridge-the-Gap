@@ -1,9 +1,10 @@
-import { useParams, Link } from "react-router";
+import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { httpRequest } from "../utils/utils";
 import Header from "../components/Header";
 import PostList from "../components/PostList";
 import PostModal from "../components/PostModal";
+import PostView from "../components/PostView.jsx";
 import MembersList from "../components/MembersList";
 import Footer from "../components/Footer";
 import "./GroupPage.css";
@@ -16,6 +17,8 @@ function GroupPage() {
 
   const [group, setGroup] = useState(null);
   const [modalDisplay, setModalDisplay] = useState("modal-hidden");
+  const [inPostView, setInPostView] = useState(false);
+  const [post, setPost] = useState(null);
 
   useEffect(() => {
     const GROUP_URL = `/api/groups/${params.id}`;
@@ -53,6 +56,32 @@ function GroupPage() {
     setModalDisplay("modal-hidden");
   };
 
+  const viewPost = (post) => {
+    setPost(post);
+    setInPostView(true);
+  };
+
+  const closePostView = () => {
+    setInPostView(false);
+    setPost(null);
+  };
+
+  const nextPost = () => {
+    const postIndex = group.posts.findIndex((p) => p.id === post.id);
+    if (postIndex === group.posts.length - 1) {
+      setPost(group.posts[0]);
+    }
+    setPost(group.posts[postIndex + 1]);
+  };
+
+  const prevPost = () => {
+    const postIndex = group.posts.findIndex((p) => p.id === post.id);
+    if (postIndex === 0) {
+      setPost(group.posts[group.posts.length - 1]);
+    }
+    setPost(group.posts[postIndex - 1]);
+  };
+
   return (
     <main>
       <Header />
@@ -65,6 +94,7 @@ function GroupPage() {
           posts={group?.posts ?? []}
           onOpen={openModal}
           group={group ? group : null}
+          openPost={viewPost}
         />
         <GroupCalendar group={group} setGroup={setGroup} />
         <MembersList members={group ? group.members : []} />
@@ -74,6 +104,13 @@ function GroupPage() {
         onPost={createPost}
         displayMode={modalDisplay}
         onClose={closeModal}
+      />
+      <PostView
+        isOpen={inPostView}
+        post={post}
+        onClose={closePostView}
+        nextPost={nextPost}
+        prevPost={prevPost}
       />
     </main>
   );
