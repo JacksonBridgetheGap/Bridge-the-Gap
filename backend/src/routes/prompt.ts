@@ -24,6 +24,11 @@ promptRouter.get("/api/groups/:groupID/prompt", async (req, res) => {
           promptLastUpdate: new Date(),
         },
       });
+      await prisma.post.deleteMany({
+        where: {
+          groupID: Number(groupID),
+        },
+      });
       res.status(201).json({ prompt, updatedGroup });
     } else {
       res

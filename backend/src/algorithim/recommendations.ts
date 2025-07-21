@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 // 5. Perform cosine similarity to determine strength of recommendation and sort list of recommendations
 export default async function recommendations(
   user: UserWithGroupsAndCircle | null,
-) {
+): Promise<GroupWithMembers[]> {
   //1.
   const groups: GroupWithMembers = await prisma.group.findMany({
     include: { members: true },
