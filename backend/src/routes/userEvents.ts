@@ -1,9 +1,8 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../prisma";
 import isAuthenticated from "../middleware/is-authenticated";
 
 export const userEventsRouter = express.Router();
-const prisma = new PrismaClient();
 
 userEventsRouter.get(
   "/api/user/:userId/events",

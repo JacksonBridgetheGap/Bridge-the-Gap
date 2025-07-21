@@ -1,6 +1,6 @@
 import { cosineSimilarity } from "../math/math";
 import { UserWithGroupsAndCircle } from "../types/types";
-import { prisma } from "./prisma";
+import { Groups } from "../types/types";
 
 const TAG_OPTIONS = [
   "hobbies",
@@ -17,15 +17,11 @@ const TAG_OPTIONS = [
 //This is just to change the strength of how much we value people in your circle being in groups
 const FRIEND_CONSTANT = 0.2;
 
-type GroupWithMembers = {
-  members: any[];
-} & Awaited<ReturnType<typeof prisma.group.findMany>>[number];
-type RecordsType = GroupWithMembers[];
 export default function contentBasedFilter(
   user: UserWithGroupsAndCircle | null,
   userClassificatoins: Map<string, number>,
   groupMatrix: Map<number, Map<string, number>>,
-  groups: RecordsType,
+  groups: Groups[],
 ) {
   //Construct User vector from classifications
   const userVector = Array.from({ length: 10 }, () => 0);

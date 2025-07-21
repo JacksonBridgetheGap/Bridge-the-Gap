@@ -4,11 +4,13 @@ import { useState } from "react";
 import BridgeTheGapTextInput from "./BridgeTheGapTextInput.jsx";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
-export default function ProfileDetails({ onUpdate }) {
+const INPUT_LABEL_STYLE = "text-xl font-bold dark:text-white";
+
+export default function ProfileDetails({ onUpdate, loading }) {
   const { user } = useUser();
   const [newUser, setNewUser] = useState({
     username: user.username,
-    photo: null,
+    photo: user.photo,
     location: user.location,
     email: user.email,
   });
@@ -31,8 +33,8 @@ export default function ProfileDetails({ onUpdate }) {
 
   return (
     <div className="profile-details">
-      <h3>User Information</h3>
-      <h5>Name</h5>
+      <h3 className="text-3xl font-bold dark:text-white">User Information</h3>
+      <h5 className={INPUT_LABEL_STYLE}>Name</h5>
       <BridgeTheGapTextInput
         name="username"
         value={newUser.username}
@@ -43,7 +45,7 @@ export default function ProfileDetails({ onUpdate }) {
       {
         //If I get some time I want to use react-dropzone to make a better file upload process for users
       }
-      <h5>Profile Image</h5>
+      <h5 className={INPUT_LABEL_STYLE}>Profile Image</h5>
       <input
         type="file"
         name="photo"
@@ -58,7 +60,7 @@ export default function ProfileDetails({ onUpdate }) {
         />
       )}{" "}
       <br />
-      <h5>Location</h5>
+      <h5 className={INPUT_LABEL_STYLE}>Location</h5>
       <BridgeTheGapTextInput
         name="location"
         value={newUser.location}
@@ -66,7 +68,7 @@ export default function ProfileDetails({ onUpdate }) {
         onChange={handleInputChange}
       />
       <br />
-      <h5>Email</h5>
+      <h5 className={INPUT_LABEL_STYLE}>Email</h5>
       <BridgeTheGapTextInput
         name="email"
         value={newUser.email}
@@ -77,6 +79,7 @@ export default function ProfileDetails({ onUpdate }) {
       <BridgeTheGapButton
         onClick={() => onUpdate(newUser)}
         value={"Save Changes"}
+        loading={loading}
       />
     </div>
   );

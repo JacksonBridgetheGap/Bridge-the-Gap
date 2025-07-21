@@ -1,12 +1,10 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../prisma";
 import optimalTimeSlot from "../algorithim/optimalTimeSlot";
-import { TimeSlot } from "../utils/TimeSlot";
 import { createTimeSlotMap } from "../utils/dataUtils";
 import isAuthenticated from "../middleware/is-authenticated";
 
 export const groupEventsRouter = express.Router();
-const prisma = new PrismaClient();
 
 groupEventsRouter.get(
   "/api/group/:groupId/events",
@@ -54,6 +52,7 @@ groupEventsRouter.get(
         date,
         new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
         Number(groupId),
+        group?.averageOffsetUTC! / 60,
       );
       res.status(200).json({ slot, conflicts });
     } catch (error) {

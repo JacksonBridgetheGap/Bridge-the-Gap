@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Group" ADD COLUMN     "averageOffsetUTC" DOUBLE PRECISION NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "offsetUTC" INTEGER NOT NULL DEFAULT 0;

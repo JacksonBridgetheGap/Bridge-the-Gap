@@ -8,10 +8,13 @@ const prisma = new PrismaClient();
 authRouter.post("/api/auth/register", async (req, res) => {
   //Check the username for uniqness
   const { username, password, photo, email, location } = req.body;
-  const user = await prisma.user.findUnique({ where: { username } });
+  const user = await prisma.user.findFirst({
+    where: { OR: [{ username: username }, { email: email }] },
+  });
   if (user === null) {
     //Hash password and write user to db
     const hash = await hashPassword(password);
+    const offsetUTC = new Date().getTimezoneOffset();
     const newUser = await prisma.user.create({
       data: {
         username,
@@ -19,6 +22,7 @@ authRouter.post("/api/auth/register", async (req, res) => {
         email,
         location,
         photo,
+        offsetUTC,
       },
       omit: {
         password: true,
@@ -27,7 +31,7 @@ authRouter.post("/api/auth/register", async (req, res) => {
     req.session.userId = newUser.id;
     res.json({ newUser });
   } else {
-    res.status(400).json({ message: "Username already exists" });
+    res.status(409).json({ message: "Username/Email already exists" });
   }
 });
 
