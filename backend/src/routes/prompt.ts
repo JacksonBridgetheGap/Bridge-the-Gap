@@ -22,6 +22,7 @@ promptRouter.get("/api/groups/:groupID/prompt", async (req, res) => {
         data: {
           prompt: prompt,
           promptLastUpdate: new Date(),
+          postFrequency: 0,
         },
       });
       await prisma.post.deleteMany({
