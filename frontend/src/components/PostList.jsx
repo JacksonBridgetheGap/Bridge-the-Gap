@@ -9,7 +9,7 @@ export default function PostList({ group, posts, onOpen, openPost }) {
   useEffect(() => {
     if (group?.prompt) {
       setPrompt(group.prompt);
-      const PROMPT_URL = `/api/groups/${group.id}/prompt`;
+      const PROMPT_URL = `${import.meta.env.VITE_BASE_URL}/api/groups/${group.id}/prompt`;
       httpRequest(PROMPT_URL, "GET").then((res) => {
         if (res.message) {
           return;

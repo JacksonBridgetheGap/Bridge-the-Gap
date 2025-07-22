@@ -8,7 +8,7 @@ import { useContext } from "react";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 import BridgeTheGapTitle from "./BridgeTheGapTitle.jsx";
 
-const LOGOUT_URL = "/api/auth/logout";
+const LOGOUT_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/logout`;
 
 export default function Header() {
   const navigate = useNavigate();

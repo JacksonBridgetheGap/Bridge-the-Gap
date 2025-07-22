@@ -23,7 +23,7 @@ function ProfilePage() {
         if (user.offsetUTC !== new Date().getTimezoneOffset()) {
           userData.offsetUTC = new Date().getTimezoneOffset();
         }
-        const USER_URL = `/api/users/${user.id}`;
+        const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users/${user.id}`;
         httpRequest(USER_URL, "PUT", userData)
           .then((updatedUser) => {
             setUser({

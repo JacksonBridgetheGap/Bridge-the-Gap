@@ -6,7 +6,7 @@ function SearchResultsProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const SEARCH_URL = `/api/groups/?name=${searchTerm}`;
+  const SEARCH_URL = `${import.meta.env.VITE_BASE_URL}/api/groups/?name=${searchTerm}`;
 
   useEffect(() => {
     httpRequest(SEARCH_URL, "GET").then((groups) => {

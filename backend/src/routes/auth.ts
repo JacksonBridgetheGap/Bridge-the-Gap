@@ -36,13 +36,11 @@ authRouter.post("/api/auth/register", async (req, res) => {
 });
 
 authRouter.post("/api/auth/login", async (req, res) => {
-  //Check if username exists
   const { username, password } = req.body;
   const user = await prisma.user.findUnique({
     where: { username },
     include: { groups: { include: { members: true } } },
   });
-  //Check if password matches stored password if user exists
   if (user !== null && (await verifyPassword(password, user.password))) {
     req.session.userId = user.id;
     const { password: _password, ...rest } = user;

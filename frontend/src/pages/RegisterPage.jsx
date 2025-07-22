@@ -6,7 +6,7 @@ import { authContext } from "../context/AuthContext.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import BridgeTheGapTitle from "../components/BridgeTheGapTitle.jsx";
 
-const REGISTER_URL = "/api/auth/register";
+const REGISTER_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/register`;
 
 export default function RegisterPage() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -36,6 +36,7 @@ export default function RegisterPage() {
     try {
       const response = await fetch(REGISTER_URL, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { authContext as AuthContext } from "../context/AuthContext.jsx";
 import { httpRequest } from "../utils/utils.js";
 
-const AUTH_URL = "/api/auth/session";
+const AUTH_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/session`;
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(null);

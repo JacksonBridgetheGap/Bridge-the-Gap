@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import { userContext } from "../context/UserContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
 import BridgeTheGapTitle from "../components/BridgeTheGapTitle.jsx";
-const LOGIN_URL = "/api/auth/login";
+const LOGIN_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/login`;
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -33,6 +33,7 @@ function LoginPage() {
     try {
       const response = await fetch(LOGIN_URL, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

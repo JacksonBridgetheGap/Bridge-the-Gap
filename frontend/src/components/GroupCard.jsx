@@ -12,7 +12,7 @@ export default function GroupCard({ group, members, joinedGroup, home }) {
 
   const handleJoin = () => {
     if (!joinedGroup) {
-      const USER_GROUPS_URL = `/api/user/${user.id}/groups`;
+      const USER_GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups`;
       httpRequest(USER_GROUPS_URL, "PUT", {
         groupId: group.id,
       }).then(() => {

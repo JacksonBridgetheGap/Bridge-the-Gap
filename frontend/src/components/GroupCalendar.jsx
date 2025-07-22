@@ -22,7 +22,7 @@ export default function GroupCalendar({ group, setGroup }) {
 
   const addEvent = (eventUTC, eventLocal) => {
     eventUTC.members = group.members;
-    const EVENT_URL = `/api/group/${group.id}/events`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events`;
     httpRequest(EVENT_URL, "POST", eventUTC).then(() => {
       setGroup({
         ...group,
@@ -32,17 +32,17 @@ export default function GroupCalendar({ group, setGroup }) {
   };
 
   const deleteEvent = (id) => {
-    const EVENT_URL = `/api/group/${group.id}/events/${id}`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events/${id}`;
     httpRequest(EVENT_URL, "DELETE");
   };
 
   const editEvent = (eventData) => {
-    const EVENT_URL = `/api/group/${group.id}/events/${eventData.id}`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events/${eventData.id}`;
     httpRequest(EVENT_URL, "PUT", eventData);
   };
 
   const getOptimalTime = () => {
-    const OPTIMAL_TIME_URL = `/api/group/${group.id}/optimalEvent`;
+    const OPTIMAL_TIME_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/optimalEvent`;
     setLoading(true);
     httpRequest(OPTIMAL_TIME_URL, "GET")
       .then((response) => {
