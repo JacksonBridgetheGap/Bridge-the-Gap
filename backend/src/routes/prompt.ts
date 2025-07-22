@@ -15,13 +15,19 @@ promptRouter.get("/api/groups/:groupID/prompt", async (req, res) => {
     const todaysDate = new Date().getTime();
     const lastUpdate = group!.promptLastUpdate.getTime();
     const timeSinceLastUpdate = (todaysDate - lastUpdate) / DAY_IN_MS;
-    if (timeSinceLastUpdate >= 7) {
+    if (timeSinceLastUpdate >= 7 || group?.prompt === "") {
       const prompt = await getResponseForPrompt(group);
       const updatedGroup = await prisma.group.update({
         where: { id: Number(groupID) },
         data: {
           prompt: prompt,
           promptLastUpdate: new Date(),
+          postFrequency: 0,
+        },
+      });
+      await prisma.post.deleteMany({
+        where: {
+          groupID: Number(groupID),
         },
       });
       res.status(201).json({ prompt, updatedGroup });

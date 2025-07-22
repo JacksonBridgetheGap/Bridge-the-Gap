@@ -37,9 +37,16 @@ postsRouter.post(
           groupID: groupId,
         },
       });
+
+      const group = await prisma.group.findUnique({
+        where: { id: groupId },
+        include: { members: true, posts: true },
+      });
+
       await prisma.group.update({
         where: { id: groupId },
         data: {
+          postFrequency: group?.posts.length! / group?.members?.length!,
           posts: {
             connect: { id: post.id },
           },

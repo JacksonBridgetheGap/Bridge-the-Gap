@@ -14,8 +14,8 @@ const TAG_OPTIONS = [
   "miscellaneous",
 ];
 
-//This is just to change the strength of how much we value people in your circle being in groups
 const FRIEND_CONSTANT = 0.2;
+const POST_FREQUENCY_BONUS = 0.5;
 
 export default function contentBasedFilter(
   user: UserWithGroupsAndCircle | null,
@@ -53,7 +53,9 @@ export default function contentBasedFilter(
 
     relationshipStrengths.set(
       group.id,
-      similarity + sharedCircle.length * FRIEND_CONSTANT,
+      similarity +
+        sharedCircle.length * FRIEND_CONSTANT +
+        group?.postFrequency * POST_FREQUENCY_BONUS,
     );
   });
 

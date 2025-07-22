@@ -12,6 +12,7 @@ export const groupsSmall = [
     name: "Group1",
     img: "/deafult_group_pic.png",
     tags: ["education"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 2 }, { id: 3 }],
   },
   {
@@ -19,6 +20,7 @@ export const groupsSmall = [
     name: "Group2",
     img: "/deafult_group_pic.png",
     tags: ["education"],
+    postFrequency: 0,
     members: [{ id: 2 }, { id: 4 }, { id: 6 }],
   },
   {
@@ -26,6 +28,7 @@ export const groupsSmall = [
     name: "Group3",
     img: "/deafult_group_pic.png",
     tags: ["hobbies", "gaming", "education"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 3 }, { id: 5 }],
   },
   {
@@ -33,6 +36,7 @@ export const groupsSmall = [
     name: "Group4",
     img: "/default_group_pic.png",
     tags: ["food", "travel", "miscellaneous"],
+    postFrequency: 0,
     members: [{ id: 2 }, { id: 4 }],
   },
   {
@@ -40,6 +44,7 @@ export const groupsSmall = [
     name: "Group5",
     img: "/default_group_pic.png",
     tags: ["business", "hobbies", "gaming"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 5 }],
   },
   {
@@ -47,6 +52,7 @@ export const groupsSmall = [
     name: "Group6",
     img: "/default_group_pic.png",
     tags: ["education", "health", "pets"],
+    postFrequency: 0,
     members: [{ id: 3 }, { id: 4 }],
   },
   {
@@ -54,6 +60,7 @@ export const groupsSmall = [
     name: "Group7",
     img: "/default_group_pic.png",
     tags: ["travel", "food", "business"],
+    postFrequency: 0,
     members: [{ id: 2 }, { id: 5 }],
   },
   {
@@ -61,6 +68,7 @@ export const groupsSmall = [
     name: "Group8",
     img: "/default_group_pic.png",
     tags: ["gaming", "hobbies", "miscellaneous"],
+    postFrequency: 0,
     members: [{ id: 1 }, { id: 3 }],
   },
   {
@@ -68,6 +76,7 @@ export const groupsSmall = [
     name: "Group9",
     img: "/default_group_pic.png",
     tags: ["education", "health", "pets"],
+    postFrequency: 0,
     members: [{ id: 4 }, { id: 5 }],
   },
 ];

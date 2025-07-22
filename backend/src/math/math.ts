@@ -16,5 +16,8 @@ export function magnitude(a: number[]): number {
 }
 
 export function cosineSimilarity(a: number[], b: number[]): number {
-  return dotProduct(a, b) / (magnitude(a) * magnitude(b));
+  const a_mag = magnitude(a);
+  const b_mag = magnitude(b);
+  if (a_mag === 0 || b_mag === 0) return 0;
+  return dotProduct(a, b) / (a_mag * b_mag);
 }

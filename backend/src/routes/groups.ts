@@ -2,6 +2,7 @@ import express from "express";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { UserWithGroupsAndCircle } from "../types/types";
+import { timeoutPromise } from "../utils/promise";
 import recommendations from "../algorithim/recommendations";
 import isAuthenticated from "../middleware/is-authenticated";
 
@@ -38,8 +39,9 @@ groupsRouter.get(
       res.status(400).json({ message: "User not found" });
       return;
     }
-    const groups = await recommendations(user);
-    res.json(groups);
+    timeoutPromise(5000, recommendations(user))
+      .then((groups) => res.json(groups))
+      .catch((error) => res.status(400).json({ message: error }));
   },
 );
 
