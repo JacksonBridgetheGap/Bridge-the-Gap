@@ -14,7 +14,7 @@ function UserGroupProvider({ children }) {
   useEffect(() => {
     setIsLoading(true);
     if (!auth || userLoading) return;
-    const USER_GROUPS_URL = `/api/user/${user.id}/groups`;
+    const USER_GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups`;
     httpRequest(USER_GROUPS_URL, "GET")
       .then((groups) => {
         setGroups(

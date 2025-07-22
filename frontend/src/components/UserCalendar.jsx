@@ -29,7 +29,7 @@ export default function UserCalendar() {
   const addEvent = (eventUTC, eventLocal) => {
     eventUTC.groupID = null;
     eventLocal.groupID = null;
-    const EVENT_URL = `/api/user/${user.id}/events`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/events`;
     httpRequest(EVENT_URL, "POST", eventUTC).then(() => {
       setUser({
         ...user,
@@ -39,7 +39,7 @@ export default function UserCalendar() {
   };
 
   const deleteEvent = (id) => {
-    const EVENT_URL = `/api/user/${user.id}/events/${id}`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/events/${id}`;
     httpRequest(EVENT_URL, "DELETE").then(() => {
       setUser({
         ...user,
@@ -49,7 +49,7 @@ export default function UserCalendar() {
   };
 
   const editEvent = (eventData) => {
-    const EVENT_URL = `/api/user/${user.id}/events/${eventData.id}`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/events/${eventData.id}`;
     httpRequest(EVENT_URL, "PUT", eventData);
   };
 

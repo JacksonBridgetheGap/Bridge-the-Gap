@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 export async function httpRequest(URL, method, data) {
   return fetch(URL, {
     method: method,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json", // Indicate the data type
     },

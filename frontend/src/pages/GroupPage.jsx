@@ -21,7 +21,7 @@ function GroupPage() {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    const GROUP_URL = `/api/groups/${params.id}`;
+    const GROUP_URL = `${import.meta.env.VITE_BASE_URL}/api/groups/${params.id}`;
     httpRequest(GROUP_URL, "GET").then((group) => {
       setGroup({
         ...group,
@@ -39,7 +39,7 @@ function GroupPage() {
   }, [params.id]);
 
   const createPost = async (postData) => {
-    const POST_URL = `/api/groups/${params.id}/posts`;
+    const POST_URL = `${import.meta.env.VITE_BASE_URL}/api/groups/${params.id}/posts`;
 
     const newPost = await httpRequest(POST_URL, "POST", postData);
     setGroup({

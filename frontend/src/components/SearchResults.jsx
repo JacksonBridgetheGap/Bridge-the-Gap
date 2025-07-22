@@ -13,7 +13,7 @@ export function SearchResults() {
   const { groups: userGroups, isLoading } = useUserGroups();
 
   useEffect(() => {
-    const RECOMMENDATIONS_URL = `/api/user/${user.id}/recommendations`;
+    const RECOMMENDATIONS_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/recommendations`;
     httpRequest(RECOMMENDATIONS_URL, "GET").then((recommendations) => {
       setRecommendation(recommendations);
     });

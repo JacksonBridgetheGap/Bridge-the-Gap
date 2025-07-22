@@ -10,7 +10,7 @@ import { SearchResults } from "../components/SearchResults.jsx";
 import Footer from "../components/Footer";
 import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 
-const GROUP_URL = "/api/groups";
+const GROUP_URL = `${import.meta.env.VITE_BASE_URL}/api/groups`;
 
 function HomePage() {
   const [modalDisplay, setModalDisplay] = useState("modal-hidden");

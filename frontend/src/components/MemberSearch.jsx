@@ -9,7 +9,7 @@ export default function MemberSearch({ onChange, displayMode }) {
 
   useEffect(() => {
     setAddedUsers([]);
-    const USER_URL = "/api/users";
+    const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users`;
     httpRequest(USER_URL, "GET").then((userList) => {
       setUsers(userList);
     });

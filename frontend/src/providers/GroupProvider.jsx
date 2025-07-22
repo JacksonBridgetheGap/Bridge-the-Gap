@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth.js";
 
 const groupContext = createContext();
 
-const GROUPS_URL = "/api/groups";
+const GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/groups`;
 
 function GroupProvider(props) {
   const [groups, setGroups] = useState([]);

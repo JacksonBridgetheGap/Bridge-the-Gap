@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { userContext as UserContext } from "../context/UserContext.jsx";
 import { convertEventsToLocal, httpRequest } from "../utils/utils.js";
 import useAuth from "../hooks/useAuth.js";
-import { DateTime } from "luxon";
 
-const USER_URL = `/api/me`;
+const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/me`;
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);

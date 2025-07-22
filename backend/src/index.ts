@@ -7,7 +7,12 @@ import morgan from "morgan";
 const app: express.Application = express();
 app.use(express.json());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.set("trust proxy", 1); // works alongside "secure" cookie setting
 app.use(morgan("tiny"));
 app.use(
@@ -16,8 +21,8 @@ app.use(
     secret: process.env.AUTH_SECRET || "secret",
     cookie: {
       maxAge: 1000 * 60 * 5,
-      secure: process.env.RENDER ? true : false,
-      httpOnly: false,
+      secure: false,
+      httpOnly: true,
     },
     resave: false,
     saveUninitialized: false,
