@@ -1,18 +1,18 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { OAuth2Client } from "google-auth-library";
 import { hashPassword, verifyPassword } from "./argon";
 
 export const authRouter = express.Router();
 const prisma = new PrismaClient();
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 authRouter.post("/api/auth/register", async (req, res) => {
-  //Check the username for uniqness
   const { username, password, photo, email, location } = req.body;
   const user = await prisma.user.findFirst({
     where: { OR: [{ username: username }, { email: email }] },
   });
   if (user === null) {
-    //Hash password and write user to db
     const hash = await hashPassword(password);
     const offsetUTC = new Date().getTimezoneOffset();
     const newUser = await prisma.user.create({
@@ -32,6 +32,33 @@ authRouter.post("/api/auth/register", async (req, res) => {
     res.json({ newUser });
   } else {
     res.status(409).json({ message: "Username/Email already exists" });
+  }
+});
+
+authRouter.post("/api/auth/google", async (req, res) => {
+  try {
+    const { idToken } = req.body;
+    const ticket = await googleClient.verifyIdToken({
+      idToken: idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    if (payload == null) {
+      res.status(401).json({ message: "Invalid token" });
+    }
+
+    const user = await prisma.user.findFirst({
+      where: { email: payload?.email },
+    });
+
+    if (user != null) {
+      req.session.userId = user?.id;
+      res.status(200).json({ user });
+    } else {
+      res.status(401).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token", error: error });
   }
 });
 
