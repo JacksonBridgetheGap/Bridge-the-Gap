@@ -30,9 +30,9 @@ app.use(
 );
 app.use("/", routes);
 
-const port: number = 3000;
+const port: number = Number(process.env.PORT) || 3000;
 
 //**RUN SERVER ON PORT**//
-app.listen(port, (): void => {
-  console.log(`Server listening at http://localhost:${port}`);
+app.listen(port, "0.0.0.0", (): void => {
+  console.log(`Server listening at http://0.0.0.0:${port}`);
 });
