@@ -44,7 +44,8 @@ export default function RegisterPage() {
         body: JSON.stringify(newUser),
       });
       if (response.ok) {
-        const { newUser } = await response.json();
+        const { newUser, token } = await response.json();
+        document.cookie = `token=${token}`;
         setIsLoading(false);
         setAuth(true);
         setUser(newUser);

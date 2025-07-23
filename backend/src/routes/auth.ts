@@ -2,6 +2,8 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { OAuth2Client } from "google-auth-library";
 import { hashPassword, verifyPassword } from "./argon";
+import { generateToken } from "../utils/token";
+import isAuthenticated from "../middleware/is-authenticated";
 
 export const authRouter = express.Router();
 const prisma = new PrismaClient();
@@ -28,8 +30,8 @@ authRouter.post("/api/auth/register", async (req, res) => {
         password: true,
       },
     });
-    req.session.userId = newUser.id;
-    res.json({ newUser });
+    const token = generateToken(newUser.id);
+    res.json({ newUser, token });
   } else {
     res.status(409).json({ message: "Username/Email already exists" });
   }
@@ -52,8 +54,8 @@ authRouter.post("/api/auth/google", async (req, res) => {
     });
 
     if (user != null) {
-      req.session.userId = user?.id;
-      res.status(200).json({ user });
+      const token = generateToken(user.id);
+      res.status(200).json({ user, token });
     } else {
       res.status(401).json({ message: "User not found" });
     }
@@ -69,9 +71,9 @@ authRouter.post("/api/auth/login", async (req, res) => {
     include: { groups: { include: { members: true } } },
   });
   if (user !== null && (await verifyPassword(password, user.password))) {
-    req.session.userId = user.id;
+    const token = generateToken(user.id);
     const { password: _password, ...rest } = user;
-    res.json({ user: rest });
+    res.json({ user: rest, token });
   } else {
     res.status(400).json({ message: "Invalid username or password" });
   }
@@ -93,6 +95,9 @@ authRouter.post("/api/auth/logout", (req, res) => {
 });
 
 authRouter.get("/api/auth/session", async (req, res) => {
-  const userExists = req.session.userId ? true : false;
-  res.json({ userExists });
+  if (req.user) {
+    res.json({ userExists: true });
+  }
+
+  res.json({ userExists: false });
 });

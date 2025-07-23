@@ -1,13 +1,23 @@
-import express from "express";
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
 export default function isAuthenticated(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) {
-  if (req.session.userId) {
-    next();
-  } else {
-    res.status(401).json({ message: "Not logged in" });
+  const authenticationHeader = req.headers["authorization"];
+  const token = authenticationHeader && authenticationHeader.split(" ")[1];
+
+  if (token == null) {
+    res.sendStatus(401);
   }
+
+  jwt.verify(token!, process.env.AUTH_SECRET as string, (err, user) => {
+    if (err) res.sendStatus(403);
+
+    req.user = user;
+
+    next();
+  });
 }

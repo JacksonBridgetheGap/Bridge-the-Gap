@@ -20,7 +20,7 @@ usersRouter.get(
   "/api/me",
   isAuthenticated,
   async (req, res, next): Promise<void> => {
-    const id = req.session.userId;
+    const id = req.user.user_id;
     try {
       const user = await prisma.user.findUnique({
         where: { id: Number(id) },
