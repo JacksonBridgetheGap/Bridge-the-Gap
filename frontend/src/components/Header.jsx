@@ -26,9 +26,11 @@ export default function Header() {
 
   return (
     <header className="flex justify-between items-center py-4 px-8">
-      <div className="logo">
-        <BridgeTheGapTitle />
-      </div>
+      <Link to="/" className="logo-link">
+        <div className="logo">
+          <BridgeTheGapTitle />
+        </div>
+      </Link>
       <div className="flex items-center gap-4">
         <BridgeTheGapButton onClick={handleLogout} value={"Log Out"} />
         <div className="profile-icon">
