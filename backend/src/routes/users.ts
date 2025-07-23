@@ -15,7 +15,6 @@ usersRouter.get("/api/users", async (req, res, next): Promise<void> => {
 });
 
 // [GET] /me
-// Get the currently logged in user based on the session
 usersRouter.get(
   "/api/me",
   isAuthenticated,

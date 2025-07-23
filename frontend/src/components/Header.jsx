@@ -16,11 +16,12 @@ export default function Header() {
   const { setAuth } = useContext(authContext);
 
   const handleLogout = async () => {
-    if (await httpRequest(LOGOUT_URL, "POST")) {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    httpRequest(LOGOUT_URL, "POST").then(() => {
       setAuth(false);
       setUser(null);
       navigate("/");
-    }
+    });
   };
 
   return (

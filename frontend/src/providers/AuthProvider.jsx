@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
 import { authContext as AuthContext } from "../context/AuthContext.jsx";
-import { httpRequest } from "../utils/utils.js";
-
-const AUTH_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/session`;
+import { getCookie } from "../utils/utils.js";
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(null);
 
   useEffect(() => {
-    httpRequest(AUTH_URL, "GET").then((auth) => {
-      setAuth(auth.userExists);
-    });
+    const token = getCookie("token");
+
+    if (token) {
+      fetch(`${import.meta.env.VITE_BASE_URL}/api/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then(() => {
+          setAuth(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          setAuth(false);
+        });
+    }
   }, [setAuth]);
 
   return (

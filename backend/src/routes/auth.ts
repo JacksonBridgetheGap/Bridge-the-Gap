@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import { OAuth2Client } from "google-auth-library";
 import { hashPassword, verifyPassword } from "./argon";
 import { generateToken } from "../utils/token";
-import isAuthenticated from "../middleware/is-authenticated";
 
 export const authRouter = express.Router();
 const prisma = new PrismaClient();
@@ -80,18 +79,14 @@ authRouter.post("/api/auth/login", async (req, res) => {
 });
 
 authRouter.post("/api/auth/logout", (req, res) => {
-  //destroy session
-  if (req.session) {
-    req.session.destroy((err) => {
-      if (err) {
-        res.status(400).send({ message: "Error logging out" });
-      }
-      res.clearCookie("sessionId", { path: "/" });
-      res.json({ message: "Logged out" });
-    });
-  } else {
-    res.end();
-  }
+  //clear cookie
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    path: "/",
+  });
+  res.json({ message: "Logged out" });
 });
 
 authRouter.get("/api/auth/session", async (req, res) => {

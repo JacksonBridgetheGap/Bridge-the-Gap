@@ -42,7 +42,7 @@ export function convertEventsToLocal(events) {
   });
 }
 
-function getCookie(name) {
+export function getCookie(name) {
   const match = document.cookie.match(new RegExp(`(^|;\\s*)(${name})=([^;]*)`));
   return match ? decodeURIComponent(match[3]) : null;
 }
