@@ -63,7 +63,5 @@ export default function contentBasedFilter(
     return relationshipStrengths.get(b.id) - relationshipStrengths.get(a.id);
   });
 
-  console.log(relationshipStrengths);
-
   return ret;
 }
