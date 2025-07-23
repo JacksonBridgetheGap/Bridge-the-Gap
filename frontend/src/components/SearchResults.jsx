@@ -5,6 +5,7 @@ import useUserGroups from "../hooks/useUserGroups.js";
 import { useEffect, useState } from "react";
 import { httpRequest } from "../utils/utils.js";
 import useUser from "../hooks/useUser.js";
+import BridgeTheGapLoadingSpinner from "./BridgeTheGapLoadingSpinner.jsx";
 
 export function SearchResults() {
   const { groups } = useSearch();
@@ -20,7 +21,14 @@ export function SearchResults() {
   }, [user.id]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div
+        className="flex flex-col items-center justify-center"
+        style={{ height: "100vh" }}
+      >
+        <BridgeTheGapLoadingSpinner />
+      </div>
+    );
   }
   return (
     <div>
