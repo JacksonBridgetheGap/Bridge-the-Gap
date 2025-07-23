@@ -93,6 +93,5 @@ authRouter.get("/api/auth/session", async (req, res) => {
   if (req.user) {
     res.json({ userExists: true });
   }
-
   res.json({ userExists: false });
 });

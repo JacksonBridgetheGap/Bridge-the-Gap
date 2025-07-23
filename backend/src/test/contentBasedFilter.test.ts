@@ -1,6 +1,6 @@
 import contentBasedFilter from "../algorithim/contentBasedFilter";
 import { createGroupMatrix } from "../utils/dataUtils";
-import { groupsMedium, groupsSmall, groupsLarge } from "./test.data/testGroups";
+import { groupsSmall } from "./test.data/testGroups";
 import { simpleUser, userWithCircle } from "./test.data/testUsers";
 
 test("contentBasedFilter: small", () => {
@@ -26,6 +26,8 @@ test("contentBasedFilter: small", () => {
 
 test("contentBasedFilter: circle", () => {
   const userMap = new Map();
+  userMap.set("hobbies", 10);
+  userMap.set("business", 10);
 
   userMap.set("education", 10);
   //@ts-ignore
@@ -37,7 +39,7 @@ test("contentBasedFilter: circle", () => {
   ).toEqual({
     id: 2,
     name: "Group2",
-    img: "/deafult_group_pic.png",
+    img: "/default_group_pic.png",
     tags: ["education"],
     postFrequency: 0,
     members: [{ id: 2 }, { id: 4 }, { id: 6 }],
@@ -45,32 +47,33 @@ test("contentBasedFilter: circle", () => {
 });
 
 //These two test are just repeats for now until I go add member data to each of the groups in sample data
-test("contentBasedFilter: medium", () => {
+test("contentBasedFilter: diff 1", () => {
   const userMap = new Map();
 
-  userMap.set("hobbies", 10);
-  userMap.set("business", 10);
+  userMap.set("education", 10);
+  userMap.set("health", 4);
+  userMap.set("pets", 3);
   //@ts-ignore
   const groupMap = createGroupMatrix(groupsSmall);
 
+  console.log("diff");
   expect(
     //@ts-ignore
     contentBasedFilter(simpleUser, userMap, groupMap, groupsSmall)[0],
   ).toEqual({
-    id: 5,
-    name: "Group5",
+    id: 2,
+    name: "Group2",
     img: "/default_group_pic.png",
-    tags: ["business", "hobbies", "gaming"],
+    tags: ["education"],
     postFrequency: 0,
-    members: [{ id: 1 }, { id: 5 }],
+    members: [{ id: 2 }, { id: 4 }, { id: 6 }],
   });
 });
 
-test("contentBasedFilter: large", () => {
+test("contentBasedFilter: tie", () => {
   const userMap = new Map();
 
-  userMap.set("hobbies", 10);
-  userMap.set("business", 10);
+  userMap.set("education", 10);
   //@ts-ignore
   const groupMap = createGroupMatrix(groupsSmall);
 
@@ -78,11 +81,11 @@ test("contentBasedFilter: large", () => {
     //@ts-ignore
     contentBasedFilter(simpleUser, userMap, groupMap, groupsSmall)[0],
   ).toEqual({
-    id: 5,
-    name: "Group5",
+    id: 2,
+    name: "Group2",
     img: "/default_group_pic.png",
-    tags: ["business", "hobbies", "gaming"],
+    tags: ["education"],
     postFrequency: 0,
-    members: [{ id: 1 }, { id: 5 }],
+    members: [{ id: 2 }, { id: 4 }, { id: 6 }],
   });
 });
