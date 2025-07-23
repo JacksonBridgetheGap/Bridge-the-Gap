@@ -1,6 +1,7 @@
 import "./LoginPage.css";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
+import GoogleAuth from "../components/GoogleAuth.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import { Link } from "react-router";
 import { userContext } from "../context/UserContext.jsx";
@@ -114,6 +115,7 @@ function LoginPage() {
             loading={isLoading}
           />
           <br />
+          <GoogleAuth />
           <Link
             to="/"
             className="font-medium cursor-pointer text-blue-600 dark:text-blue-500 hover:underline"

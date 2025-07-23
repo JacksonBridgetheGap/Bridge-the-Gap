@@ -5,18 +5,21 @@ import { UserProvider } from "./providers/UserProvider.jsx";
 import { UserGroupProvider } from "./providers/UserGroupsProvider.jsx";
 import { AuthProvider } from "./providers/AuthProvider.jsx";
 import { SearchResultsProvider } from "./providers/SearchResultsProvider.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import AppRoutes from "./AppRoutes.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <UserProvider>
-      <UserGroupProvider>
-        <SearchResultsProvider>
-          <GroupProvider>
-            <AppRoutes />
-          </GroupProvider>
-        </SearchResultsProvider>
-      </UserGroupProvider>
-    </UserProvider>
-  </AuthProvider>,
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT}>
+    <AuthProvider>
+      <UserProvider>
+        <UserGroupProvider>
+          <SearchResultsProvider>
+            <GroupProvider>
+              <AppRoutes />
+            </GroupProvider>
+          </SearchResultsProvider>
+        </UserGroupProvider>
+      </UserProvider>
+    </AuthProvider>
+  </GoogleOAuthProvider>,
 );

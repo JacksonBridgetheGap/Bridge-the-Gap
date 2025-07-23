@@ -7,7 +7,7 @@ export default function PostView({
 }) {
   return (
     <div>
-      {isOpen && post && (
+      {isOpen && post != null && (
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50 backdrop-blur-xs">
           <button
             onClick={prevPost}

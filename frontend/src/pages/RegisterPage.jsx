@@ -5,6 +5,7 @@ import { userContext } from "../context/UserContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import BridgeTheGapTitle from "../components/BridgeTheGapTitle.jsx";
+import GoogleAuth from "../components/GoogleAuth.jsx";
 
 const REGISTER_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/register`;
 
@@ -116,7 +117,7 @@ export default function RegisterPage() {
               htmlFor="location"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Username
+              Location
             </label>
             <input
               type="text"

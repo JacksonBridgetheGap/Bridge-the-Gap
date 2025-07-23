@@ -27,6 +27,7 @@ export default tseslint.config(
           argsIgnorePattern: "^_",
         },
       ],
+      "eol-last": "error",
     },
   },
 );
