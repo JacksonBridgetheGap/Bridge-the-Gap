@@ -24,7 +24,6 @@
     "@eslint/js": "^9.31.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
-    "@types/express-session": "^1.18.2",
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
@@ -49,7 +48,6 @@
     "argon2": "^0.43.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
     "google-auth-library": "^10.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0"
