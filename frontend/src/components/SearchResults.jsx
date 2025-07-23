@@ -1,4 +1,4 @@
-import GrouopCard from "./GroupCard";
+import GroupCard from "./GroupCard";
 import "../styles/SearchResults.css";
 import useSearch from "../hooks/useSearch.js";
 import useUserGroups from "../hooks/useUserGroups.js";
@@ -38,7 +38,7 @@ export function SearchResults() {
         </h3>
         <div className={"grid gap-3 sm:grid-cols-2 md:grid-cols-3"}>
           {recommendations.map((group) => (
-            <GrouopCard
+            <GroupCard
               group={group}
               members={group.members}
               key={group.id}
@@ -55,7 +55,7 @@ export function SearchResults() {
       </p>
       <div className={"grid gap-4 sm:grid-cols-2 md:grid-cols-3"}>
         {groups?.map((group) => (
-          <GrouopCard
+          <GroupCard
             group={group}
             members={group.members}
             key={group.id}
