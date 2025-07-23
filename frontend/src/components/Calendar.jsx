@@ -99,8 +99,14 @@ export default function Calendar({
     calendar.events.update(event);
     onEdit({
       id: event.id(),
-      start: event.start().toDate().toISOString(),
-      end: event.end().toDate().toISOString(),
+      start: new Date(
+        event.start().toDate().getTime() +
+          event.start().toDate().getTimezoneOffset() * 60000,
+      ).toISOString(),
+      end: new Date(
+        event.end().toDate().getTime() +
+          event.end().toDate().getTimezoneOffset() * 60000,
+      ).toISOString(),
       text: modal.result,
     });
   };

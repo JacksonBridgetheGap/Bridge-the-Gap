@@ -1,5 +1,4 @@
 import express from "express";
-import session from "express-session";
 import { routes } from "./routes";
 import cors from "cors";
 import morgan from "morgan";
@@ -15,19 +14,6 @@ app.use(
 );
 app.set("trust proxy", 1); // works alongside "secure" cookie setting
 app.use(morgan("tiny"));
-app.use(
-  session({
-    name: "sessionId",
-    secret: process.env.AUTH_SECRET || "secret",
-    cookie: {
-      maxAge: 1000 * 60 * 5,
-      secure: false,
-      httpOnly: true,
-    },
-    resave: false,
-    saveUninitialized: false,
-  }),
-);
 app.use("/", routes);
 
 const port: number = Number(process.env.PORT) || 3000;

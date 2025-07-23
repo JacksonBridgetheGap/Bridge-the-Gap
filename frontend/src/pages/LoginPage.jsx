@@ -41,7 +41,8 @@ function LoginPage() {
         body: JSON.stringify(loginData),
       });
       if (response.ok) {
-        const { user } = await response.json();
+        const { user, token } = await response.json();
+        document.cookie = `token=${token}`;
         setIsLoading(false);
         setUser(user);
         setAuth(true);

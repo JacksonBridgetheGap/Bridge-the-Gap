@@ -1,10 +1,13 @@
 import { DateTime } from "luxon";
 
 export async function httpRequest(URL, method, data) {
+  const token = getCookie("token");
+
   return fetch(URL, {
     method: method,
     credentials: "include",
     headers: {
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json", // Indicate the data type
     },
     body: JSON.stringify(data), // Convert data to JSON string
@@ -37,4 +40,9 @@ export function convertEventsToLocal(events) {
       .toISO({ suppressMilliseconds: true, includeOffset: false });
     return event;
   });
+}
+
+export function getCookie(name) {
+  const match = document.cookie.match(new RegExp(`(^|;\\s*)(${name})=([^;]*)`));
+  return match ? decodeURIComponent(match[3]) : null;
 }

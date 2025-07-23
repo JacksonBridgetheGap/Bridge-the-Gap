@@ -9,21 +9,25 @@ import isAuthenticated from "../middleware/is-authenticated";
 export const groupsRouter = express.Router();
 
 //  [GET] /groups
-groupsRouter.get("/api/groups", async (req, res, next): Promise<void> => {
-  const query = req.query;
-  const name: string = query.name! as string;
-  try {
-    const groups = await prisma.group.findMany({
-      where: {
-        name: { contains: name },
-      },
-      include: { members: true },
-    });
-    res.json(groups);
-  } catch (error) {
-    next(error);
-  }
-});
+groupsRouter.get(
+  "/api/groups",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const query = req.query;
+    const name: string = query.name! as string;
+    try {
+      const groups = await prisma.group.findMany({
+        where: {
+          name: { contains: name },
+        },
+        include: { members: true },
+      });
+      res.json(groups);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // [GET] /api/users/:userID/recommendations
 groupsRouter.get(

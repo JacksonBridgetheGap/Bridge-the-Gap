@@ -23,6 +23,7 @@ export default function GoogleAuth() {
         if (response.ok) {
           response.json().then((response) => {
             setUser(response.user);
+            document.cookie = `token=${response.token}`;
             setAuth(true);
             navigate("/");
           });
