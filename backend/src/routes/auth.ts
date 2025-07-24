@@ -9,13 +9,12 @@ const prisma = new PrismaClient();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 authRouter.post("/api/auth/register", async (req, res) => {
-  const { username, password, photo, email, location } = req.body;
+  const { username, password, photo, email, location, offsetUTC } = req.body;
   const user = await prisma.user.findFirst({
     where: { OR: [{ username: username }, { email: email }] },
   });
   if (user === null) {
     const hash = await hashPassword(password);
-    const offsetUTC = new Date().getTimezoneOffset();
     const newUser = await prisma.user.create({
       data: {
         username,

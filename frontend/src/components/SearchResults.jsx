@@ -1,10 +1,11 @@
-import GrouopCard from "./GroupCard";
+import GroupCard from "./GroupCard";
 import "../styles/SearchResults.css";
 import useSearch from "../hooks/useSearch.js";
 import useUserGroups from "../hooks/useUserGroups.js";
 import { useEffect, useState } from "react";
 import { httpRequest } from "../utils/utils.js";
 import useUser from "../hooks/useUser.js";
+import BridgeTheGapLoadingSpinner from "./BridgeTheGapLoadingSpinner.jsx";
 
 export function SearchResults() {
   const { groups } = useSearch();
@@ -20,7 +21,14 @@ export function SearchResults() {
   }, [user.id]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div
+        className="flex flex-col items-center justify-center"
+        style={{ height: "100vh" }}
+      >
+        <BridgeTheGapLoadingSpinner />
+      </div>
+    );
   }
   return (
     <div>
@@ -30,7 +38,7 @@ export function SearchResults() {
         </h3>
         <div className={"grid gap-3 sm:grid-cols-2 md:grid-cols-3"}>
           {recommendations.map((group) => (
-            <GrouopCard
+            <GroupCard
               group={group}
               members={group.members}
               key={group.id}
@@ -47,7 +55,7 @@ export function SearchResults() {
       </p>
       <div className={"grid gap-4 sm:grid-cols-2 md:grid-cols-3"}>
         {groups?.map((group) => (
-          <GrouopCard
+          <GroupCard
             group={group}
             members={group.members}
             key={group.id}

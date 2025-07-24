@@ -12,6 +12,10 @@ header {
   align-self: flex-start;
 }
 
+.logo:hover {
+  cursor: pointer;
+}
+
 .profile-photo {
   height: 6em;
   padding: 1.5em;

@@ -2,16 +2,20 @@ import "../styles/MemberSearch.css";
 import { useState, useEffect } from "react";
 import { httpRequest } from "../utils/utils";
 import AddMemberTile from "./AddMemberTile";
+import BridgeTheGapLoadingSpinner from "./BridgeTheGapLoadingSpinner.jsx";
 
 export default function MemberSearch({ onChange, displayMode }) {
   const [addedUsers, setAddedUsers] = useState([]);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     setAddedUsers([]);
     const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users`;
     httpRequest(USER_URL, "GET").then((userList) => {
       setUsers(userList);
+      setIsLoading(false);
     });
   }, [displayMode]);
 
@@ -27,6 +31,13 @@ export default function MemberSearch({ onChange, displayMode }) {
     onChange(addedUsers.filter((user) => user.id !== member.id));
   };
 
+  if (isLoading) {
+    return (
+      <div className={"flex flex-col items-center justify-center"}>
+        <BridgeTheGapLoadingSpinner />
+      </div>
+    );
+  }
   return (
     <div>
       <p>Add to Group:</p>

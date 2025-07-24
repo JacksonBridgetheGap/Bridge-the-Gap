@@ -5,7 +5,6 @@ import { userContext } from "../context/UserContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import BridgeTheGapTitle from "../components/BridgeTheGapTitle.jsx";
-import GoogleAuth from "../components/GoogleAuth.jsx";
 
 const REGISTER_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/register`;
 
@@ -17,6 +16,7 @@ export default function RegisterPage() {
     email: "",
     location: "",
     photo: "/default_profile_pic.jpg",
+    offsetUTC: new Date().getTimezoneOffset(),
   });
   const navigate = useNavigate();
   const { setUser } = useContext(userContext);
