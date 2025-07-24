@@ -1,9 +1,11 @@
 .added-member {
-  background-color: var(--accent-color);
+  background-color: oklch(90.1% 0.058 230.902);
+  border: 2px solid oklch(62.3% 0.214 259.815);
 }
 
 .unadded-member {
-  background-color: gray;
+  background-color: oklch(70.5% 0.015 286.067);
+  border: 2px solid oklch(37.3% 0.034 259.733);
 }
 
 .member-tile:hover {
@@ -12,9 +14,10 @@
 }
 
 .member-tile {
-  padding: 10px;
   margin: 10px;
   width: 100px;
-  height: 50px;
   transition: 0.5s ease;
+  border-radius: 15px;
+  text-align: center;
+  padding: 0.5rem;
 }

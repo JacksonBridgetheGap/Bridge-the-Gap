@@ -9,3 +9,26 @@
 .group-title {
   font-size: 4rem;
 }
+
+@keyframes post-appear {
+  0% {transform: translateX(-300px); width: 15%;}
+  25% {transform: translateX(0px); width: 15%;}
+  100% {width: 100%;}
+}
+
+@keyframes calendar-appear {
+  from {transform: translateY(+300px);}
+  to {transform: translateY(0px);}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .posts {
+    animation-name: post-appear;
+    animation-duration: 1.75s;
+  }
+
+  .group-calendar {
+    animation-name: calendar-appear;
+    animation-duration: 1.75s;
+  }
+}

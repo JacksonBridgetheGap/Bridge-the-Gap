@@ -1,7 +1,7 @@
 .search-bar {
   animation-name: search-fade-in;
   animation-duration: 2s;
-  z-index: -1;
+  z-index: 0;
 }
 
 .search-button {

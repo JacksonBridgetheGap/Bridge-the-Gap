@@ -57,7 +57,7 @@ h1 {
 
 .calendar {
   animation-name: calendar-fade-in;
-  animation-duration: 2s;
+  animation-duration: 1.5s;
 }
 
 @keyframes list-fade-in {
@@ -67,5 +67,5 @@ h1 {
 
 .list {
   animation-name: list-fade-in;
-  animation-duration: 2s;
+  animation-duration: 1.5s;
 }
