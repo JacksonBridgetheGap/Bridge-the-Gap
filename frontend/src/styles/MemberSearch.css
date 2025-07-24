@@ -1,6 +1,7 @@
 .unadded-members {
-  background: #8f8f8f;
-  background: linear-gradient(0deg,rgba(143, 143, 143, 1) 6%, rgba(0, 0, 0, 1) 100%);
+  background-color: oklch(70.7% 0.022 261.325);
+  border: 3px oklch(55.1% 0.027 264.364) solid;
+  border-radius: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -10,7 +11,9 @@
 }
 
 .added-members {
-  background-color: white;
+  background-color: oklch(88.2% 0.059 254.128);
+  border: 3px oklch(70.7% 0.165 254.624) solid;
+  border-radius: 10px;
   text-align: center;
   display: flex;
   flex-wrap: wrap;

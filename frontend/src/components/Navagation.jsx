@@ -28,7 +28,7 @@ export function Navagation({ onSearch, onClear }) {
   };
 
   return (
-    <div className="relative w-1/2">
+    <div className="search-bar relative w-1/2">
       <input
         type="search"
         placeholder="Search..."

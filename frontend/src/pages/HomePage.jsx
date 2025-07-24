@@ -65,9 +65,15 @@ function HomePage() {
       {searching ? (
         <SearchResults />
       ) : (
-        <div className="flex flex-row items-center justify-center space-y-4 p-4 gap-4 w-full">
+        <div className="list flex flex-row items-center justify-center space-y-4 p-4 gap-4 w-full">
           <GroupList onOpen={openModal} />
-          <UserCalendar />
+          <div
+            className={
+              "calendar flex justify-center items-center w-full h-full"
+            }
+          >
+            <UserCalendar />
+          </div>
           <GroupModal
             displayMode={modalDisplay}
             onClose={closeModal}
