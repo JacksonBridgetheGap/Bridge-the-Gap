@@ -37,22 +37,22 @@ export default function UserCalendar() {
     });
   };
 
-  const deleteEvent = (event) => {
-    if (event.groupID !== null) {
-      const DISCONNECT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups/${event.groupID}/events/${event.id}`;
+  const deleteEvent = (eventData) => {
+    if (eventData.groupID !== null) {
+      const DISCONNECT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups/${eventData.groupID}/events/${eventData.id}`;
       httpRequest(DISCONNECT_URL, "DELETE").then(() => {
         setUser({
           ...user,
-          events: user.events.filter((event) => event.id !== id),
+          events: user.events.filter((event) => event.id !== eventData.id),
         });
       });
       return;
     }
-    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/events/${event.id}`;
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/events/${eventData.id}`;
     httpRequest(EVENT_URL, "DELETE").then(() => {
       setUser({
         ...user,
-        events: user.events.filter((event) => event.id !== id),
+        events: user.events.filter((event) => event.id !== eventData.id),
       });
     });
   };
