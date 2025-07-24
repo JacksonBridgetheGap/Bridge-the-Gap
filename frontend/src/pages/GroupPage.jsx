@@ -11,6 +11,8 @@ import "./GroupPage.css";
 import GroupCalendar from "../components/GroupCalendar.jsx";
 import { DateTime } from "luxon";
 import BackButton from "../components/BackButtons.jsx";
+import GroupTimer from "../components/GroupTimer.jsx";
+import BridgeTheGapLoadingSpinner from "../components/BridgeTheGapLoadingSpinner.jsx";
 
 function GroupPage() {
   const params = useParams();
@@ -90,6 +92,11 @@ function GroupPage() {
         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4 p-2 border-b-4">
           {group ? group.name : "Loading Data..."}
         </h2>
+        {group ? (
+          <GroupTimer lastRefresh={new Date(group.promptLastUpdate)} />
+        ) : (
+          <BridgeTheGapLoadingSpinner />
+        )}
         <div className="posts flex flex-row justify-center items-center space-x-4 max-w-3/4">
           <PostList
             posts={group?.posts ?? []}

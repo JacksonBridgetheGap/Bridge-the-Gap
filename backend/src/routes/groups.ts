@@ -81,6 +81,7 @@ groupsRouter.post("/api/groups", async (req, res, next): Promise<void> => {
         name,
         img,
         tags,
+        promptLastUpdate: new Date(),
         averageOffsetUTC: averageOffsetUTC,
         members: {
           connect: memberIds.map((id: number) => ({ id })),

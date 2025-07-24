@@ -29,7 +29,7 @@ model Group {
   posts              Post[]
   tags               String[] @default([])
   prompt             String   @default("")
-  promptLastUpdate   DateTime @updatedAt
+  promptLastUpdate   DateTime
   events             Event[]
   averageEventLength Int      @default(60)
   averageOffsetUTC   Float    @default(0)
