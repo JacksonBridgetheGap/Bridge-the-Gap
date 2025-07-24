@@ -56,7 +56,7 @@ export default function Calendar({
         {
           text: "Delete",
           onClick: async (args) => {
-            onDelete(args.source.cache.id);
+            onDelete(args.source.cache);
             calendar.events.remove(args.source.cache.id);
           },
         },

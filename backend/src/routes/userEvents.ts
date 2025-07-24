@@ -107,3 +107,32 @@ userEventsRouter.delete(
     }
   },
 );
+
+userEventsRouter.delete(
+  "/api/user/:userId/groups/:groupId/events/:eventId",
+  isAuthenticated,
+  async (req, res) => {
+    const { userId, groupId, eventId } = req.params;
+    try {
+      const group = await prisma.group.findFirst({
+        where: { id: Number(groupId) },
+      });
+
+      if (group != null) {
+        const user = await prisma.user.update({
+          where: { id: Number(userId) },
+          data: {
+            events: {
+              disconnect: [{ id: Number(eventId) }],
+            },
+          },
+        });
+        res.status(200).json({ user });
+      } else {
+        res.status(400).json({ message: "Group not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: "Error deleting event", error: error });
+    }
+  },
+);

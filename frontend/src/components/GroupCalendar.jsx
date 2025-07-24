@@ -31,8 +31,8 @@ export default function GroupCalendar({ group, setGroup }) {
     });
   };
 
-  const deleteEvent = (id) => {
-    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events/${id}`;
+  const deleteEvent = (event) => {
+    const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events/${event.id}`;
     httpRequest(EVENT_URL, "DELETE");
   };
 
