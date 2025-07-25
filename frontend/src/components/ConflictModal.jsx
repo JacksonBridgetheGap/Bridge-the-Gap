@@ -2,7 +2,13 @@ import ConflictCard from "./ConflictCard.jsx";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 import { useState } from "react";
 
-export default function ConflictModal({ display, conflicts, confirm, cancel }) {
+export default function ConflictModal({
+  display,
+  conflicts,
+  confirm,
+  cancel,
+  removeConflict,
+}) {
   const [confirmedConflicts, setConfirmedConflicts] = useState([]);
 
   const handleToggle = (id) => {
@@ -30,7 +36,7 @@ export default function ConflictModal({ display, conflicts, confirm, cancel }) {
             return (
               <div>
                 <div className="bg-red-400 rounded-lg p-2 m-2 border border-red-500">
-                  <ConflictCard conflict={conflict} />
+                  <ConflictCard conflict={conflict} remove={removeConflict} />
                 </div>
                 <div className={"flex flex-row gap-4 justify-center"}>
                   <p>Ignore Conflict</p>

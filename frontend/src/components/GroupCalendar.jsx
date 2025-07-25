@@ -77,6 +77,10 @@ export default function GroupCalendar({ group, setGroup }) {
     confirmation?.resolve(false);
   };
 
+  const removeConflict = (id) => {
+    setConflicts(conflicts.filter((conflict) => conflict.id !== id));
+  };
+
   const deleteEvent = (event) => {
     const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events/${event.id}`;
     httpRequest(EVENT_URL, "DELETE");
@@ -167,6 +171,7 @@ export default function GroupCalendar({ group, setGroup }) {
         conflicts={conflicts}
         confirm={handleConfirm}
         cancel={handleCancel}
+        removeConflict={removeConflict}
       />
       <Calendar
         events={cachedEvents}
