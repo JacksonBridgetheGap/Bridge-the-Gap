@@ -5,14 +5,18 @@ import isAuthenticated from "../middleware/is-authenticated";
 export const usersRouter = express.Router();
 
 // [GET] /users
-usersRouter.get("/api/users", async (req, res, next): Promise<void> => {
-  try {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  } catch (error) {
-    next(error);
-  }
-});
+usersRouter.get(
+  "/api/users",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    try {
+      const users = await prisma.user.findMany();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // [GET] /me
 usersRouter.get(
@@ -103,65 +107,73 @@ usersRouter.put(
 );
 
 //  [PUT] /users/:id
-usersRouter.put("/api/users/:id", async (req, res, next): Promise<void> => {
-  const { id } = req.params;
-  const { username, password, photo, location, email, offsetUTC } = req.body;
+usersRouter.put(
+  "/api/users/:id",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { id } = req.params;
+    const { username, password, photo, location, email, offsetUTC } = req.body;
 
-  try {
-    const user = await prisma.user.findFirst({ where: { id: Number(id) } });
+    try {
+      const user = await prisma.user.findFirst({ where: { id: Number(id) } });
 
-    if (user) {
-      const result = await prisma.user.update({
-        where: { id: Number(id) },
-        data: {
-          username,
-          password,
-          photo,
-          location,
-          email,
-          offsetUTC,
-        },
-        include: {
-          inCircle: true,
-          circle: true,
-          groups: { include: { members: true } },
-          events: { include: { group: true } },
-        },
-      });
+      if (user) {
+        const result = await prisma.user.update({
+          where: { id: Number(id) },
+          data: {
+            username,
+            password,
+            photo,
+            location,
+            email,
+            offsetUTC,
+          },
+          include: {
+            inCircle: true,
+            circle: true,
+            groups: { include: { members: true } },
+            events: { include: { group: true } },
+          },
+        });
 
-      for (const group of result.groups) {
-        if (offsetUTC) {
-          await prisma.group.update({
-            where: { id: group.id },
-            data: {
-              averageOffsetUTC:
-                (group.averageOffsetUTC! * group.members?.length! -
-                  user.offsetUTC +
-                  offsetUTC) /
-                group.members?.length!,
-            },
-          });
+        for (const group of result.groups) {
+          if (offsetUTC) {
+            await prisma.group.update({
+              where: { id: group.id },
+              data: {
+                averageOffsetUTC:
+                  (group.averageOffsetUTC! * group.members?.length! -
+                    user.offsetUTC +
+                    offsetUTC) /
+                  group.members?.length!,
+              },
+            });
+          }
         }
-      }
 
-      res.json(result);
-    } else {
-      throw new Error("User not found");
+        res.json(result);
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 // [DELETE] /users/:id
-usersRouter.delete("/api/users/:id", async (req, res, next): Promise<void> => {
-  const { id } = req.params;
-  try {
-    const result = await prisma.user.delete({
-      where: { id: Number(id) },
-    });
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+usersRouter.delete(
+  "/api/users/:id",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { id } = req.params;
+    try {
+      const result = await prisma.user.delete({
+        where: { id: Number(id) },
+      });
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);

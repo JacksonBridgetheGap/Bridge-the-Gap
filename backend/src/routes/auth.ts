@@ -27,6 +27,12 @@ authRouter.post("/api/auth/register", async (req, res) => {
       omit: {
         password: true,
       },
+      include: {
+        inCircle: true,
+        circle: true,
+        groups: { include: { members: true } },
+        events: { include: { group: true } },
+      },
     });
     const token = generateToken(newUser.id);
     res.json({ newUser, token });
@@ -49,6 +55,12 @@ authRouter.post("/api/auth/google", async (req, res) => {
 
     const user = await prisma.user.findFirst({
       where: { email: payload?.email },
+      include: {
+        inCircle: true,
+        circle: true,
+        groups: { include: { members: true } },
+        events: { include: { group: true } },
+      },
     });
 
     if (user != null) {
@@ -66,7 +78,12 @@ authRouter.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
   const user = await prisma.user.findUnique({
     where: { username },
-    include: { groups: { include: { members: true } } },
+    include: {
+      inCircle: true,
+      circle: true,
+      groups: { include: { members: true } },
+      events: { include: { group: true } },
+    },
   });
   if (user !== null && (await verifyPassword(password, user.password))) {
     const token = generateToken(user.id);

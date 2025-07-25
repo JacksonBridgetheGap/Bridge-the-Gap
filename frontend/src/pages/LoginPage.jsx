@@ -1,5 +1,5 @@
 import "./LoginPage.css";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import GoogleAuth from "../components/GoogleAuth.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
@@ -16,9 +16,15 @@ function LoginPage() {
   });
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  const { setUser } = useContext(userContext);
-  const { setAuth } = useContext(authContext);
+  const { user } = useContext(userContext);
+  const { auth, setAuth } = useContext(authContext);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && auth) {
+      navigate("/");
+    }
+  }, [user, auth, navigate]);
 
   const handleInputChange = (evt) => {
     setLoginData({
@@ -41,12 +47,10 @@ function LoginPage() {
         body: JSON.stringify(loginData),
       });
       if (response.ok) {
-        const { user, token } = await response.json();
+        const { token } = await response.json();
         document.cookie = `token=${token}`;
         setIsLoading(false);
-        setUser(user);
         setAuth(true);
-        navigate("/");
       } else {
         const json = await response.json();
         setIsLoading(false);

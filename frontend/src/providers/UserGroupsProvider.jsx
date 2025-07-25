@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { userGroupsContext as UserGroupsContext } from "../context/UserGroupsContext.jsx";
+import { authContext } from "../context/AuthContext.jsx";
 import { httpRequest } from "../utils/utils.js";
-import useAuth from "../hooks/useAuth.js";
 import useUser from "../hooks/useUser.js";
 import { DateTime } from "luxon";
 
@@ -9,11 +9,11 @@ function UserGroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user, isLoading: userLoading } = useUser();
-  const auth = useAuth();
+  const { auth, isLoading: loading } = useContext(authContext);
 
   useEffect(() => {
     setIsLoading(true);
-    if (!auth || userLoading) return;
+    if (!auth || userLoading || loading) return;
     const USER_GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups`;
     httpRequest(USER_GROUPS_URL, "GET")
       .then((groups) => {

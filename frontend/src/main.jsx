@@ -9,8 +9,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import AppRoutes from "./AppRoutes.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT}>
-    <AuthProvider>
+  <AuthProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT}>
       <UserProvider>
         <UserGroupProvider>
           <SearchResultsProvider>
@@ -20,6 +20,6 @@ createRoot(document.getElementById("root")).render(
           </SearchResultsProvider>
         </UserGroupProvider>
       </UserProvider>
-    </AuthProvider>
-  </GoogleOAuthProvider>,
+    </GoogleOAuthProvider>
+  </AuthProvider>,
 );

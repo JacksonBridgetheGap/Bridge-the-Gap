@@ -6,17 +6,17 @@ import useAuth from "../hooks/useAuth.js";
 function SearchResultsProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const auth = useAuth();
+  const { auth, isLoading } = useAuth();
 
   const SEARCH_URL = `${import.meta.env.VITE_BASE_URL}/api/groups/?name=${searchTerm}`;
 
   useEffect(() => {
-    if (auth) {
+    if (auth && !isLoading) {
       httpRequest(SEARCH_URL, "GET").then((groups) => {
         setGroups(groups);
       });
     }
-  }, [searchTerm, SEARCH_URL, auth]);
+  }, [searchTerm, SEARCH_URL, auth, isLoading]);
 
   return (
     <SearchResultsContext.Provider
