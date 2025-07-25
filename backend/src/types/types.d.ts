@@ -13,5 +13,5 @@ type UserWithEvents = Prisma.UserGetPayload<{
 }>;
 
 type Groups = Prisma.GroupGetPayload<{
-  include: { members: true };
+  include: { members: true; events: true };
 }>;

@@ -1,6 +1,7 @@
 import { cosineSimilarity } from "../math/math";
 import { UserWithGroupsAndCircle } from "../types/types";
 import { Groups } from "../types/types";
+import groupQualityScore from "./groupQualityScore";
 
 const TAG_OPTIONS = [
   "hobbies",
@@ -15,47 +16,40 @@ const TAG_OPTIONS = [
 ];
 
 const FRIEND_CONSTANT = 0.2;
-const POST_FREQUENCY_BONUS = 0.5;
 
 export default function contentBasedFilter(
   user: UserWithGroupsAndCircle | null,
-  userClassificatoins: Map<string, number>,
+  userClassifications: Map<string, number>,
   groupMatrix: Map<number, Map<string, number>>,
   groups: Groups[],
 ) {
-  //Construct User vector from classifications
   const userVector = Array.from({ length: 10 }, () => 0);
   for (let i = 0; i < TAG_OPTIONS.length; i++) {
-    userVector[i] = userClassificatoins.get(TAG_OPTIONS[i]) || 0;
+    userVector[i] = userClassifications.get(TAG_OPTIONS[i]) || 0;
   }
 
-  //Loop through groups
   const relationshipStrengths = new Map();
 
-  //Get users circle as a list of ids
   const circleList: number[] | undefined = user?.circle.map((user) => user.id);
   const inCircleList: number[] = user?.inCircle.map((user) => user.id)!;
   const idList = circleList?.concat(inCircleList);
   const idSet = new Set(idList);
   groups.forEach((group) => {
-    //Construct group vector
     const groupVector = Array.from({ length: 10 }, () => 0);
     for (let i = 0; i < TAG_OPTIONS.length; i++) {
       groupVector[i] = groupMatrix.get(group.id)?.get(TAG_OPTIONS[i]) || 0;
     }
-    //Compare vectors using cosine similarity
     const similarity = cosineSimilarity(userVector, groupVector);
 
-    //Get set difference between user circle and group members
     const sharedCircle = group.members.filter((member) =>
       idSet.has(Number(member.id)),
     );
 
+    const qualityScore = groupQualityScore(group);
+
     relationshipStrengths.set(
       group.id,
-      similarity +
-        sharedCircle.length * FRIEND_CONSTANT +
-        group?.postFrequency * POST_FREQUENCY_BONUS,
+      similarity + sharedCircle.length * FRIEND_CONSTANT + qualityScore,
     );
   });
 

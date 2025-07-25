@@ -9,7 +9,7 @@ export default async function recommendations(
   user: UserWithGroupsAndCircle | null,
 ): Promise<GroupWithMembers[]> {
   const groups: GroupWithMembers = await prisma.group.findMany({
-    include: { members: true },
+    include: { members: true, events: true },
   });
 
   const userClassifications = userParse(user);
