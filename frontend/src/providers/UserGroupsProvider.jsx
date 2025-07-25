@@ -2,7 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { userGroupsContext as UserGroupsContext } from "../context/UserGroupsContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
 import { httpRequest } from "../utils/utils.js";
-import useAuth from "../hooks/useAuth.js";
 import useUser from "../hooks/useUser.js";
 import { DateTime } from "luxon";
 

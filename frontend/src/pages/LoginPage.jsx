@@ -6,7 +6,6 @@ import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import { Link } from "react-router";
 import { userContext } from "../context/UserContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
-import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 import BridgeTheGapTitle from "../components/BridgeTheGapTitle.jsx";
 const LOGIN_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/login`;
 
@@ -17,17 +16,15 @@ function LoginPage() {
   });
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  const { user, setUser } = useContext(userContext);
+  const { user } = useContext(userContext);
   const { auth, setAuth } = useContext(authContext);
-  const { groups, setGroups } = useContext(userGroupsContext);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (user && auth && groups) {
-      console.log(user);
+    if (user && auth) {
       navigate("/");
     }
-  }, [user, auth, navigate, groups]);
+  }, [user, auth, navigate]);
 
   const handleInputChange = (evt) => {
     setLoginData({
@@ -50,11 +47,9 @@ function LoginPage() {
         body: JSON.stringify(loginData),
       });
       if (response.ok) {
-        const { user, token } = await response.json();
+        const { token } = await response.json();
         document.cookie = `token=${token}`;
         setIsLoading(false);
-        setUser(user);
-        setGroups(user.groups);
         setAuth(true);
       } else {
         const json = await response.json();

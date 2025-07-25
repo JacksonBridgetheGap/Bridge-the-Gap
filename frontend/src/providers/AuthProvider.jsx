@@ -4,13 +4,13 @@ import { getCookie } from "../utils/utils.js";
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = getCookie("token");
     setIsLoading(true);
 
-    if (token) {
+    if (token || auth) {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
           setIsLoading(false);
         });
     }
-  }, [setAuth]);
+  }, [setAuth, auth]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, isLoading }}>

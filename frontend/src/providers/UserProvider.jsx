@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { userContext as UserContext } from "../context/UserContext.jsx";
+import { authContext } from "../context/AuthContext.jsx";
 import { convertEventsToLocal, httpRequest } from "../utils/utils.js";
-import useAuth from "../hooks/useAuth.js";
 
 const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/me`;
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { auth, isLoading: loading } = useAuth();
+  const { auth, isLoading: loading } = useContext(authContext);
   useEffect(() => {
     setIsLoading(true);
     if (auth && !loading) {
