@@ -37,7 +37,7 @@ function UserGroupProvider({ children }) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [setGroups, user, auth, userLoading]);
+  }, [setGroups, user, auth, userLoading, loading]);
 
   return (
     <UserGroupsContext.Provider value={{ groups, setGroups, isLoading }}>
