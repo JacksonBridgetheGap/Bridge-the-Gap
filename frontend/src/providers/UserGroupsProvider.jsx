@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { userGroupsContext as UserGroupsContext } from "../context/UserGroupsContext.jsx";
+import { authContext } from "../context/AuthContext.jsx";
 import { httpRequest } from "../utils/utils.js";
 import useAuth from "../hooks/useAuth.js";
 import useUser from "../hooks/useUser.js";
@@ -9,7 +10,7 @@ function UserGroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user, isLoading: userLoading } = useUser();
-  const { auth, isLoading: loading } = useAuth();
+  const { auth, isLoading: loading } = useContext(authContext);
 
   useEffect(() => {
     setIsLoading(true);

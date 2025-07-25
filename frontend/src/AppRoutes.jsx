@@ -1,19 +1,15 @@
-import useUser from "./hooks/useUser.js";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import HomePage from "./pages/HomePage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import GroupPage from "./pages/GroupPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import RootRoute from "./components/RootRoute.jsx";
 
 export default function AppRoutes() {
-  const { user } = useUser();
-
   const routes = createBrowserRouter([
     {
       path: "/",
-      element: user ? <HomePage /> : <RegisterPage />,
+      element: <RootRoute />,
     },
     {
       path: "/login",

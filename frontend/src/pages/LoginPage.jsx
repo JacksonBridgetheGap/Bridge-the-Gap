@@ -1,11 +1,12 @@
 import "./LoginPage.css";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import GoogleAuth from "../components/GoogleAuth.jsx";
 import BridgeTheGapButton from "../components/BridgeTheGapButton.jsx";
 import { Link } from "react-router";
 import { userContext } from "../context/UserContext.jsx";
 import { authContext } from "../context/AuthContext.jsx";
+import { userGroupsContext } from "../context/UserGroupsContext.jsx";
 import BridgeTheGapTitle from "../components/BridgeTheGapTitle.jsx";
 const LOGIN_URL = `${import.meta.env.VITE_BASE_URL}/api/auth/login`;
 
@@ -16,9 +17,17 @@ function LoginPage() {
   });
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  const { setUser } = useContext(userContext);
-  const { setAuth } = useContext(authContext);
+  const { user, setUser } = useContext(userContext);
+  const { auth, setAuth } = useContext(authContext);
+  const { groups, setGroups } = useContext(userGroupsContext);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && auth && groups) {
+      console.log(user);
+      navigate("/");
+    }
+  }, [user, auth, navigate, groups]);
 
   const handleInputChange = (evt) => {
     setLoginData({
@@ -45,8 +54,8 @@ function LoginPage() {
         document.cookie = `token=${token}`;
         setIsLoading(false);
         setUser(user);
+        setGroups(user.groups);
         setAuth(true);
-        navigate("/");
       } else {
         const json = await response.json();
         setIsLoading(false);
@@ -118,7 +127,7 @@ function LoginPage() {
           <br />
           <GoogleAuth />
           <Link
-            to="/register"
+            to="/"
             className="font-medium cursor-pointer text-blue-600 dark:text-blue-500 hover:underline"
           >
             Don't Have an account yet?
