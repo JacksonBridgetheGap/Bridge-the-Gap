@@ -7,6 +7,7 @@ import {
 } from "./test.data/testUsers";
 
 test("optimalTimeSlot: basic", () => {
+  //@ts-ignore
   const [SlotMap, SlotSet] = createTimeSlotMap([userWithOneOpeningEvents]);
   optimalTimeSlot(
     SlotSet,
@@ -29,6 +30,7 @@ test("optimalTimeSlot: basic", () => {
 });
 
 test("optimalTimeSlot: two-opening - long opening", () => {
+  //@ts-ignore
   const [SlotMap, SlotSet] = createTimeSlotMap([userWithTwoOpeningEvents]);
   optimalTimeSlot(
     SlotSet,
@@ -52,6 +54,7 @@ test("optimalTimeSlot: two-opening - long opening", () => {
 });
 
 test("optimalTimeSlot: two-opening - small opening", () => {
+  //@ts-ignore
   const [SlotMap, SlotSet] = createTimeSlotMap([userWithTwoOpeningEvents]);
   optimalTimeSlot(
     SlotSet,
@@ -75,6 +78,8 @@ test("optimalTimeSlot: two-opening - small opening", () => {
 });
 
 test("optimalTimeSlot: timezone - behind", () => {
+  //@ts-ignore
+  //@ts-ignore
   const [SlotMap, SlotSet] = createTimeSlotMap([userWithTwoOpeningsTimezone]);
   optimalTimeSlot(
     SlotSet,
@@ -97,6 +102,7 @@ test("optimalTimeSlot: timezone - behind", () => {
 });
 
 test("optimalTimeSlot: timezone - ahead", () => {
+  //@ts-ignore
   const [SlotMap, SlotSet] = createTimeSlotMap([userWithTwoOpeningsTimezone]);
   optimalTimeSlot(
     SlotSet,
