@@ -1,16 +1,20 @@
 import Calendar from "./Calendar";
-import { httpRequest } from "../utils/utils.js";
+import { convertEventsToLocal, httpRequest } from "../utils/utils.js";
 import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 import { useState, useMemo } from "react";
 import { DayPilot } from "@daypilot/daypilot-lite-react";
 import { DateTime } from "luxon";
 import moment from "moment-timezone";
 import { popularTimezones } from "../data/timezones.js";
+import ConflictModal from "./ConflictModal.jsx";
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export default function GroupCalendar({ group, setGroup }) {
   const [optimalTime, setOptimalTime] = useState(null);
+  const [displayConflictModal, setDisplayConflictModal] = useState(false);
+  const [conflicts, setConflicts] = useState([]);
+  const [confirmation, setConfirmation] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const cachedEvents = useMemo(() => {
@@ -23,19 +27,54 @@ export default function GroupCalendar({ group, setGroup }) {
   const addEvent = (eventUTC, eventLocal) => {
     eventUTC.members = group.members;
     const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events`;
-    httpRequest(EVENT_URL, "POST", { eventUTC, conflictOverride: false }).then(
-      (res) => {
-        if (res.ok) {
-          setGroup({
-            ...group,
-            events: [...group.events, eventLocal],
+    httpRequest(EVENT_URL, "POST", {
+      eventUTC,
+      conflictOverride: false,
+    }).then(async (res) => {
+      if (res.conflicts == null) {
+        setGroup({
+          ...group,
+          events: [...group.events, eventLocal],
+        });
+      } else {
+        const conflicts = res.conflicts.map((conflict) => {
+          return conflict.event;
+        });
+        const localEvents = convertEventsToLocal(conflicts);
+        setConflicts(localEvents);
+        const confirmed = await askForConfirmation();
+        if (confirmed) {
+          httpRequest(EVENT_URL, "POST", {
+            eventUTC,
+            conflictOverride: true,
+          }).then(async (res) => {
+            if (res.conflicts == null) {
+              setGroup({
+                ...group,
+                events: [...group.events, eventLocal],
+              });
+            }
           });
-        } else {
-          console.log("Conflicts present in event");
-          //show conflicts remake request with conflict override
         }
-      },
-    );
+      }
+    });
+  };
+
+  const askForConfirmation = async () => {
+    setDisplayConflictModal(true);
+    return new Promise((resolve) => {
+      setConfirmation({ resolve });
+    });
+  };
+
+  const handleConfirm = () => {
+    setDisplayConflictModal(false);
+    confirmation?.resolve(true);
+  };
+
+  const handleCancel = () => {
+    setDisplayConflictModal(false);
+    confirmation?.resolve(false);
   };
 
   const deleteEvent = (event) => {
@@ -87,14 +126,27 @@ export default function GroupCalendar({ group, setGroup }) {
     if (!modal.result) {
       return;
     }
-    const newEvent = {
-      start: args.e.start().toDate().toISOString(),
-      end: args.e.end().toDate().toISOString(),
+
+    const localEvent = {
+      start: args.e.start().toDate(),
+      end: args.e.end().toDate(),
       id: DayPilot.guid(),
       text: modal.result,
       suggested: true,
     };
-    await addEvent(newEvent);
+
+    const newEvent = {
+      start:
+        args.e.start().toDate().getTime() +
+        args.e.start().toDate().getTimezoneOffset() * 60000,
+      end:
+        args.e.end().toDate().getTime() +
+        args.e.end().toDate().getTimezoneOffset() * 60000,
+      id: DayPilot.guid(),
+      text: modal.result,
+      suggested: true,
+    };
+    await addEvent(newEvent, localEvent);
     setOptimalTime(null);
   };
 
@@ -110,6 +162,12 @@ export default function GroupCalendar({ group, setGroup }) {
 
   return (
     <div className="flex-grow w-[90%] mx-auto my-8 rounded-2xl border-b-3 border-b-blue-500 border border-gray-200 bg-white/70 backdrop-blur-md p-6 shadow-md dark:border-gray-700 dark:bg-gray-800/60 dark:shadow-lg">
+      <ConflictModal
+        display={displayConflictModal}
+        conflicts={conflicts}
+        confirm={handleConfirm}
+        cancel={handleCancel}
+      />
       <Calendar
         events={cachedEvents}
         onAdd={addEvent}

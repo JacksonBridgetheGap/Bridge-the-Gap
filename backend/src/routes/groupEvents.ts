@@ -105,7 +105,7 @@ groupEventsRouter.post(
           new TimeSlot(startDateTime, endDateTime, Number(groupId)),
         );
         if (conflicts.length > 0) {
-          res.status(409).json({ conflicts });
+          res.status(200).json({ conflicts });
           return;
         }
       }
