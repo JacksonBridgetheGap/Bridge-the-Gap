@@ -9,12 +9,12 @@ const GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/groups`;
 function GroupProvider(props) {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const auth = useAuth();
+  const { auth, isLoading: loading } = useAuth();
 
   useEffect(() => {
     setIsLoading(true);
 
-    if (!auth) return;
+    if (!auth || loading) return;
     httpRequest(GROUPS_URL, "GET")
       .then((groupList) => {
         setGroups(groupList);
@@ -22,7 +22,7 @@ function GroupProvider(props) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [setGroups, auth]);
+  }, [setGroups, auth, loading]);
 
   return (
     <groupContext.Provider value={{ groups, setGroups, isLoading }}>

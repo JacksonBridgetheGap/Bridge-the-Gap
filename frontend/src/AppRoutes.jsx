@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 
 export default function AppRoutes() {
   const { user } = useUser();
+
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -32,5 +33,6 @@ export default function AppRoutes() {
       ],
     },
   ]);
+
   return <RouterProvider router={routes} />;
 }

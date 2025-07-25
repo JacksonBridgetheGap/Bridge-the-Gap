@@ -9,11 +9,11 @@ function UserGroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user, isLoading: userLoading } = useUser();
-  const auth = useAuth();
+  const { auth, isLoading: loading } = useAuth();
 
   useEffect(() => {
     setIsLoading(true);
-    if (!auth || userLoading) return;
+    if (!auth || userLoading || loading) return;
     const USER_GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups`;
     httpRequest(USER_GROUPS_URL, "GET")
       .then((groups) => {

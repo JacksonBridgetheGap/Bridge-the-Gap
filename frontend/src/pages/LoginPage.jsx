@@ -118,7 +118,7 @@ function LoginPage() {
           <br />
           <GoogleAuth />
           <Link
-            to="/"
+            to="/register"
             className="font-medium cursor-pointer text-blue-600 dark:text-blue-500 hover:underline"
           >
             Don't Have an account yet?

@@ -4,9 +4,11 @@ import { getCookie } from "../utils/utils.js";
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = getCookie("token");
+    setIsLoading(true);
 
     if (token) {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/me`, {
@@ -14,19 +16,21 @@ export function AuthProvider({ children }) {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((res) => res.json())
-        .then(() => {
+        .then((res) => {
+          if (!res.ok) {
+            setAuth(false);
+            throw new Error("Invalid token");
+          }
           setAuth(true);
         })
-        .catch((err) => {
-          console.log(err);
-          setAuth(false);
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   }, [setAuth]);
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

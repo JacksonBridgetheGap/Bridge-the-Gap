@@ -7,11 +7,11 @@ const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/me`;
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const auth = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { auth, isLoading: loading } = useAuth();
   useEffect(() => {
     setIsLoading(true);
-    if (auth) {
+    if (auth && !loading) {
       httpRequest(USER_URL, "GET")
         .then((user) => {
           setUser({
@@ -23,7 +23,7 @@ function UserProvider({ children }) {
           setIsLoading(false);
         });
     }
-  }, [auth, setUser]);
+  }, [auth, setUser, loading]);
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading }}>

@@ -2,43 +2,50 @@ import "./ProfilePage.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProfileBanner from "../components/ProfileBanner";
-import MemberIcon from "../components/MemberIcon";
 import ProfileDetails from "../components/ProfileDetails";
 import useUser from "../hooks/useUser.js";
-import { userContext } from "../context/UserContext.jsx";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { convertEventsToLocal, httpRequest } from "../utils/utils.js";
 import BackButton from "../components/BackButtons.jsx";
+import BridgeTheGapLoadingSpinner from "../components/BridgeTheGapLoadingSpinner.jsx";
 
 function ProfilePage() {
-  const { user } = useUser();
+  const { user, isLoading: userLoading, setUser } = useUser();
 
   function useUpdateProfile() {
-    const { user, setUser } = useContext(userContext);
     const [isLoading, setIsLoading] = useState(false);
 
-    const update = useCallback(
-      async (userData) => {
-        setIsLoading(true);
-        if (user.offsetUTC !== new Date().getTimezoneOffset()) {
-          userData.offsetUTC = new Date().getTimezoneOffset();
-        }
-        const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users/${user.id}`;
-        httpRequest(USER_URL, "PUT", userData)
-          .then((updatedUser) => {
-            setUser({
-              ...updatedUser,
-              events: convertEventsToLocal(updatedUser.events),
-            });
-          })
-          .finally(() => setIsLoading(false));
-      },
-      [setUser, user.id, user.offsetUTC],
-    );
+    const update = useCallback(async (userData) => {
+      setIsLoading(true);
+      if (user.offsetUTC !== new Date().getTimezoneOffset()) {
+        userData.offsetUTC = new Date().getTimezoneOffset();
+      }
+      const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users/${user.id}`;
+      httpRequest(USER_URL, "PUT", userData)
+        .then((updatedUser) => {
+          setUser({
+            ...updatedUser,
+            events: convertEventsToLocal(updatedUser.events),
+          });
+        })
+        .finally(() => setIsLoading(false));
+    }, []);
     return [update, isLoading];
   }
 
   const [update, isLoading] = useUpdateProfile();
+
+  if (userLoading) {
+    return (
+      <div
+        className={
+          "flex flex-col items-center justify-center max-w mx-auto p-2 m-auto"
+        }
+      >
+        <BridgeTheGapLoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <main>

@@ -1,11 +1,13 @@
 import express from "express";
 import { prisma } from "../prisma";
+import isAuthenticated from "../middleware/is-authenticated";
 
 export const postsRouter = express.Router();
 
 //  [GET] /groups/:id/posts
 postsRouter.get(
   "/api/groups/:id/posts",
+  isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { id } = req.params;
     try {
@@ -23,6 +25,7 @@ postsRouter.get(
 //  [POST] /groups/:id/posts
 postsRouter.post(
   "/api/groups/:id/posts",
+  isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { id } = req.params;
     const groupId = Number(id);
@@ -62,6 +65,7 @@ postsRouter.post(
 //  [DELETE] /groups/:groupId/posts/:postId
 postsRouter.delete(
   "/api/groups/:groupId/posts/:postId",
+  isAuthenticated,
   async (req, res, next): Promise<void> => {
     const groupId = req.params.groupId;
     const postId = req.params.postId;

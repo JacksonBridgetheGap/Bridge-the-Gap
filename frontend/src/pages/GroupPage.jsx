@@ -13,9 +13,11 @@ import { DateTime } from "luxon";
 import BackButton from "../components/BackButtons.jsx";
 import GroupTimer from "../components/GroupTimer.jsx";
 import BridgeTheGapLoadingSpinner from "../components/BridgeTheGapLoadingSpinner.jsx";
+import useUser from "../hooks/useUser.js";
 
 function GroupPage() {
   const params = useParams();
+  const { isLoading } = useUser();
 
   const [group, setGroup] = useState(null);
   const [modalDisplay, setModalDisplay] = useState("modal-hidden");
@@ -111,11 +113,13 @@ function GroupPage() {
         <MembersList members={group ? group.members : []} />
       </div>
       <Footer />
-      <PostModal
-        onPost={createPost}
-        displayMode={modalDisplay}
-        onClose={closeModal}
-      />
+      {!isLoading && (
+        <PostModal
+          onPost={createPost}
+          displayMode={modalDisplay}
+          onClose={closeModal}
+        />
+      )}
       <PostView
         isOpen={inPostView}
         post={post}

@@ -50,110 +50,123 @@ groupsRouter.get(
 );
 
 // [GET] /groups/:id
-groupsRouter.get("/api/groups/:id", async (req, res, next): Promise<void> => {
-  const { id } = req.params;
-  try {
-    const group = await prisma.group.findUnique({
-      where: { id: Number(id) },
-      include: { members: true, posts: true, events: true },
-    });
-    res.json(group);
-  } catch (error) {
-    next(error);
-  }
-});
+groupsRouter.get(
+  "/api/groups/:id",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { id } = req.params;
+    try {
+      const group = await prisma.group.findUnique({
+        where: { id: Number(id) },
+        include: { members: true, posts: true, events: true },
+      });
+      res.json(group);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // [POST] /groups
-groupsRouter.post("/api/groups", async (req, res, next): Promise<void> => {
-  const { name, img, members, tags } = req.body;
-  try {
-    const memberIds = members?.map((member: any) => {
-      return member.id;
-    });
+groupsRouter.post(
+  "/api/groups",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { name, img, members, tags } = req.body;
+    try {
+      const memberIds = members?.map((member: any) => {
+        return member.id;
+      });
 
-    const averageOffsetUTC =
-      members?.reduce((acc: number, cur: any) => {
-        return acc + cur.offsetUTC;
-      }, 0) / memberIds?.length;
+      const averageOffsetUTC =
+        members?.reduce((acc: number, cur: any) => {
+          return acc + cur.offsetUTC;
+        }, 0) / memberIds?.length;
 
-    const group = await prisma.group.create({
-      data: {
-        name,
-        img,
-        tags,
-        promptLastUpdate: new Date(),
-        averageOffsetUTC: averageOffsetUTC,
-        members: {
-          connect: memberIds.map((id: number) => ({ id })),
-        },
-      },
-      include: {
-        members: true,
-      },
-    });
-
-    for (const id of memberIds) {
-      const otherIds = memberIds.filter((otherId: number) => otherId !== id);
-      await prisma.user.update({
-        where: { id: id },
+      const group = await prisma.group.create({
         data: {
-          circle: {
-            connect: otherIds.map((id: number) => ({ id })),
+          name,
+          img,
+          tags,
+          promptLastUpdate: new Date(),
+          averageOffsetUTC: averageOffsetUTC,
+          members: {
+            connect: memberIds.map((id: number) => ({ id })),
+          },
+        },
+        include: {
+          members: true,
+        },
+      });
+
+      for (const id of memberIds) {
+        const otherIds = memberIds.filter((otherId: number) => otherId !== id);
+        await prisma.user.update({
+          where: { id: id },
+          data: {
+            circle: {
+              connect: otherIds.map((id: number) => ({ id })),
+            },
+          },
+        });
+      }
+      res.json(group);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// [PUT] /groups/:id
+groupsRouter.put(
+  "/api/groups/:id",
+  isAuthenticated,
+  async (req, res, next): Promise<void> => {
+    const { id } = req.params;
+    const { name, img, members, posts } = req.body;
+    try {
+      //Need to bundle member and post data to add to groups
+      const memberData = members?.map((user: Prisma.UserCreateInput) => {
+        return {
+          username: user?.username,
+          photo: user?.photo,
+          location: user?.location,
+          password: user?.password,
+        };
+      });
+
+      const postData = posts?.map((post: Prisma.PostCreateInput) => {
+        return {
+          title: post?.title,
+          img: post?.img,
+          description: post?.description,
+        };
+      });
+
+      const result = await prisma.group.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          img,
+          members: {
+            create: memberData,
+          },
+          posts: {
+            create: postData,
           },
         },
       });
+      res.json(result);
+    } catch (error) {
+      next(error);
     }
-    res.json(group);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// [PUT] /groups/:id
-groupsRouter.put("/api/groups/:id", async (req, res, next): Promise<void> => {
-  const { id } = req.params;
-  const { name, img, members, posts } = req.body;
-  try {
-    //Need to bundle member and post data to add to groups
-    const memberData = members?.map((user: Prisma.UserCreateInput) => {
-      return {
-        username: user?.username,
-        photo: user?.photo,
-        location: user?.location,
-        password: user?.password,
-      };
-    });
-
-    const postData = posts?.map((post: Prisma.PostCreateInput) => {
-      return {
-        title: post?.title,
-        img: post?.img,
-        description: post?.description,
-      };
-    });
-
-    const result = await prisma.group.update({
-      where: { id: Number(id) },
-      data: {
-        name,
-        img,
-        members: {
-          create: memberData,
-        },
-        posts: {
-          create: postData,
-        },
-      },
-    });
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 // [DELETE] /groups/:id
 groupsRouter.delete(
   "/api/groups/:id",
+  isAuthenticated,
   async (req, res, next): Promise<void> => {
     const { id } = req.params;
     try {
