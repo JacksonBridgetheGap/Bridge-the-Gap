@@ -14,7 +14,10 @@ export default function isAuthenticated(
   }
 
   jwt.verify(token!, process.env.AUTH_SECRET as string, (err, user) => {
-    if (err) res.sendStatus(403);
+    if (err) {
+      res.sendStatus(403);
+      return;
+    }
 
     req.user = user;
 

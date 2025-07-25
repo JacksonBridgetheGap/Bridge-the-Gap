@@ -1,6 +1,9 @@
 import express from "express";
 import { prisma } from "../prisma";
 import isAuthenticated from "../middleware/is-authenticated";
+import { createTimeSlotMap } from "../utils/dataUtils";
+import { timeoutPromise } from "../utils/promise";
+import optimalTimeSlot from "../algorithim/optimalTimeSlot";
 
 export const userEventsRouter = express.Router();
 
@@ -19,6 +22,60 @@ userEventsRouter.get(
       res.status(200).json({ events: user?.events });
     } catch (error) {
       res.status(400).json({ message: "Error getting events", error: error });
+    }
+  },
+);
+
+userEventsRouter.post(
+  "/api/user/:userId/optimalEvent",
+  isAuthenticated,
+  async (req, res) => {
+    const { userId } = req.params;
+    const { currentEventLength } = req.body;
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: Number(userId) },
+        include: {
+          events: {
+            include: {
+              participants: true,
+            },
+          },
+        },
+      });
+
+      if (user == null) {
+        throw new Error("User not found");
+      }
+
+      const date = new Date();
+      date.setMinutes(0);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      const endOfWeek = new Date();
+      const [timeSlotMap, timeSlotSet] = createTimeSlotMap([user]);
+      timeoutPromise(
+        5000,
+        optimalTimeSlot(
+          timeSlotSet,
+          timeSlotMap,
+          currentEventLength,
+          date,
+          new Date(endOfWeek.setDate(date.getDate() - (date.getDay() - 1) + 5)),
+          Number(null),
+          user.offsetUTC / 60,
+        ),
+      )
+        .then((data) => {
+          const slot = data.slot;
+          const conflicts = data.conflicts;
+          res.status(200).json({ slot, conflicts });
+        })
+        .catch(() => {
+          res.status(500).json({ error: "Optimal time algorithm timed out" });
+        });
+    } catch (error) {
+      res.status(500).json({ message: "Error getting events", error: error });
     }
   },
 );

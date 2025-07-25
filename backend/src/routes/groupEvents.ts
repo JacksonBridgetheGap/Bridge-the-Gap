@@ -4,6 +4,8 @@ import optimalTimeSlot from "../algorithim/optimalTimeSlot";
 import { createTimeSlotMap } from "../utils/dataUtils";
 import { timeoutPromise } from "../utils/promise";
 import isAuthenticated from "../middleware/is-authenticated";
+import checkConflicts from "../algorithim/checkConflicts";
+import { TimeSlot } from "../utils/TimeSlot";
 
 export const groupEventsRouter = express.Router();
 
@@ -36,7 +38,7 @@ groupEventsRouter.get(
         where: { id: Number(groupId) },
         include: {
           members: {
-            include: { events: true },
+            include: { events: { include: { participants: true } } },
           },
         },
       });
@@ -79,10 +81,35 @@ groupEventsRouter.post(
   isAuthenticated,
   async (req, res) => {
     const { groupId } = req.params;
-    const { text, start, end, members } = req.body;
+    const { eventUTC, conflictOverride } = req.body;
+    const { text, start, end, members } = eventUTC;
     try {
       const startDateTime = new Date(start);
       const endDateTime = new Date(end);
+
+      const group = await prisma.group.findUnique({
+        where: { id: Number(groupId) },
+        include: {
+          members: { include: { events: { include: { participants: true } } } },
+          events: true,
+        },
+      });
+
+      if (group == null) {
+        throw new Error("Group not found");
+      }
+
+      if (!conflictOverride) {
+        const conflicts = checkConflicts(
+          group.members,
+          new TimeSlot(startDateTime, endDateTime, Number(groupId)),
+        );
+        if (conflicts.length > 0) {
+          res.status(200).json({ conflicts });
+          return;
+        }
+      }
+
       const event = await prisma.event.create({
         data: {
           text: text,
@@ -103,10 +130,6 @@ groupEventsRouter.post(
       });
       const eventLength =
         (endDateTime.getTime() - startDateTime.getTime()) / 1000 / 60;
-      const group = await prisma.group.findUnique({
-        where: { id: Number(groupId) },
-        include: { events: true },
-      });
       await prisma.group.update({
         where: { id: Number(groupId) },
         data: {

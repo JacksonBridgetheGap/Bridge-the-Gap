@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import "../styles/GroupTimer.css";
+import "../styles/ToolTip.css";
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 const HOUR_MS = 1000 * 60 * 60;
