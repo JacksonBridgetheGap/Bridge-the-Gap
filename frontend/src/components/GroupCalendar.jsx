@@ -23,12 +23,19 @@ export default function GroupCalendar({ group, setGroup }) {
   const addEvent = (eventUTC, eventLocal) => {
     eventUTC.members = group.members;
     const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events`;
-    httpRequest(EVENT_URL, "POST", eventUTC).then(() => {
-      setGroup({
-        ...group,
-        events: [...group.events, eventLocal],
-      });
-    });
+    httpRequest(EVENT_URL, "POST", { eventUTC, conflictOverride: false }).then(
+      (res) => {
+        if (res.ok) {
+          setGroup({
+            ...group,
+            events: [...group.events, eventLocal],
+          });
+        } else {
+          console.log("Conflicts present in event");
+          //show conflicts remake request with conflict override
+        }
+      },
+    );
   };
 
   const deleteEvent = (event) => {

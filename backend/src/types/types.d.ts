@@ -9,9 +9,13 @@ type GroupWithMembers = {
 } & Awaited<ReturnType<typeof prisma.group.findMany>>[number];
 
 type UserWithEvents = Prisma.UserGetPayload<{
-  include: { events: true };
+  include: { events: { include: { participants: true } } };
 }>;
 
 type Groups = Prisma.GroupGetPayload<{
-  include: { members: true; events: true };
+  include: { members: true; events: { include: { participants: true } } };
+}>;
+
+type Events = Prisma.EventGetPayload<{
+  include: { participants: true };
 }>;
