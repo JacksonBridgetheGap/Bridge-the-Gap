@@ -23,8 +23,8 @@ export default function GroupTimer({ lastRefresh }) {
     return () => clearInterval(timer);
   }, [timeToRefresh]);
 
-  const convertMsToTime = (ms, timeInMs) => {
-    return Math.floor(ms / timeInMs);
+  const convertMsToTime = (ms, timeInMs, mod) => {
+    return (Math.floor(ms / timeInMs) % mod).toString().padStart(2, "0");
   };
 
   return (
@@ -32,7 +32,7 @@ export default function GroupTimer({ lastRefresh }) {
       <span className="tooltiptext">Time to next challenge refresh</span>
       <span
         className={"font-bold text-3xl"}
-      >{`${convertMsToTime(timeToRefresh, DAY_MS)} : ${convertMsToTime(timeToRefresh, HOUR_MS) % 24} : ${Math.floor(convertMsToTime(timeToRefresh, MINUTE_MS) % 60)} : ${convertMsToTime(timeToRefresh, SECOND_MS) % 60}`}</span>
+      >{`${convertMsToTime(timeToRefresh, DAY_MS, 7)} : ${convertMsToTime(timeToRefresh, HOUR_MS, 24)} : ${convertMsToTime(timeToRefresh, MINUTE_MS, 60)} : ${convertMsToTime(timeToRefresh, SECOND_MS, 60)}`}</span>
     </div>
   );
 }
