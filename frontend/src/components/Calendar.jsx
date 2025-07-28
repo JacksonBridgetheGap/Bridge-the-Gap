@@ -17,7 +17,7 @@ export default function Calendar({
     timeRangeSelectedHandling: "Enabled",
     heightSpec: "BusinessHours",
     onTimeRangeSelected: async (args) => {
-      const modal = await DayPilot.Modal.prompt("Add a new event", "", {
+      const modal = await DayPilot.Modal.prompt("Add a new event", "Title", {
         okText: "Confirm",
         scrollWithPage: true,
       });
