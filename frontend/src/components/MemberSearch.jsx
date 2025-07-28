@@ -3,21 +3,23 @@ import { useState, useEffect } from "react";
 import { httpRequest } from "../utils/utils";
 import AddMemberTile from "./AddMemberTile";
 import BridgeTheGapLoadingSpinner from "./BridgeTheGapLoadingSpinner.jsx";
+import useUser from "../hooks/useUser.js";
 
 export default function MemberSearch({ onChange, displayMode }) {
   const [addedUsers, setAddedUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useUser();
 
   useEffect(() => {
     setIsLoading(true);
-    setAddedUsers([]);
+    setAddedUsers([user]);
     const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users`;
     httpRequest(USER_URL, "GET").then((userList) => {
-      setUsers(userList);
+      setUsers(userList.filter((member) => member.id !== user.id));
       setIsLoading(false);
     });
-  }, [displayMode]);
+  }, [displayMode, user]);
 
   const addMember = async (member) => {
     setUsers(users.filter((user) => user.id !== member.id));
@@ -26,6 +28,7 @@ export default function MemberSearch({ onChange, displayMode }) {
   };
 
   const removeMember = async (member) => {
+    if (member.id === user.id) return;
     setAddedUsers(addedUsers.filter((user) => user.id !== member.id));
     setUsers([...users, member]);
     onChange(addedUsers.filter((user) => user.id !== member.id));
