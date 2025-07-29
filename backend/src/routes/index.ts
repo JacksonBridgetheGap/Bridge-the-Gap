@@ -6,6 +6,7 @@ import { postsRouter } from "./posts";
 import { promptRouter } from "./prompt";
 import { userEventsRouter } from "./userEvents";
 import { groupEventsRouter } from "./groupEvents";
+import { graphqlRouter } from "./graphql";
 
 export const routes = express.Router();
 
@@ -16,3 +17,4 @@ routes.use(groupEventsRouter);
 routes.use(groupsRouter);
 routes.use(usersRouter);
 routes.use(postsRouter);
+routes.use(graphqlRouter);
