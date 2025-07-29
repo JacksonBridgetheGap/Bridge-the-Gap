@@ -25,35 +25,44 @@ export default function MoveEventModal({ display, event, remove, close }) {
 
   const moveEvent = async () => {
     const MOVE_EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/events/${event.id}`;
+    setIsLoading(true);
     httpRequest(MOVE_EVENT_URL, "PUT", {
       start: newTime.start,
       end: newTime.end,
-    }).then((response) => {
-      remove(response.event.id);
-      close();
-    });
+    })
+      .then((response) => {
+        remove(response.event.id);
+        close();
+      })
+      .finally(() => setIsLoading(false));
   };
 
   if (display) {
     return (
       <div
         className={
-          "absolute z-10 mt-2 w-48 p-3 bg-white rounded shadow-xl border text-sm right-60 m-4"
+          "absolute z-10 mt-2 w-60 h-50 p-3 bg-white rounded shadow-xl border text-sm right-60 m-4"
         }
       >
-        <span className={"close text-sm"} onClick={close}>
+        <span className={"close"} onClick={close}>
           X
         </span>
-        <p className={"text-2xl"}>Move Event</p>
-        {isLoading ? (
-          <BridgeTheGapLoadingSpinner />
-        ) : (
-          <div>
-            <p>{`Next Best Start: ${new Date(newTime.start).toLocaleString()}`}</p>
-            <p>{`Next Best End: ${new Date(newTime.end).toLocaleString()}`}</p>
-          </div>
-        )}
-        <BridgeTheGapButton value={"Confirm"} onClick={moveEvent} />
+        <div className="flex flex-col items-center justify-center">
+          <p className={"text-2xl"}>Move Event</p>
+          {isLoading ? (
+            <BridgeTheGapLoadingSpinner />
+          ) : (
+            <div className={"p-3"}>
+              <p>{`Next Best Start: ${new Date(newTime.start).toLocaleString()}`}</p>
+              <p>{`Next Best End: ${new Date(newTime.end).toLocaleString()}`}</p>
+            </div>
+          )}
+          <BridgeTheGapButton
+            value={"Confirm"}
+            onClick={moveEvent}
+            loading={isLoading}
+          />
+        </div>
       </div>
     );
   }

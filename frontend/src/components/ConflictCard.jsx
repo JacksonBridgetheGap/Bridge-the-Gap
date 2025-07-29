@@ -2,6 +2,7 @@ import "../styles/ToolTip.css";
 import useUser from "../hooks/useUser.js";
 import { useEffect, useState } from "react";
 import MoveEventModal from "./MoveEventModal.jsx";
+import BridgeTheGapButton from "./BridgeTheGapButton.jsx";
 
 export default function ConflictCard({ conflict, remove }) {
   const [userConflict, setUserConflict] = useState(false);
@@ -29,30 +30,34 @@ export default function ConflictCard({ conflict, remove }) {
   return (
     <div className={"flex flex-row justify-between"}>
       <h4>{conflict.text}</h4>
-      <p>{`${new Date(conflict.start).toLocaleTimeString()} - ${new Date(conflict.end).toLocaleTimeString()}`}</p>
+      <p>
+        <em>{`${new Date(conflict.start).toLocaleTimeString()} - ${new Date(conflict.end).toLocaleTimeString()}`}</em>
+      </p>
       <div className="flex flex-row gap-2">
         <div className={"tooltip"}>
-          <div
-            className={`${userConflict ? "bg-blue-600 border border-blue-700" : "bg-gray-600 border border-gray-700"} w-6 h-6 border-2 rounded-full cursor-pointer`}
+          <button
+            className={
+              "flex items-center px-3 py-0.3 text-sm rounded-md bg-gray-600 text-white hover:bg-gray-700"
+            }
           >
-            O
-          </div>
+            Attendees
+          </button>
           <div className="tooltiptext">
             {conflict.participants.map((participant) => {
               return <p>{participant.username}</p>;
             })}
           </div>
         </div>
-        {userConflict && (
+        {userConflict && conflict.groupID === null && (
           <div>
-            <div
-              className={
-                "bg-blue-600 border border-blue-700 w-6 h-6 cursor-pointer"
-              }
+            <button
               onClick={openModal}
+              className={
+                "flex items-center px-3 py-0.3 text-sm rounded-md bg-blue-700 text-white hover:bg-blue-800"
+              }
             >
-              {`>`}
-            </div>
+              Resolve
+            </button>
             <MoveEventModal
               display={editEventDisplay}
               event={conflict}

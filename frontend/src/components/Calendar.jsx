@@ -17,7 +17,10 @@ export default function Calendar({
     timeRangeSelectedHandling: "Enabled",
     heightSpec: "BusinessHours",
     onTimeRangeSelected: async (args) => {
-      const modal = await DayPilot.Modal.prompt("Add a new event", "Title");
+      const modal = await DayPilot.Modal.prompt("Add a new event", "Title", {
+        okText: "Confirm",
+        scrollWithPage: true,
+      });
       calendar.clearSelection();
       if (!modal.result) {
         return;
@@ -54,8 +57,9 @@ export default function Calendar({
     contextMenu: new DayPilot.Menu({
       items: [
         {
-          text: "Delete",
+          text: `Delete`,
           onClick: async (args) => {
+            if (args.source.cache.suggested) return;
             onDelete(args.source.cache);
             calendar.events.remove(args.source.cache.id);
           },
@@ -66,6 +70,7 @@ export default function Calendar({
         {
           text: "Edit",
           onClick: async (args) => {
+            if (args.source.cache.suggested) return;
             await editEvent(args.source);
           },
         },

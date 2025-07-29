@@ -92,6 +92,7 @@ export default function GroupModal({
           onChange={handleInputChange}
           value={newGroup.name}
           placeholder="New Group..."
+          required
         />
         <h4 className="text-lg font-bold dark:text-white">Group Image:</h4>
         <input type="file" onChange={handleFileChange} />

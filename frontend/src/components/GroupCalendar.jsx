@@ -37,9 +37,12 @@ export default function GroupCalendar({ group, setGroup }) {
           events: [...group.events, eventLocal],
         });
       } else {
-        const conflicts = res.conflicts.map((conflict) => {
-          return conflict.event;
-        });
+        const conflicts = res.conflicts.reduce((acc, cur) => {
+          if (!acc.find((e) => e.id === cur.event.id)) {
+            acc.push(cur.event);
+          }
+          return acc;
+        }, []);
         const localEvents = convertEventsToLocal(conflicts);
         setConflicts(localEvents);
         const confirmed = await askForConfirmation();
@@ -77,7 +80,7 @@ export default function GroupCalendar({ group, setGroup }) {
     confirmation?.resolve(false);
   };
 
-  const removeConflict = (id) => {
+  const removeConflict = async (id) => {
     setConflicts(conflicts.filter((conflict) => conflict.id !== id));
   };
 
