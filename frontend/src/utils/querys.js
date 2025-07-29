@@ -8,8 +8,15 @@ export const createGroupQuery = (id) => {
         promptLastUpdate
         averageOffsetUTC
         members {
+          id
           username
           photo
+          events {
+            start
+            end
+            groupID
+            text
+          }
         }
         posts {
           id
@@ -19,9 +26,13 @@ export const createGroupQuery = (id) => {
           author
         }
         events {
+          id
           text
           start
           end
+          participants {
+            id
+          }
         }
         }
       }`;

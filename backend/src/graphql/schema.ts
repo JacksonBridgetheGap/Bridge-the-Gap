@@ -20,7 +20,7 @@ export const schema = buildSchema(`
     circle: [User!]!
     inCircle: [User!]!
     groups: [Group!]!
-    events: [Event!]!
+    events: [Event!]
   }
   
   type Group {
@@ -45,6 +45,7 @@ export const schema = buildSchema(`
     end: Date!
     participants: [User!]!
     group: Group
+    groupID: Int
   }
   
   type Post {
@@ -79,12 +80,18 @@ export const resolvers = {
   group: async ({ id }: { id: number }) => {
     const group = await prisma.group.findUnique({
       where: { id },
-      include: { members: true, events: true, posts: true },
+      include: {
+        members: { include: { events: true } },
+        events: { include: { participants: true } },
+        posts: true,
+      },
     });
     return group;
   },
   allGroups: async () => {
-    const groups = await prisma.group.findMany({ include: { members: true } });
+    const groups = await prisma.group.findMany({
+      include: { members: true },
+    });
     return groups;
   },
 };

@@ -110,6 +110,8 @@ groupEventsRouter.post(
         }
       }
 
+      console.log(members.map((member: any) => ({ id: Number(member.id) })));
+
       const event = await prisma.event.create({
         data: {
           text: text,
@@ -121,7 +123,7 @@ groupEventsRouter.post(
             },
           },
           participants: {
-            connect: members.map((member: any) => ({ id: member.id })),
+            connect: members.map((member: any) => ({ id: Number(member.id) })),
           },
         },
         include: {
@@ -152,8 +154,12 @@ groupEventsRouter.put(
   isAuthenticated,
   async (req, res) => {
     const { groupId, eventId } = req.params;
-    const { text, start, end, members } = req.body;
+    const { text, start, end, participants } = req.body;
     try {
+      console.log(participants);
+      console.log(
+        participants.map((member: any) => ({ id: Number(member.id) })),
+      );
       const event = await prisma.event.update({
         where: { id: Number(eventId) },
         data: {
@@ -162,7 +168,9 @@ groupEventsRouter.put(
           end: new Date(end),
           groupID: Number(groupId),
           participants: {
-            connect: [members.map((member: any) => ({ id: member.id }))],
+            connect: participants.map((member: any) => ({
+              id: Number(member.id),
+            })),
           },
         },
       });
