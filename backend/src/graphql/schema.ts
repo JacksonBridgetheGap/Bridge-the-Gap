@@ -5,7 +5,7 @@ export const schema = buildSchema(`
   type Query {
     getUser(id: Int!): User
     allUsers: [User]!
-    getGroup(id: Int!): Group
+    group(id: Int!): Group
     allGroups: [Group]!
   }
   
@@ -35,6 +35,7 @@ export const schema = buildSchema(`
     averageOffsetUTC: Float!
     averageEventLength: Int!
     postFrequency: Float!
+    posts: [Post!]!
   }
   
   type Event {
@@ -44,6 +45,15 @@ export const schema = buildSchema(`
     end: Date!
     participants: [User!]!
     group: Group
+  }
+  
+  type Post {
+    id: ID!
+    title: String!
+    img: String!
+    description: String!
+    author: String!
+    group: Group!
   }
   
   scalar Date
@@ -66,7 +76,7 @@ export const resolvers = {
     const users = await prisma.user.findMany();
     return users;
   },
-  getGroup: async ({ id }: { id: number }) => {
+  group: async ({ id }: { id: number }) => {
     const group = await prisma.group.findUnique({
       where: { id },
       include: { members: true, events: true, posts: true },

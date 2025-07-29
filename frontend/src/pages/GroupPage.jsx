@@ -14,6 +14,9 @@ import BackButton from "../components/BackButtons.jsx";
 import GroupTimer from "../components/GroupTimer.jsx";
 import BridgeTheGapLoadingSpinner from "../components/BridgeTheGapLoadingSpinner.jsx";
 import useUser from "../hooks/useUser.js";
+import { createGroupQuery } from "../utils/querys.js";
+
+const GRAPHQL_URL = `${import.meta.env.VITE_BASE_URL}/api/graphql`;
 
 function GroupPage() {
   const params = useParams();
@@ -25,8 +28,9 @@ function GroupPage() {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    const GROUP_URL = `${import.meta.env.VITE_BASE_URL}/api/groups/${params.id}`;
-    httpRequest(GROUP_URL, "GET").then((group) => {
+    const query = createGroupQuery(params.id);
+    httpRequest(GRAPHQL_URL, "POST", { query }).then((response) => {
+      const { group } = response.data;
       setGroup({
         ...group,
         events: group.events.map((event) => {
