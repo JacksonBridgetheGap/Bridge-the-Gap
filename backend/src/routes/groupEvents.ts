@@ -110,8 +110,6 @@ groupEventsRouter.post(
         }
       }
 
-      console.log(members.map((member: any) => ({ id: Number(member.id) })));
-
       const event = await prisma.event.create({
         data: {
           text: text,
@@ -156,10 +154,6 @@ groupEventsRouter.put(
     const { groupId, eventId } = req.params;
     const { text, start, end, participants } = req.body;
     try {
-      console.log(participants);
-      console.log(
-        participants.map((member: any) => ({ id: Number(member.id) })),
-      );
       const event = await prisma.event.update({
         where: { id: Number(eventId) },
         data: {
