@@ -12,6 +12,7 @@ export const createGroupQuery = (id) => {
           photo
         }
         posts {
+          id
           title
           img
           description
