@@ -53,19 +53,25 @@ export function SearchResults() {
       <p className="p-4 text-sm text-gray-600 dark:text-gray-300">
         {groups ? `${groups.length} results found...` : "Loading results..."}
       </p>
-      <div className={"grid gap-4 sm:grid-cols-2 md:grid-cols-3"}>
-        {groups?.map((group) => (
-          <GroupCard
-            group={group}
-            members={group.members}
-            key={group.id}
-            joinedGroup={userGroups.some(
-              (userGroup) => userGroup.id === group.id,
-            )}
-            home={false}
-          />
-        ))}
-      </div>
+      {groups.length > 0 ? (
+        <div className={"grid gap-4 sm:grid-cols-2 md:grid-cols-3"}>
+          {groups?.map((group) => (
+            <GroupCard
+              group={group}
+              members={group.members}
+              key={group.id}
+              joinedGroup={userGroups.some(
+                (userGroup) => userGroup.id === group.id,
+              )}
+              home={false}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className={"flex flex-col items-center justify-center p-48"}>
+          <p className={"text-4xl font-bold"}>No results found</p>
+        </div>
+      )}
     </div>
   );
 }
