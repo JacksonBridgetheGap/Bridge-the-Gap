@@ -1,5 +1,5 @@
 import "../styles/MemberSearch.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { httpRequest } from "../utils/utils";
 import AddMemberTile from "./AddMemberTile";
 import BridgeTheGapLoadingSpinner from "./BridgeTheGapLoadingSpinner.jsx";
@@ -9,9 +9,10 @@ export default function MemberSearch({ onChange, displayMode }) {
   const [addedUsers, setAddedUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useUser();
+  const { user, isLoading: userLoading } = useUser();
 
   useEffect(() => {
+    if (userLoading) return;
     setIsLoading(true);
     setAddedUsers([user]);
     const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/users`;
@@ -19,7 +20,7 @@ export default function MemberSearch({ onChange, displayMode }) {
       setUsers(userList.filter((member) => member.id !== user.id));
       setIsLoading(false);
     });
-  }, [displayMode, user]);
+  }, [displayMode, user, userLoading]);
 
   const addMember = async (member) => {
     setUsers(users.filter((user) => user.id !== member.id));

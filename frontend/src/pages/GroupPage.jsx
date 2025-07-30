@@ -11,8 +11,6 @@ import "./GroupPage.css";
 import GroupCalendar from "../components/GroupCalendar.jsx";
 import { DateTime } from "luxon";
 import BackButton from "../components/BackButtons.jsx";
-import GroupTimer from "../components/GroupTimer.jsx";
-import BridgeTheGapLoadingSpinner from "../components/BridgeTheGapLoadingSpinner.jsx";
 import useUser from "../hooks/useUser.js";
 import { createGroupQuery } from "../utils/querys.js";
 
