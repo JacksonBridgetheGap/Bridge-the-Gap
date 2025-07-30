@@ -68,11 +68,11 @@ export default async function optimalTimeSlot(
           if (event.groupID === groupID) {
             continue startTimeLoop;
           }
-          let number = timeSlotMap.get(
+          let numberConflicts = timeSlotMap.get(
             new TimeSlot(event.start, event.end, event.groupID).toString(),
           )!;
-          numConflicts += number;
-          score += number;
+          numConflicts += numberConflicts;
+          score += numberConflicts;
         } else if (possibleTimeSlot.eventsOverlap(bufferedEvent)) {
           score += BUFFER_PENALTY;
         }

@@ -90,6 +90,11 @@ export default function GroupCalendar({ group, setGroup }) {
   };
 
   const editEvent = (eventData) => {
+    eventData = {
+      ...eventData,
+      participants: group.events.find((event) => event.id === eventData.id)
+        .participants,
+    };
     const EVENT_URL = `${import.meta.env.VITE_BASE_URL}/api/group/${group.id}/events/${eventData.id}`;
     httpRequest(EVENT_URL, "PUT", eventData);
   };

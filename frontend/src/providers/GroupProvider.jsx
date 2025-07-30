@@ -5,6 +5,21 @@ import useAuth from "../hooks/useAuth.js";
 const groupContext = createContext();
 
 const GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/groups`;
+const GRAPHQL_URL = `${import.meta.env.VITE_BASE_URL}/api/graphql`;
+
+const query = `
+query {
+  allGroups {
+    id
+    name
+    img
+    members {
+      id
+      username
+    }
+  }
+}
+`;
 
 function GroupProvider(props) {
   const [groups, setGroups] = useState([]);
@@ -15,9 +30,10 @@ function GroupProvider(props) {
     setIsLoading(true);
 
     if (!auth || loading) return;
-    httpRequest(GROUPS_URL, "GET")
-      .then((groupList) => {
-        setGroups(groupList);
+    httpRequest(GRAPHQL_URL, "POST", { query })
+      .then((response) => {
+        const { allGroups } = response.data;
+        setGroups(allGroups);
       })
       .finally(() => {
         setIsLoading(false);
