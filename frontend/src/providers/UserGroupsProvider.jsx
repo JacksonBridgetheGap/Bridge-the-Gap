@@ -13,7 +13,7 @@ function UserGroupProvider({ children }) {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!auth || userLoading || loading) return;
+    if (!auth || userLoading || loading || user == null) return;
     const USER_GROUPS_URL = `${import.meta.env.VITE_BASE_URL}/api/user/${user.id}/groups`;
     httpRequest(USER_GROUPS_URL, "GET")
       .then((groups) => {

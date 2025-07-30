@@ -35,7 +35,7 @@ function ProfilePage() {
 
   const [update, isLoading] = useUpdateProfile();
 
-  if (userLoading) {
+  if (userLoading || user == null) {
     return (
       <div
         className={

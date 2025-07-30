@@ -3,12 +3,11 @@ import { authContext as AuthContext } from "../context/AuthContext.jsx";
 import { getCookie } from "../utils/utils.js";
 
 export function AuthProvider({ children }) {
-  const [auth, setAuth] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = getCookie("token");
-    setIsLoading(true);
 
     if (token || auth) {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/me`, {

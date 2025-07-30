@@ -7,10 +7,9 @@ const USER_URL = `${import.meta.env.VITE_BASE_URL}/api/me`;
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { auth, isLoading: loading } = useContext(authContext);
   useEffect(() => {
-    setIsLoading(true);
     if (auth && !loading) {
       httpRequest(USER_URL, "GET")
         .then((user) => {
@@ -22,6 +21,8 @@ function UserProvider({ children }) {
         .finally(() => {
           setIsLoading(false);
         });
+    } else {
+      setIsLoading(false);
     }
   }, [auth, setUser, loading]);
 
