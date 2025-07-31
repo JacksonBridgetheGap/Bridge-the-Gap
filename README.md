@@ -1,12 +1,10 @@
 # Bridge-the-Gap
 
-## By: Jackson Seifferly
+***Meta University Internship Program 2025***
 
-## Meta University Internship Program 2025
+**By: Jackson Seifferly**
 
-Project Plan: <https://docs.google.com/document/d/1vNQNzT8_fTWdJuXJ9tGQTQziGGsSEb8sm781ow9e8tE/edit?usp=sharing>
-
-Feature List: <https://docs.google.com/document/d/1W8MVLrEJUWygf_aet8GDMK0A21BPqwHh5pvGOLKMKVQ/edit?tab=t.0>
+“Bridge the Gap” is a social media app intended to help people improve their long distance relationships with friends, family, and significant others! Think more “BeReal” than “Facebook”. The app helps users stay connected by identifying times to meet with each other and proposing challenges or ideas via prompts created by Gemini. The goal of the app is to promote communication despite the distance in a non-overbearing way that makes the process of keeping in touch a fun and enjoyable experience for everyone involved.
 
 ## Postgres Setup
 
