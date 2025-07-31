@@ -1,5 +1,5 @@
 import "../styles/MemberSearch.css";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { httpRequest } from "../utils/utils";
 import AddMemberTile from "./AddMemberTile";
 import BridgeTheGapLoadingSpinner from "./BridgeTheGapLoadingSpinner.jsx";
